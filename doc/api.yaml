@@ -33,6 +33,7 @@ paths:
           application/json:
             schema:
               type: object
+              description: "Oggetto"
               properties:
                 name:
                   type: string
@@ -42,12 +43,13 @@ paths:
                   maxLength: 16
         required: true
       responses: 
-        '201':
+        '200':
           description: User log-in action successful
           content:
             application/json:
               schema:
                 type: object
+                description: "User log-in action successful"
                 properties:
                   identifier:
                     # change here if you decide to use an integer
@@ -69,10 +71,12 @@ paths:
               required: true
               schema:
                 type: string
+                description: "User Id"
             - in: path
               name: newUsername
               required: true
               schema:
+                description: "New UserName"
                 type: string
           responses: 
             '200':
@@ -81,6 +85,7 @@ paths:
                 application/json:
                   schema:
                     type: array
+                    description: "Return if UserName is changed"
                     items:
                       properties: 
                         UserId: 
@@ -95,6 +100,7 @@ paths:
                 application/json:
                   schema:
                     type: array
+                    description: "Return if UserName is Not changed"
                     items:
                       properties: 
                         UserId: 
@@ -104,7 +110,7 @@ paths:
                           type: string
                           example: UserName NOT changed
 
-  /{userId1}/followUser/{userId2}:
+  /followUser/{userId1}/-/{userId2}:
     post:
           tags: ["followUser"]
           summary: Follow another user
@@ -118,11 +124,13 @@ paths:
               required: true
               schema:
                 type: string
+                description: "First UserId"
             - in: path
               name: userId2
               required: true
               schema:
                 type: string
+                description: "Second UserId"
           responses: 
             '200':
               description: Success 
@@ -130,6 +138,7 @@ paths:
                 application/json:
                   schema:
                     type: array
+                    description: "Return if the following is successful"
                     items:
                       properties: 
                         UserId: 
@@ -145,6 +154,7 @@ paths:
                 application/json:
                   schema:
                     type: array
+                    description: "Return if UserId is NOT found"
                     items:
                       properties: 
                         UserId: 
@@ -159,6 +169,7 @@ paths:
                 application/json:
                   schema:
                     type: array
+                    description: "Return if User2 banned User1"
                     items:
                       properties: 
                         UserId: 
@@ -173,6 +184,7 @@ paths:
                 application/json:
                   schema:
                     type: array
+                    description: "Return if UserId2 is NOT found"
                     items:
                       properties: 
                         UserId: 
@@ -187,6 +199,7 @@ paths:
                 application/json:
                   schema:
                     type: array
+                    description: "Error server execution"
                     items:
                       properties: 
                         UserId: 
