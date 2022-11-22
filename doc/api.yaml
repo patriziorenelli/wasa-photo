@@ -38,7 +38,7 @@ paths:
                 name:
                   type: string
                   example: Maria
-                  pattern: 'ˆ.*?$'
+                  pattern: '^[a-zA-Z0-9]+$'
                   minLength: 6
                   maxLength: 16
         required: true
@@ -195,7 +195,7 @@ paths:
                           example: 403
                         UserNick:
                           type: string
-                          example: Sorry,Maria banned you. You can not follow her.
+                          example: Sorry, Maria banned you. You can not follow her.
                     minItems: 1
                     maxItems: 1
             '404':
