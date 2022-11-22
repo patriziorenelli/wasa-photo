@@ -37,7 +37,8 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Maria
+                  example: Mariangela
+                  description: Username
                   pattern: '^[a-zA-Z0-9]+$'
                   minLength: 6
                   maxLength: 16
@@ -57,6 +58,7 @@ paths:
                     type: string
                     example: "abcdef012345"
                     pattern: '^[a-zA-Z0-9]+$'
+                    description: Id dell'utente
   
   /{userId}/setMyUserName/{newUsername}:
     post:
@@ -70,6 +72,7 @@ paths:
             - in: path
               name: userId
               required: true
+              description: User Id
               schema:
                 type: string
                 description: "User Id"
@@ -80,11 +83,12 @@ paths:
             - in: path
               name: newUsername
               required: true
+              description: New UserName
               schema:
                 type: string
                 description: "New UserName"
-                example: abccrf389345
-                pattern: '^[a-zA-Z0-9]+$'
+                example: Franchino12
+                pattern: '^[a-zA-Z0-9-_]+$'
                 minLength: 6
                 maxLength: 16                
                 
@@ -99,12 +103,14 @@ paths:
                     description: "Return if UserName is changed"
                     items:
                       properties: 
-                        UserId: 
+                        Error Code: 
                           type: integer
                           example: 200
-                        UserNick:
+                          description: Error Code
+                        Error Message:
                           type: string
                           example: UserName changed
+                          description: Error Message
                     minItems: 1
                     maxItems: 1
             '400':
@@ -116,12 +122,15 @@ paths:
                     description: "Return if UserName is Not changed"
                     items:
                       properties: 
-                        UserId: 
+                        Error Code: 
                           type: integer
                           example: 400
-                        UserNick:
+                          description: Error Code
+                        Error Message:
                           type: string
                           example: UserName NOT changed
+                          description: Error Message
+
                     minItems: 1
                     maxItems: 1
 
@@ -137,6 +146,7 @@ paths:
             - in: path
               name: userId1
               required: true
+              description: First UserId
               schema:
                 type: string
                 description: "First UserId"
@@ -147,6 +157,7 @@ paths:
             - in: path
               name: userId2
               required: true
+              description: Second UserId
               schema:
                 type: string
                 description: "Second UserId"
@@ -164,12 +175,14 @@ paths:
                     description: "Return if the following is successful"
                     items:
                       properties: 
-                        UserId: 
+                        Error Code: 
                           type: integer
                           example: 200
-                        UserNick:
+                          description: Error Code
+                        Error Message:
                           type: string
                           example: Now follow the user Marco.
+                          description: Error Message
                     minItems: 1
                     maxItems: 1
            
@@ -182,12 +195,14 @@ paths:
                     description: "Return if UserId is NOT found"
                     items:
                       properties: 
-                        UserId: 
+                        Error Code: 
                           type: integer
                           example: 400
-                        UserNick:
+                          description: Error Code
+                        Error Message:
                           type: string
                           example: Userid not found.
+                          description: Error Message
                     minItems: 1
                     maxItems: 1                         
             '403':
@@ -199,12 +214,14 @@ paths:
                     description: "Return if User2 banned User1"
                     items:
                       properties: 
-                        UserId: 
+                        Error Code: 
                           type: integer
                           example: 403
-                        UserNick:
+                          description: Error Code
+                        Error Message:
                           type: string
                           example: Sorry, Maria banned you. You can not follow her.
+                          description: Error Message
                     minItems: 1
                     maxItems: 1
             '404':
@@ -216,12 +233,14 @@ paths:
                     description: "Return if UserId2 is NOT found"
                     items:
                       properties: 
-                        UserId: 
+                        Error Code: 
                           type: integer
                           example: 404
-                        UserNick:
+                          description: Error Code
+                        Error Message:
                           type: string
                           example: Userid2 not found.
+                          description: Error Message
                     minItems: 1
                     maxItems: 1                        
             '500':
@@ -233,11 +252,13 @@ paths:
                     description: "Error server execution"
                     items:
                       properties: 
-                        UserId: 
+                        Error Code: 
                           type: integer
                           example: 500
-                        UserNick:
+                          description: Error Code
+                        Error Message:
                           type: string
                           example: Error server execution.
+                          description: Error Message
                     minItems: 1
                     maxItems: 1                          
