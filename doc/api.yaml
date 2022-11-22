@@ -39,7 +39,7 @@ paths:
                   type: string
                   example: Maria
                   pattern: 'ˆ.*?$'
-                  minLength: 3
+                  minLength: 6
                   maxLength: 16
         required: true
       responses: 
@@ -72,12 +72,18 @@ paths:
               schema:
                 type: string
                 description: "User Id"
+                minLength: 6
+                maxLength: 16
             - in: path
               name: newUsername
               required: true
               schema:
-                description: "New UserName"
                 type: string
+                description: "New UserName"
+                minLength: 6
+                maxLength: 16                
+                
+
           responses: 
             '200':
               description: Success 
@@ -129,12 +135,16 @@ paths:
               schema:
                 type: string
                 description: "First UserId"
+                minLength: 6
+                maxLength: 16                
             - in: path
               name: userId2
               required: true
               schema:
                 type: string
                 description: "Second UserId"
+                minLength: 6
+                maxLength: 16                
           responses: 
             '200':
               description: Success 
