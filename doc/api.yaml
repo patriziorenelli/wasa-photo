@@ -39,7 +39,7 @@ paths:
                   type: string
                   example: Mariangela
                   description: Username
-                  pattern: '^[a-zA-Z0-9]+$'
+                  pattern: '^[a-zA-Z0-9-_]+$'
                   minLength: 6
                   maxLength: 16
         required: true
@@ -87,7 +87,7 @@ paths:
               schema:
                 type: string
                 description: "New UserName"
-                example: Franchino12
+                example: Franchino_12
                 pattern: '^[a-zA-Z0-9-_]+$'
                 minLength: 6
                 maxLength: 16                
