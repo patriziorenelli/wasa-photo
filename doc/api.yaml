@@ -78,6 +78,7 @@ paths:
               application/json:
                 schema: 
                   type: object
+                  description: "Json lettura dati modifica"
                   properties: 
                     UserId: 
                       type: string
@@ -138,7 +139,7 @@ paths:
 
 
 
-  /users/{userId1}/followUser/-/{userId2}:
+  /users/followUser/:
     post:
           tags: ["followUser"]
           summary: Follow another user
@@ -148,29 +149,29 @@ paths:
           operationId: followUser
           security:
             - userAuth: []
-          parameters: 
-            - in: path
-              name: userId1
-              required: true
-              description: First UserId
-              schema:
-                type: string
-                description: "First UserId"
-                example: abcdef012345
-                pattern: '^[a-zA-Z0-9]+$'
-                minLength: 6
-                maxLength: 16                
-            - in: path
-              name: userId2
-              required: true
-              description: Second UserId
-              schema:
-                type: string
-                description: "Second UserId"
-                example: abccrf389345                
-                pattern: '^[a-zA-Z0-9]+$'
-                minLength: 6
-                maxLength: 16                
+          requestBody: 
+            required: true
+            description: "Json con id UserId e il nuovo username da impostare"
+            content: 
+              application/json:
+                schema: 
+                  type: object
+                  description: "Json lettura dati utenti"
+                  properties: 
+                    userId1:
+                      type: string
+                      description: "First UserId"
+                      example: abcdef012345
+                      pattern: '^[a-zA-Z0-9]+$'
+                      minLength: 6
+                      maxLength: 16   
+                    UserId2:
+                      type: string
+                      description: "Second UserId"
+                      example: abccrf389345                
+                      pattern: '^[a-zA-Z0-9]+$'
+                      minLength: 6
+                      maxLength: 16    
           responses: 
             '200':
               description: Success 
