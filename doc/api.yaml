@@ -139,7 +139,7 @@ paths:
 
 
 
-  /users/followUser/:
+  /users/followUser:
     post:
           tags: ["followUser"]
           summary: Follow another user
