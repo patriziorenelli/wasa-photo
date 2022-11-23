@@ -43,6 +43,7 @@ paths:
                   minLength: 6
                   maxLength: 16
         required: true
+                  
       responses: 
         '200':
           description: User log-in action successful
@@ -60,7 +61,7 @@ paths:
                     pattern: '^[a-zA-Z0-9]+$'
                     description: Id dell'utente
   
-  /{userId}/setMyUserName/{newUsername}:
+  /users/{userId}/setMyUserName/{newUsername}:
     post:
           tags: ["setMyUserName"]
           summary: Set Username of User selected by his id 
@@ -68,6 +69,8 @@ paths:
             If the user does not exist, error is returned.
             If the user exists, his username is changed.
           operationId: setMyUserName
+          security:
+            - userAuth: []
           parameters: 
             - in: path
               name: userId
@@ -91,8 +94,7 @@ paths:
                 pattern: '^[a-zA-Z0-9-_]+$'
                 minLength: 6
                 maxLength: 16                
-                
-
+          
           responses: 
             '200':
               description: Success 
@@ -134,7 +136,10 @@ paths:
                     minItems: 1
                     maxItems: 1
 
-  /followUser/{userId1}/-/{userId2}:
+
+
+
+  /users/{userId1}/followUser/-/{userId2}:
     post:
           tags: ["followUser"]
           summary: Follow another user
@@ -142,6 +147,8 @@ paths:
             If the user identified by userId2 does not exist, error is returned.
             If the user identified by userId2 exists, user identified by userId follow user identified by userId2 if user2 hasn't banned him.
           operationId: followUser
+          security:
+            - userAuth: []
           parameters: 
             - in: path
               name: userId1
@@ -261,4 +268,12 @@ paths:
                           example: Error server execution.
                           description: Error Message
                     minItems: 1
-                    maxItems: 1                          
+                    maxItems: 1
+                    
+components: 
+  securitySchemes:
+    userAuth:
+      type: http
+      scheme: bearer
+
+
