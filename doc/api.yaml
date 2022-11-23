@@ -60,6 +60,22 @@ paths:
                     example: "abcdef012345"
                     pattern: '^[a-zA-Z0-9]+$'
                     description: Id dell'utente
+
+        '201':
+          description: User CREATED and log-in action successful
+          content:
+            application/json:
+              schema:
+                type: object
+                description: "User CREATED and log-in action successful"
+                properties:
+                  identifier:
+                    # change here if you decide to use an integer
+                    # or any other type of identifier
+                    type: string
+                    example: "abcdef012345"
+                    pattern: '^[a-zA-Z0-9]+$'
+                    description: Id dell'utente
   
   /users/setMyUserName:
     post:
@@ -139,7 +155,7 @@ paths:
 
 
 
-  /users/followUser:
+  /users/followUser/:
     post:
           tags: ["followUser"]
           summary: Follow another user
