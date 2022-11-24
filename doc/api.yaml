@@ -47,13 +47,8 @@ paths:
                 type: object
                 description: "User log-in action successful"
                 properties:
-                  identifier:
-                    # change here if you decide to use an integer
-                    # or any other type of identifier
-                    type: string
-                    example: "abcdef012345"
-                    pattern: '^[a-zA-Z0-9]+$'
-                    description: Id dell'utente
+                  UserName: {$ref: "#/components/schemas/Username"}
+                    
 
         '201':
           description: User CREATED and log-in action successful
@@ -63,13 +58,8 @@ paths:
                 type: object
                 description: "User CREATED and log-in action successful"
                 properties:
-                  identifier:
-                    # change here if you decide to use an integer
-                    # or any other type of identifier
-                    type: string
-                    example: "abcdef012345"
-                    pattern: '^[a-zA-Z0-9]+$'
-                    description: Id dell'utente
+                  identifier: { $ref: "#/components/schemas/identifier" }
+                    
   
   /users/{userId}/setMyUserName:
     put:
@@ -96,44 +86,23 @@ paths:
 
           responses: 
             '200':
-              description: Success 
-              content: 
+              description: UserName is changed 
+              content:
                 application/json:
                   schema:
-                    type: array
-                    description: "Return if UserName is changed"
-                    items:
-                      properties: 
-                        Error Code: 
-                          type: integer
-                          example: 200
-                          description: Error Code
-                        Error Message:
-                          type: string
-                          example: UserName changed
-                          description: Error Message
-                    minItems: 1
-                    maxItems: 1
+                    type: object
+                    description: "UserName is changed"
+                    properties:
+                      newUserName: { $ref: "#/components/schemas/Username" }
             '400':
               description: Userid not found  
-              content: 
+              content:
                 application/json:
                   schema:
-                    type: array
-                    description: "Return if UserName is Not changed"
-                    items:
-                      properties: 
-                        Error Code: 
-                          type: integer
-                          example: 400
-                          description: Error Code
-                        Error Message:
-                          type: string
-                          example: UserName NOT changed
-                          description: Error Message
-
-                    minItems: 1
-                    maxItems: 1
+                    type: object
+                    description: "UserId is NOT found"
+                    properties:
+                      newUserName: { $ref: "#/components/schemas/identifier" }
 
 
 
@@ -164,101 +133,52 @@ paths:
               
           responses: 
             '200':
-              description: Success 
-              content: 
+              description: Now you follow the other user
+              content:
                 application/json:
                   schema:
-                    type: array
-                    description: "Return if the following is successful"
-                    items:
-                      properties: 
-                        Error Code: 
-                          type: integer
-                          example: 200
-                          description: Error Code
-                        Error Message:
-                          type: string
-                          example: Now follow the user Marco.
-                          description: Error Message
-                    minItems: 1
-                    maxItems: 1
+                    type: object
+                    description: "UserName of followed user"
+                    properties:
+                      newUserName: { $ref: "#/components/schemas/Username" }
            
             '400':
-              description: Userid not found  
-              content: 
+              description: Userid not found 
+              content:
                 application/json:
                   schema:
-                    type: array
-                    description: "Return if UserId is NOT found"
-                    items:
-                      properties: 
-                        Error Code: 
-                          type: integer
-                          example: 400
-                          description: Error Code
-                        Error Message:
-                          type: string
-                          example: Userid not found.
-                          description: Error Message
-                    minItems: 1
-                    maxItems: 1                         
+                    type: object
+                    description: "UserId is NOT found"
+                    properties:
+                      newUserName: { $ref: "#/components/schemas/identifier" }                                      
             '403':
-              description: Userid banned  
-              content: 
+              description: Userid banned 
+              content:
                 application/json:
                   schema:
-                    type: array
-                    description: "Return if User2 banned User1"
-                    items:
-                      properties: 
-                        Error Code: 
-                          type: integer
-                          example: 403
-                          description: Error Code
-                        Error Message:
-                          type: string
-                          example: Sorry, Maria banned you. You can not follow her.
-                          description: Error Message
-                    minItems: 1
-                    maxItems: 1
+                    type: object
+                    description: "User2 BANNED you"
+                    properties:
+                      newUserName: { $ref: "#/components/schemas/identifier" }
             '404':
-              description: Userid2 not found  
+              description: Userid2 not found
               content: 
                 application/json:
-                  schema:
-                    type: array
-                    description: "Return if UserId2 is NOT found"
-                    items:
-                      properties: 
-                        Error Code: 
-                          type: integer
-                          example: 404
-                          description: Error Code
-                        Error Message:
-                          type: string
-                          example: Userid2 not found.
-                          description: Error Message
-                    minItems: 1
-                    maxItems: 1                        
+                    schema:
+                      type: object
+                      description: "UserId2 is NOT found"
+                      properties:
+                        newUserName: { $ref: "#/components/schemas/identifier" }                                            
             '500':
-              description: Error server execution  
-              content: 
+              description: Error server execution 
+              content:
                 application/json:
-                  schema:
-                    type: array
-                    description: "Error server execution"
-                    items:
-                      properties: 
-                        Error Code: 
-                          type: integer
-                          example: 500
-                          description: Error Code
-                        Error Message:
-                          type: string
-                          example: Error server execution.
-                          description: Error Message
-                    minItems: 1
-                    maxItems: 1
+                    schema:
+                      type: object
+                      description: "Not followed"
+                      properties:
+                        newUserName: { $ref: "#/components/schemas/Username" }      
+
                     
 components: 
   schemas:
@@ -269,6 +189,14 @@ components:
       pattern: '^[a-zA-Z0-9-_]+$'
       minLength: 6
       maxLength: 16 
+      
+    identifier:
+        type: string
+        description: "User Id"
+        example: abcdef012345
+        pattern: '^[a-zA-Z0-9]+$'
+        minLength: 6
+        maxLength: 16    
 
   parameters: 
     userId:
