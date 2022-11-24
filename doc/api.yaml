@@ -28,21 +28,15 @@ paths:
         If the user exists, the user identifier is returned.
       operationId: doLogin
       requestBody:
+        required: true
         description: User details
         content:
           application/json:
-            schema:
+            schema: 
               type: object
-              description: "Oggetto"
+              description: "Json with username"
               properties:
-                name:
-                  type: string
-                  example: Mariangela
-                  description: Username
-                  pattern: '^[a-zA-Z0-9-_]+$'
-                  minLength: 6
-                  maxLength: 16
-        required: true
+                userName: {$ref: "#/components/schemas/Username"}
                   
       responses: 
         '200':
@@ -77,8 +71,8 @@ paths:
                     pattern: '^[a-zA-Z0-9]+$'
                     description: Id dell'utente
   
-  /users/setMyUserName:
-    post:
+  /users/{userId}/setMyUserName:
+    put:
           tags: ["setMyUserName"]
           summary: Set Username of User selected by his id 
           description: |
@@ -87,30 +81,19 @@ paths:
           operationId: setMyUserName
           security:
             - userAuth: []
+          parameters: 
+            - $ref: "#/components/parameters/userId"
           requestBody: 
             required: true
-            description: "Json con id UserId e il nuovo username da impostare"
+            description: "Json con il nuovo username da impostare"
             content: 
               application/json:
                 schema: 
-                  type: object
-                  description: "Json lettura dati modifica"
-                  properties: 
-                    UserId: 
-                      type: string
-                      description: "User Id"
-                      example: abcdef012345
-                      pattern: '^[a-zA-Z0-9]+$'
-                      minLength: 6
-                      maxLength: 16
-                    newUsername:
-                      type: string
-                      description: "New UserName"
-                      example: Franchino_12
-                      pattern: '^[a-zA-Z0-9-_]+$'
-                      minLength: 6
-                      maxLength: 16                
-          
+                  type: object 
+                  description: "Json to read new username"
+                  properties:
+                    newUsername: {$ref: "#/components/schemas/Username"}
+
           responses: 
             '200':
               description: Success 
@@ -155,7 +138,7 @@ paths:
 
 
 
-  /users/followUser/:
+  /users/{userId}/followUser/{followId}:
     post:
           tags: ["followUser"]
           summary: Follow another user
@@ -165,29 +148,20 @@ paths:
           operationId: followUser
           security:
             - userAuth: []
-          requestBody: 
-            required: true
-            description: "Json con id UserId e il nuovo username da impostare"
-            content: 
-              application/json:
-                schema: 
-                  type: object
-                  description: "Json lettura dati utenti"
-                  properties: 
-                    userId1:
-                      type: string
-                      description: "First UserId"
-                      example: abcdef012345
-                      pattern: '^[a-zA-Z0-9]+$'
-                      minLength: 6
-                      maxLength: 16   
-                    UserId2:
-                      type: string
-                      description: "Second UserId"
-                      example: abccrf389345                
-                      pattern: '^[a-zA-Z0-9]+$'
-                      minLength: 6
-                      maxLength: 16    
+          parameters: 
+            - $ref: "#/components/parameters/userId"
+            - in: path
+              name: followId
+              required: true
+              description: id of the user to follow 
+              schema:
+                type: string
+                description: "User Id"
+                example: abcdef012345
+                pattern: '^[a-zA-Z0-9]+$'
+                minLength: 6
+                maxLength: 16
+              
           responses: 
             '200':
               description: Success 
@@ -287,6 +261,29 @@ paths:
                     maxItems: 1
                     
 components: 
+  schemas:
+    Username:
+      type: string
+      description: "User's UserName"
+      example: Franchino_12
+      pattern: '^[a-zA-Z0-9-_]+$'
+      minLength: 6
+      maxLength: 16 
+
+  parameters: 
+    userId:
+      in: path
+      name: userId
+      required: true
+      description: User Id
+      schema:
+        type: string
+        description: "User Id"
+        example: abcdef012345
+        pattern: '^[a-zA-Z0-9]+$'
+        minLength: 6
+        maxLength: 16
+
   securitySchemes:
     userAuth:
       description: login only as your user id
