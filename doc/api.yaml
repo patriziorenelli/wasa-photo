@@ -73,7 +73,7 @@ paths:
                   schema: 
                     $ref: "#/components/schemas/errorSchema"
                   example:
-                    NewUserName: "Marco12"
+                    newUserName: "Marco12"
 
             '400': 
               description: Userid not found   
@@ -81,7 +81,7 @@ paths:
 
   /users/{userId}/followUser/{userId2}: 
 
-    post: 
+    put: 
           tags: ["followUser"] 
           summary: Follow another user 
           description: | 
@@ -103,7 +103,7 @@ paths:
                   schema: 
                     $ref: '#/components/schemas/errorSchema' 
                   example:
-                    userName2: "Luigi11" 
+                    followedUser: "Luigi11" 
             '400': 
               description: Userid not found                                 
             '403': 
@@ -135,7 +135,7 @@ paths:
                   schema: 
                     $ref: '#/components/schemas/errorSchema' 
                   example:
-                    userName2: "Luigi11" 
+                    unfollowedUser: "Luigi11" 
             '400': 
               description: Userid not found                                 
             '403': 
@@ -144,6 +144,78 @@ paths:
               description: Userid2 not found                                           
             '500':
               description: Error server execution   
+
+  /users/{userId}/banUser/{userId2}/username:
+     put: 
+          tags: ["banUser"] 
+          summary: Ban another user 
+          description: | 
+            If the user identified by userId2 does not exist, error is returned. 
+            If the user identified by userId2 exists and user isn't banned by user2, user identified by userId ban user identified by userId2. 
+          operationId: banUser 
+          security: 
+            - userAuth: [] 
+
+          parameters:  
+            - $ref: "#/components/parameters/userId" 
+            - $ref: "#/components/parameters/userId2" 
+
+          responses:  
+            '200': 
+              description: User2 banned
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    bannedUser: "Luigi11" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: Userid2 banned  you
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution     
+                   
+     delete:
+          tags: ["unbanUser"] 
+          summary: Unban another user 
+          description: | 
+            If the user identified by userId2 does not exist or user doesn't ban userId2, error is returned. 
+            If user banned userId2, user identified by userId unabanned user identified by userId2. 
+          operationId: unbanUser 
+          security: 
+            - userAuth: [] 
+
+          parameters:  
+            - $ref: "#/components/parameters/userId" 
+            - $ref: "#/components/parameters/userId2" 
+
+          responses:  
+            '200': 
+              description: User2 unbanned
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    unbannedUser: "Luigi11" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId2 wasn't banned
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution   
+
+
+
+
+
+
+
 components:  
 
   schemas: 
