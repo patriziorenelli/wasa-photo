@@ -152,11 +152,6 @@ components:
       minLength: 5 
       maxLength: 50 
 
-    schIdentifier:
-      type: object
-      properties:
-        identifier:
-          $ref: "#/components/schemas/identifier"
 
     scUserName:
       type: object
@@ -167,12 +162,7 @@ components:
 
   requestBodies: 
   
-    userDetailsId:
-          description: User details Id
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/schIdentifier"
+
                 
     userDetailsNickname:
           description: User details Nickname
