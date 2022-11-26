@@ -7,6 +7,8 @@ tags:
     description: "Set Username of User selected by his id " 
   - name: "followUser" 
     description: "Follow another user"   
+  - name: "unfollowUser"
+    description: "Unfollow another user"
 
 
 openapi: 3.0.0 
@@ -109,8 +111,39 @@ paths:
             '404': 
               description: Userid2 not found                                           
             '500':
-              description: Error server execution                      
+              description: Error server execution     
+                   
+    delete:
+          tags: ["unfollowUser"] 
+          summary: Unfollow another user 
+          description: | 
+            If the user identified by userId2 does not exist or user doesn't follow userId2, error is returned. 
+            If user follow userId2, user identified by userId unfollow user identified by userId2. 
+          operationId: unfollowUser 
+          security: 
+            - userAuth: [] 
 
+          parameters:  
+            - $ref: "#/components/parameters/userId" 
+            - $ref: "#/components/parameters/userId2" 
+
+          responses:  
+            '200': 
+              description: Now you don't follow the other user 
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    userName2: "Luigi11" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: You don't follow userId2 
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution   
 components:  
 
   schemas: 
