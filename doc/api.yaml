@@ -9,7 +9,10 @@ tags:
     description: "Follow another user"   
   - name: "unfollowUser"
     description: "Unfollow another user"
-
+  - name: "banUser"
+    description: "Ban another user"
+  - name: "unbanUser"
+    description: "UnBan another user"    
 
 openapi: 3.0.0 
 
