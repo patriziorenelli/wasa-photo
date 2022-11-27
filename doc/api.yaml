@@ -12,8 +12,11 @@ tags:
   - name: "banUser"
     description: "Ban another user"
   - name: "unbanUser"
-    description: "UnBan another user"    
-
+    description: "UnBan another user"
+  - name: "likePhoto"
+    description: "Like a photo"       
+  - name: "unlikePhoto" 
+    description: " Remove like in a photo " 
 openapi: 3.0.0 
 
 info:  
@@ -83,6 +86,9 @@ paths:
               
 
   /users/{userId}/followUser/{userId2}: 
+    parameters:  
+      - $ref: "#/components/parameters/userId" 
+      - $ref: "#/components/parameters/userId2"     
 
     put: 
           tags: ["followUser"] 
@@ -93,10 +99,6 @@ paths:
           operationId: followUser 
           security: 
             - userAuth: [] 
-
-          parameters:  
-            - $ref: "#/components/parameters/userId" 
-            - $ref: "#/components/parameters/userId2" 
 
           responses:  
             '200': 
@@ -126,10 +128,6 @@ paths:
           security: 
             - userAuth: [] 
 
-          parameters:  
-            - $ref: "#/components/parameters/userId" 
-            - $ref: "#/components/parameters/userId2" 
-
           responses:  
             '200': 
               description: Now you don't follow the other user 
@@ -149,6 +147,11 @@ paths:
               description: Error server execution   
 
   /users/{userId}/banUser/{userId2}:
+
+     parameters:  
+      - $ref: "#/components/parameters/userId" 
+      - $ref: "#/components/parameters/userId2" 
+
      put: 
           tags: ["banUser"] 
           summary: Ban another user 
@@ -158,10 +161,6 @@ paths:
           operationId: banUser 
           security: 
             - userAuth: [] 
-
-          parameters:  
-            - $ref: "#/components/parameters/userId" 
-            - $ref: "#/components/parameters/userId2" 
 
           responses:  
             '200': 
@@ -214,6 +213,66 @@ paths:
               description: Error server execution   
 
 
+  /photo/{photoId}/Like/{userId}:
+    parameters:
+      - $ref:  '#/components/parameters/photoId'
+      - $ref: '#/components/parameters/userId'
+
+    put:
+          tags: ["likePhoto"] 
+          summary: Like a post
+          description: | 
+            If the user identified by userId or photo identified by phId don't exist, error is returned. 
+            If the user identified by userId and photo identified by phId exists and user can see the photo , the user likes the photo indicated by phId. 
+          operationId: likePhoto 
+          security: 
+            - userAuth: []
+          
+          responses:
+            '200': 
+              description: Liked
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done"          
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: PhotoId not found                                           
+            '500':
+              description: Error server execution  
+
+    delete:
+          tags: ["unlikePhoto"] 
+          summary:  Remove like in a photo 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't liked the photo, error is returned. 
+            If user had liked the photo and he isn't banned, he removes his likes on the post
+          operationId: unlikePhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove like in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found                                           
+            '500':
+              description: Error server execution  
 
 
 
@@ -306,6 +365,20 @@ components:
         pattern: '^[a-zA-Z0-9]+$' 
         minLength: 6 
         maxLength: 16 
+
+    photoId: 
+      in: path 
+      name: photoId 
+      required: true 
+      description: Single id photo
+      schema: 
+        type: string 
+        description: "Single id photo"
+        example: phe4er87yh092e 
+        pattern: '^[a-zA-Z0-9]+$' 
+        minLength: 10 
+        maxLength: 40 
+
 
   securitySchemes: 
     userAuth: 
