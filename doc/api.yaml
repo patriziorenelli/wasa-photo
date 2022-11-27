@@ -20,6 +20,9 @@ tags:
     description: "Comment a post"
   - name: "uncommentPhoto"
     description: "Uncomment a post"
+  - name: "uploadPhoto"
+    description: "Upload new photo"
+
 
 openapi: 3.0.0 
 
@@ -342,7 +345,37 @@ paths:
             '406':
               description: commentId not found                                            
             '500':
-              description: Error server execution  
+              description: Error server execution 
+
+  /photo/users/{userId}/userPhoto:
+    post:
+          tags: ["uploadPhoto"] 
+          summary:  Upload new photo 
+          description: | 
+            If the user identified by userId  doesn't exist, error is returned. 
+            If the user identified by userId exist, the Photo is uploaded.
+          operationId: uploadPhoto 
+          parameters:
+            - $ref: '#/components/parameters/userId'
+          security: 
+            - userAuth: [] 
+          requestBody:
+            $ref: "#/components/requestBodies/postPhotoDetails"
+
+          responses:
+            '200': 
+              description: Remove comment in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': 
+              description: Userid not found                     
+            '403': 
+              description:  File not valid                   
+            
 
 components:  
 
@@ -370,12 +403,23 @@ components:
       minLength: 6 
       maxLength: 16  
 
+    photoFile:
+      type: string
+      format: binary
+      description: "Single photo file"
+      minLength: 1
+      maxLength: 100000000
+
+
+
+
     errorSchema: 
       description: "Error example"
       type: object 
       properties: 
         Message: 
           $ref: "#/components/schemas/errorDescription" 
+
 
     errorDescription: 
       type: string  
@@ -401,13 +445,12 @@ components:
         username:
           $ref: "#/components/schemas/username"  
 
-    schcomment:
+    schComment:
       type: object
       description:  "Describe user comment" 
       properties:
         comment:
           $ref: "#/components/schemas/comment" 
-
 
 
   requestBodies: 
@@ -417,7 +460,7 @@ components:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/schcomment" 
+                $ref: "#/components/schemas/schComment" 
 
                 
     userDetailsNickname:
@@ -426,6 +469,16 @@ components:
             application/json:
               schema:
                 $ref: "#/components/schemas/scUserName"
+
+    postPhotoDetails:
+      description: New Post details
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/photoFile"
+        
+
+              
 
 
   parameters:  
