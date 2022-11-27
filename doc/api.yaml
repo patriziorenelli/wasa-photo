@@ -17,6 +17,8 @@ tags:
     description: "Like a photo"       
   - name: "unlikePhoto" 
     description: " Remove like in a photo " 
+  - name: "commentPhoto"
+    description: "Comment a post"
 openapi: 3.0.0 
 
 info:  
@@ -190,10 +192,6 @@ paths:
           security: 
             - userAuth: [] 
 
-          parameters:  
-            - $ref: "#/components/parameters/userId" 
-            - $ref: "#/components/parameters/userId2" 
-
           responses:  
             '200': 
               description: User2 unbanned
@@ -274,8 +272,39 @@ paths:
             '500':
               description: Error server execution  
 
+  /photo/{photoId}/Comment/{userId}:
+    parameters:
+      - $ref:  '#/components/parameters/photoId'
+      - $ref: '#/components/parameters/userId'
 
-
+    post:
+          tags: ["commentPhoto"] 
+          summary: Comment a post
+          description: | 
+            If the user identified by userId or photo identified by phId don't exist, error is returned. 
+            If the user identified by userId and photo identified by phId exists and user can see the photo , the user can comment the photo indicated by phId. 
+          operationId: commentPhoto 
+          security: 
+            - userAuth: []
+          requestBody:  
+            $ref: "#/components/requestBodies/commentDetails"          
+          responses:
+            '200': 
+              description: Commented
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done"          
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: PhotoId not found                                           
+            '500':
+              description: Error server execution  
 
 
 components:  
@@ -319,16 +348,39 @@ components:
       minLength: 5 
       maxLength: 50 
 
+    comment: 
+      type: string 
+      description: "Comment" 
+      example: Nice post! 
+      pattern: '^[a-zA-Z0-9 !]+$' 
+      minLength: 1 
+      maxLength: 100 
+
 
     scUserName:
       type: object
-      description:  Describe userName 
+      description:  "Describe userName" 
       properties:
         username:
           $ref: "#/components/schemas/username"  
 
+    schcomment:
+      type: object
+      description:  "Describe user comment" 
+      properties:
+        comment:
+          $ref: "#/components/schemas/comment" 
+
+
+
   requestBodies: 
-  
+
+    commentDetails:
+          description: User comment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/schcomment" 
 
                 
     userDetailsNickname:
@@ -378,6 +430,7 @@ components:
         pattern: '^[a-zA-Z0-9]+$' 
         minLength: 10 
         maxLength: 40 
+    
 
 
   securitySchemes: 
