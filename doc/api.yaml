@@ -1,6 +1,5 @@
 
 tags: 
-
   - name: "doLogin" 
     description: "Logs in the user" 
   - name: "setMyUserName" 
@@ -19,6 +18,9 @@ tags:
     description: " Remove like in a photo " 
   - name: "commentPhoto"
     description: "Comment a post"
+  - name: "uncommentPhoto"
+    description: "Uncomment a post"
+
 openapi: 3.0.0 
 
 info:  
@@ -211,7 +213,7 @@ paths:
               description: Error server execution   
 
 
-  /photo/{photoId}/Like/{userId}:
+  /photo/{photoId}/like/{userId}:
     parameters:
       - $ref:  '#/components/parameters/photoId'
       - $ref: '#/components/parameters/userId'
@@ -272,7 +274,7 @@ paths:
             '500':
               description: Error server execution  
 
-  /photo/{photoId}/Comment/{userId}:
+  /photo/{photoId}/comment/{userId}:
     parameters:
       - $ref:  '#/components/parameters/photoId'
       - $ref: '#/components/parameters/userId'
@@ -306,6 +308,41 @@ paths:
             '500':
               description: Error server execution  
 
+
+  /photo/{photoId}/comment/{userId}/userComment/{commentId}:  
+      parameters:
+        - $ref:  '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/commentId'
+      delete:
+          tags: ["uncommentPhoto"] 
+          summary:  Remove comment in a photo 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't commented the photo, error is returned. 
+            If user had commented the photo and he isn't banned, he removes his comment on the post
+          operationId: uncommentPhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove comment in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found
+            '406':
+              description: commentId not found                                            
+            '500':
+              description: Error server execution  
 
 components:  
 
@@ -431,7 +468,18 @@ components:
         minLength: 10 
         maxLength: 40 
     
-
+    commentId: 
+      in: path 
+      name: commentId 
+      required: true 
+      description:   Single id comment 
+      schema: 
+        type: string 
+        description: "Single id comment"
+        example: phe4er87yh092e 
+        pattern: '^[a-zA-Z0-9]+$' 
+        minLength: 10 
+        maxLength: 40 
 
   securitySchemes: 
     userAuth: 
