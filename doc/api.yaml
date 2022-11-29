@@ -24,7 +24,9 @@ tags:
     description: "Upload new photo"
   - name: "deletePhoto"
     description: "Delete a photo"
-
+  - name: "getMyStream"
+    description: "Returns an array of posts from followed users"   
+     
 openapi: 3.0.0 
 
 info:  
@@ -411,6 +413,50 @@ paths:
             '500':
               description: Error server execution            
 
+  /users/{userId}/stream:
+
+      get:
+        tags: ["getMyStream"]
+        summary: Stream of the user
+        operationId: getMyStream
+        description: |
+          if the user is authenticated and follows other users, he gets the various posts of the users he follows
+        parameters:
+          - $ref: '#/components/parameters/userId'
+        security:
+          - userAuth: []
+        
+        responses:
+          '200':
+            description: The user is authenticated and follows other users gets the various posts of the users he follows
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/scStream"
+                
+                example: 
+                  Posts: 
+                    - Id: phe4er87yh092e
+                      Author: abcdef012345
+                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                      Date: 2022-11-29
+                      Like: 950
+                      Comment: 1203
+                    - Id: phe4er87yh092e
+                      Author: abcdef012345
+                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                      Date: 2022-11-29
+                      Like: 950
+                      Comment: 1203
+
+                    - Id: phe4er5800012
+                      Author: abcdef012345
+                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                      Date: 2022-11-28
+                      Like: 10
+                      Comment: 502
+
+
 components:  
 
   schemas: 
@@ -440,24 +486,89 @@ components:
     photoFile:
       type: string
       format: binary
-      description: "Single photo file"
+      description: Single photo file
       minLength: 1
       maxLength: 100000000
 
+    photoLink:
+      type: string
+      description: "Link del file della foto da caricare"
+      example: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+      minLength: 1
+      maxLength: 10000
+    
+    photoDate:
+      type: string
+      format: date
+      description: "Photo date upload"
+      example: 2022-11-29
+      minLength: 10
+      maxLength: 11
+
+    photoId:
+      type: string
+      description: "Photo identifier"
+      example: phe4er87yh092e
+      minLength: 10
+      maxLength: 40
+
+    likeNumber: 
+      type: integer
+      description: "Number of likes of the post " 
+      example: 987
+
+    commentNumber:
+      type: integer
+      description: "Number of comment of the post " 
+      example: 10000
 
 
+
+    Post:
+      type: object
+      description:  Rappresent a post 
+      properties:
+        Id:
+          $ref: "#/components/schemas/photoId"
+        Author: 
+          $ref: "#/components/schemas/identifier"
+        File:
+          $ref: "#/components/schemas/photoLink"
+        Date:
+          $ref: "#/components/schemas/photoDate"
+        Like: 
+          $ref: "#/components/schemas/likeNumber"
+        Comment: 
+          $ref: "#/components/schemas/commentNumber"
+
+
+    arrayStream:
+      type: array
+      description: Various posts of the users userId follows
+      items: 
+        $ref: '#/components/schemas/Post'
+      minItems: 0
+      maxItems: 10    
+
+    scStream:
+      type: object
+      description: Contenitor of various posts of the users userId follows
+      properties:
+        Posts:
+          $ref: '#/components/schemas/arrayStream'
 
     errorSchema: 
-      description: "Error example"
+      description: Error example
       type: object 
       properties: 
         Message: 
           $ref: "#/components/schemas/errorDescription" 
 
 
+
     errorDescription: 
       type: string  
-      description: "Status" 
+      description: Status
       example: Success 
       pattern: '^[a-zA-Z0-9]+$' 
       minLength: 5 
@@ -573,3 +684,4 @@ components:
       description: login only as your user id 
       type: http 
       scheme: bearer 
+
