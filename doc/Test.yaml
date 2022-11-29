@@ -1,0 +1,542 @@
+
+tags: 
+  - name: "doLogin" 
+    description: "Logs in the user" 
+  - name: "setMyUserName" 
+    description: "Set Username of User selected by his id " 
+  - name: "followUser" 
+    description: "Follow another user"   
+  - name: "unfollowUser"
+    description: "Unfollow another user"
+  - name: "banUser"
+    description: "Ban another user"
+  - name: "unbanUser"
+    description: "UnBan another user"
+  - name: "likePhoto"
+    description: "Like a photo"       
+  - name: "unlikePhoto" 
+    description: " Remove like in a photo " 
+  - name: "commentPhoto"
+    description: "Comment a post"
+  - name: "uncommentPhoto"
+    description: "Uncomment a post"
+  - name: "uploadPhoto"
+    description: "Upload new photo"
+
+
+openapi: 3.0.0 
+
+info:  
+  title: WasaPhoto 
+  description:  |  
+    This API allows you to manage the 
+    data available in the project 
+  version: 0.0.1 
+servers: 
+  - url: "http://localhost:3000" 
+
+   
+paths:  
+
+  /session: 
+    post: 
+      tags: ["doLogin"] 
+      summary: Logs in the user 
+      description: |- 
+        If the user does not exist, it will be created, 
+        and an identifier is returned. 
+        If the user exists, the user identifier is returned. 
+
+      operationId: doLogin 
+      requestBody:
+        $ref: "#/components/requestBodies/userDetailsNickname"
+
+      responses:  
+        '201': 
+          description: User log-in action successful 
+          content: 
+            application/json: 
+              schema: 
+                  $ref: "#/components/schemas/userId"
+              example:
+                userId: "abcdef012345"
+                     
+
+  /users/{userId}/username: 
+
+    put: 
+          tags: ["setMyUserName"] 
+          summary: Set Username of User selected by his id  
+          description: | 
+            If the user does not exist, error is returned. 
+            If the user exists, his username is changed. 
+          operationId: setMyUserName 
+          security: 
+            - userAuth: [] 
+          parameters:  
+            - $ref: "#/components/parameters/userId" 
+          requestBody:  
+            $ref: "#/components/requestBodies/userDetailsNickname"
+
+          responses:  
+            '200': 
+              description: UserName changed
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: "#/components/schemas/errorSchema"
+                  example:
+                    newUserName: "Marco12"
+
+            '400': 
+              description: Userid not found   
+              
+
+  /users/{userId}/followUser/{userId2}: 
+    parameters:  
+      - $ref: "#/components/parameters/userId" 
+      - $ref: "#/components/parameters/userId2"     
+
+    put: 
+          tags: ["followUser"] 
+          summary: Follow another user 
+          description: | 
+            If the user identified by userId2 does not exist, error is returned. 
+            If the user identified by userId2 exists, user identified by userId follow user identified by userId2 if user2 hasn't banned him. 
+          operationId: followUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Now you follow the other user 
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    followedUser: "Luigi11" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: Userid banned  
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution     
+                   
+    delete:
+          tags: ["unfollowUser"] 
+          summary: Unfollow another user 
+          description: | 
+            If the user identified by userId2 does not exist or user doesn't follow userId2, error is returned. 
+            If user follow userId2, user identified by userId unfollow user identified by userId2. 
+          operationId: unfollowUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Now you don't follow the other user 
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    unfollowedUser: "Luigi11" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: You don't follow userId2 
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution   
+
+  /users/{userId}/banUser/{userId2}:
+
+     parameters:  
+      - $ref: "#/components/parameters/userId" 
+      - $ref: "#/components/parameters/userId2" 
+
+     put: 
+          tags: ["banUser"] 
+          summary: Ban another user 
+          description: | 
+            If the user identified by userId2 does not exist, error is returned. 
+            If the user identified by userId2 exists and user isn't banned by user2, user identified by userId ban user identified by userId2. 
+          operationId: banUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: User2 banned
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    bannedUser: "Luigi11" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: Userid2 banned  you
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution     
+                   
+     delete:
+          tags: ["unbanUser"] 
+          summary: Unban another user 
+          description: | 
+            If the user identified by userId2 does not exist or user doesn't ban userId2, error is returned. 
+            If user banned userId2, user identified by userId unabanned user identified by userId2. 
+          operationId: unbanUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: User2 unbanned
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    unbannedUser: "Luigi11" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId2 wasn't banned
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution   
+
+
+  /photo/{photoId}/like/{userId}:
+    parameters:
+      - $ref:  '#/components/parameters/photoId'
+      - $ref: '#/components/parameters/userId'
+
+    put:
+          tags: ["likePhoto"] 
+          summary: Like a post
+          description: | 
+            If the user identified by userId or photo identified by phId don't exist, error is returned. 
+            If the user identified by userId and photo identified by phId exists and user can see the photo , the user likes the photo indicated by phId. 
+          operationId: likePhoto 
+          security: 
+            - userAuth: []
+          
+          responses:
+            '200': 
+              description: Liked
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done"          
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: PhotoId not found                                           
+            '500':
+              description: Error server execution  
+
+    delete:
+          tags: ["unlikePhoto"] 
+          summary:  Remove like in a photo 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't liked the photo, error is returned. 
+            If user had liked the photo and he isn't banned, he removes his likes on the post
+          operationId: unlikePhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove like in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found                                           
+            '500':
+              description: Error server execution  
+
+  /photo/{photoId}/comment/{userId}:
+    parameters:
+      - $ref:  '#/components/parameters/photoId'
+      - $ref: '#/components/parameters/userId'
+
+    post:
+          tags: ["commentPhoto"] 
+          summary: Comment a post
+          description: | 
+            If the user identified by userId or photo identified by phId don't exist, error is returned. 
+            If the user identified by userId and photo identified by phId exists and user can see the photo , the user can comment the photo indicated by phId. 
+          operationId: commentPhoto 
+          security: 
+            - userAuth: []
+          requestBody:  
+            $ref: "#/components/requestBodies/commentDetails"          
+          responses:
+            '201': 
+              description: Commented
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done"          
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: PhotoId not found                                           
+            '500':
+              description: Error server execution  
+
+
+  /photo/{photoId}/comment/{commentId}/user/{userId}:  
+      parameters:
+        - $ref:  '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/commentId'
+      delete:
+          tags: ["uncommentPhoto"] 
+          summary:  Remove comment in a photo 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't commented the photo, error is returned. 
+            If user had commented the photo and he isn't banned, he removes his comment on the post
+          operationId: uncommentPhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove comment in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found
+            '406':
+              description: commentId not found                                            
+            '500':
+              description: Error server execution 
+
+  /users/{userId}/photo:
+    post:
+          tags: ["uploadPhoto"] 
+          summary:  Upload new photo 
+          description: | 
+            If the user identified by userId  doesn't exist, error is returned. 
+            If the user identified by userId exist, the Photo is uploaded.
+          operationId: uploadPhoto 
+          parameters:
+            - $ref: '#/components/parameters/userId'
+          security: 
+            - userAuth: [] 
+          requestBody:
+            $ref: "#/components/requestBodies/postPhotoDetails"
+
+          responses:
+            '201': 
+              description: Remove comment in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': 
+              description: Userid not found                     
+            '403': 
+              description:  File not valid                   
+            
+
+components:  
+
+  schemas: 
+    username: 
+      type: string 
+      description: "User's UserName" 
+      example: Franchino_12 
+      pattern: '^[a-zA-Z0-9-_]+$' 
+      minLength: 6 
+      maxLength: 16  
+
+    userId:
+      type: object 
+      description: "User log-in action successful" 
+      properties: 
+        identifier: 
+          $ref: '#/components/schemas/identifier'
+
+    identifier: 
+      type: string 
+      description: "User Id" 
+      example: abcdef012345 
+      pattern: '^[a-zA-Z0-9]+$' 
+      minLength: 6 
+      maxLength: 16  
+
+    photoFile:
+      type: string
+      format: binary
+      description: "Single photo file"
+      minLength: 1
+      maxLength: 100000000
+
+
+
+
+    errorSchema: 
+      description: "Error example"
+      type: object 
+      properties: 
+        Message: 
+          $ref: "#/components/schemas/errorDescription" 
+
+
+    errorDescription: 
+      type: string  
+      description: "Status" 
+      example: Success 
+      pattern: '^[a-zA-Z0-9]+$' 
+      minLength: 5 
+      maxLength: 50 
+
+    comment: 
+      type: string 
+      description: "Comment" 
+      example: Nice post! 
+      pattern: '^[a-zA-Z0-9 !]+$' 
+      minLength: 1 
+      maxLength: 100 
+
+
+    scUserName:
+      type: object
+      description:  "Describe userName" 
+      properties:
+        username:
+          $ref: "#/components/schemas/username"  
+
+    schComment:
+      type: object
+      description:  "Describe user comment" 
+      properties:
+        comment:
+          $ref: "#/components/schemas/comment" 
+
+
+  requestBodies: 
+
+    commentDetails:
+          description: User comment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/schComment" 
+
+                
+    userDetailsNickname:
+          description: User details Nickname
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/scUserName"
+
+    postPhotoDetails:
+      description: New Post details
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/photoFile"
+        
+
+              
+
+
+  parameters:  
+    userId: 
+      in: path 
+      name: userId 
+      required: true 
+      description: User Id 
+      schema: 
+        type: string 
+        description: "User Id" 
+        example: abcdef012345 
+        pattern: '^[a-zA-Z0-9]+$' 
+        minLength: 6 
+        maxLength: 16 
+
+    userId2: 
+      in: path 
+      name: userId2 
+      required: true 
+      description: Second userId
+      schema: 
+        type: string 
+        description: "Second userId" 
+        example: abcdef012345 
+        pattern: '^[a-zA-Z0-9]+$' 
+        minLength: 6 
+        maxLength: 16 
+
+    photoId: 
+      in: path 
+      name: photoId 
+      required: true 
+      description: Single id photo
+      schema: 
+        type: string 
+        description: "Single id photo"
+        example: phe4er87yh092e 
+        pattern: '^[a-zA-Z0-9]+$' 
+        minLength: 10 
+        maxLength: 40 
+    
+    commentId: 
+      in: path 
+      name: commentId 
+      required: true 
+      description:   Single id comment 
+      schema: 
+        type: string 
+        description: "Single id comment"
+        example: phe4er87yh092e 
+        pattern: '^[a-zA-Z0-9]+$' 
+        minLength: 10 
+        maxLength: 40 
+
+  securitySchemes: 
+    userAuth: 
+      description: login only as your user id 
+      type: http 
+      scheme: bearer 
+
