@@ -22,7 +22,8 @@ tags:
     description: "Uncomment a post"
   - name: "uploadPhoto"
     description: "Upload new photo"
-
+  - name: "deletePhoto"
+    description: "Delete a photo"
 
 openapi: 3.0.0 
 
@@ -312,7 +313,7 @@ paths:
               description: Error server execution  
 
 
-  /photo/{photoId}/comment/{userId}/userComment/{commentId}:  
+  /photo/{photoId}/comment/{commentId}/user/{userId}:  
       parameters:
         - $ref:  '#/components/parameters/photoId'
         - $ref: '#/components/parameters/userId'
@@ -347,7 +348,7 @@ paths:
             '500':
               description: Error server execution 
 
-  /photo/users/{userId}/userPhoto:
+  /users/{userId}/photo:
     post:
           tags: ["uploadPhoto"] 
           summary:  Upload new photo 
@@ -374,8 +375,41 @@ paths:
             '400': 
               description: Userid not found                     
             '403': 
-              description:  File not valid                   
-            
+              description:  File not valid  
+
+  /photo/{photoId}/user/{userId}:  
+      parameters:
+        - $ref:  '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/userId'
+      delete:
+          tags: ["deletePhoto"] 
+          summary:  Remove photo from his profile 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't posted the photo, error is returned. 
+            If user had posted the photo and the photoId exists, he removes his  post
+          operationId: deletePhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found
+            '406':
+              description: commentId not found                                            
+            '500':
+              description: Error server execution            
 
 components:  
 
@@ -539,4 +573,3 @@ components:
       description: login only as your user id 
       type: http 
       scheme: bearer 
-
