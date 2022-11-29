@@ -294,7 +294,7 @@ paths:
           requestBody:  
             $ref: "#/components/requestBodies/commentDetails"          
           responses:
-            '200': 
+            '201': 
               description: Commented
               content: 
                 application/json: 
@@ -363,7 +363,7 @@ paths:
             $ref: "#/components/requestBodies/postPhotoDetails"
 
           responses:
-            '200': 
+            '201': 
               description: Remove comment in a photo
               content: 
                 application/json: 
@@ -539,3 +539,4 @@ components:
       description: login only as your user id 
       type: http 
       scheme: bearer 
+
