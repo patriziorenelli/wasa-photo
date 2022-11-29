@@ -26,7 +26,8 @@ tags:
     description: "Delete a photo"
   - name: "getMyStream"
     description: "Returns an array of posts from followed users"   
-     
+  - name: "getUserProfile"
+    description: "Returns user profile information"  
 openapi: 3.0.0 
 
 info:  
@@ -420,7 +421,8 @@ paths:
         summary: Stream of the user
         operationId: getMyStream
         description: |
-          if the user is authenticated and follows other users, he gets the various posts of the users he follows
+           If the user identified by userId  does not exist , error is returned. 
+           If the user is authenticated and follows other users, it gets the various posts of the users he follows
         parameters:
           - $ref: '#/components/parameters/userId'
         security:
@@ -433,28 +435,93 @@ paths:
               application/json:
                 schema:
                   $ref: "#/components/schemas/scStream"
-                
                 example: 
                   Posts: 
                     - Id: phe4er87yh092e
-                      Author: abcdef012345
+                      AuthorId: abcdef012345
+                      AuthorNickname: Franchino_12
                       File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-29
                       Like: 950
                       Comment: 1203
                     - Id: phe4er87yh092e
-                      Author: abcdef012345
+                      AuthorId: abcdef012345
+                      AuthorNickname: Mario54_00
                       File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-29
                       Like: 950
                       Comment: 1203
 
-                    - Id: phe4er5800012
-                      Author: abcdef012345
+                    - Id: phe4e10000012
+                      AuthorId: abcdef012700
+                      AuthorNickname: Martina_fra13
                       File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-28
                       Like: 10
                       Comment: 502
+          '400': 
+            description: Userid not found 
+          '500':
+            description: Error server execution  
+
+
+  /users/{userId}/profile:
+
+      get:
+        tags: ["getUserProfile"]
+        summary: Profile of the user
+        operationId: getUserProfile
+        description: |
+          If the user identified by userId  does not exist , error is returned. 
+          if the user is authenticated and and if the user is not banned, it returns the profile of the user indicated by userId
+        parameters:
+          - $ref: '#/components/parameters/userId'
+        security:
+          - userAuth: []
+        
+        responses:
+          '200':
+            description: The user is authenticated and the user can see the user identified by userId, return the profile data
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/scProfile"
+                example:
+                  
+                  userId: abcdef012700
+                  userName: Franchino_12
+                  numPosts: 15
+                  numFollower: 1280
+                  numFollowing: 1600
+                  Posts: 
+                      - Id: phe4er87yh092e
+                        AuthorId: abcdef012345
+                        AuthorNickname: Franchino_12
+                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                        Date: 2022-11-29
+                        Like: 950
+                        Comment: 1203
+                      - Id: phe4er87yh092e
+                        AuthorId: abcdef012345
+                        AuthorNickname: Mario54_00
+                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                        Date: 2022-11-29
+                        Like: 950
+                        Comment: 1203
+
+                      - Id: phe4e10000012
+                        AuthorId: abcdef012700
+                        AuthorNickname: Martina_fra13
+                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                        Date: 2022-11-28
+                        Like: 10
+                        Comment: 502
+          '400': 
+            description: Userid not found 
+          '500':
+            description: Error server execution  
+
+
 
 
 components:  
@@ -462,7 +529,7 @@ components:
   schemas: 
     username: 
       type: string 
-      description: "User's UserName" 
+      description: User's UserName 
       example: Franchino_12 
       pattern: '^[a-zA-Z0-9-_]+$' 
       minLength: 6 
@@ -470,14 +537,14 @@ components:
 
     userId:
       type: object 
-      description: "User log-in action successful" 
+      description: User log-in action successful 
       properties: 
         identifier: 
           $ref: '#/components/schemas/identifier'
 
     identifier: 
       type: string 
-      description: "User Id" 
+      description: User Id 
       example: abcdef012345 
       pattern: '^[a-zA-Z0-9]+$' 
       minLength: 6 
@@ -492,7 +559,7 @@ components:
 
     photoLink:
       type: string
-      description: "Link del file della foto da caricare"
+      description: Link del file della foto da caricare
       example: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
       minLength: 1
       maxLength: 10000
@@ -500,46 +567,61 @@ components:
     photoDate:
       type: string
       format: date
-      description: "Photo date upload"
+      description: Photo date upload
       example: 2022-11-29
       minLength: 10
       maxLength: 11
 
     photoId:
       type: string
-      description: "Photo identifier"
+      description: Photo identifier
       example: phe4er87yh092e
       minLength: 10
       maxLength: 40
 
     likeNumber: 
       type: integer
-      description: "Number of likes of the post " 
+      description: Number of likes of the post 
       example: 987
 
     commentNumber:
       type: integer
-      description: "Number of comment of the post " 
+      description: Number of comment of the post  
       example: 10000
 
+    followerNumber:
+      type: integer
+      description: Number of follower 
+      example: 1285
 
+    followingNumber:
+      type: integer
+      description: Number of followinf
+      example: 1350      
+
+    photoNumber:
+      type: integer
+      description: Number of post
+      example: 23    
 
     Post:
       type: object
       description:  Rappresent a post 
       properties:
         Id:
-          $ref: "#/components/schemas/photoId"
-        Author: 
-          $ref: "#/components/schemas/identifier"
+          $ref: '#/components/schemas/photoId'
+        AuthorId: 
+          $ref: '#/components/schemas/identifier'
+        AuthorNickname:
+          $ref: '#/components/schemas/username'
         File:
-          $ref: "#/components/schemas/photoLink"
+          $ref: '#/components/schemas/photoLink'
         Date:
-          $ref: "#/components/schemas/photoDate"
+          $ref: '#/components/schemas/photoDate'
         Like: 
-          $ref: "#/components/schemas/likeNumber"
+          $ref: '#/components/schemas/likeNumber'
         Comment: 
-          $ref: "#/components/schemas/commentNumber"
+          $ref: '#/components/schemas/commentNumber'
 
 
     arrayStream:
@@ -554,6 +636,23 @@ components:
       type: object
       description: Contenitor of various posts of the users userId follows
       properties:
+        Posts:
+          $ref: '#/components/schemas/arrayStream'
+
+    scProfile:
+      type: object
+      description: Rappresent a user profile
+      properties:
+        userId:
+          $ref: '#/components/schemas/identifier'
+        userName:
+          $ref: '#/components/schemas/username'
+        numPosts:
+          $ref: '#/components/schemas/photoNumber'
+        numFollower:
+          $ref: '#/components/schemas/followerNumber'
+        numFollowing:
+          $ref: '#/components/schemas/followingNumber'
         Posts:
           $ref: '#/components/schemas/arrayStream'
 
