@@ -380,7 +380,7 @@ paths:
             '403': 
               description:  File not valid  
 
-  /photo/{photoId}/user/{userId}:  
+  /user/{userId}/photo/{photoId}:  
       parameters:
         - $ref:  '#/components/parameters/photoId'
         - $ref: '#/components/parameters/userId'
