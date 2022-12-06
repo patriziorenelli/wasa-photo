@@ -316,7 +316,7 @@ paths:
               description: Error server execution  
 
 
-  /photo/{photoId}/comment/{commentId}/user/{userId}:  
+  /photo/{photoId}/user/{userId}/comment/{commentId}:  
       parameters:
         - $ref:  '#/components/parameters/photoId'
         - $ref: '#/components/parameters/userId'
@@ -783,4 +783,3 @@ components:
       description: login only as your user id 
       type: http 
       scheme: bearer 
-
