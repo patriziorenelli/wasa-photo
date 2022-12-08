@@ -316,7 +316,7 @@ paths:
               description: Error server execution  
 
 
-  /photo/{photoId}/user/{userId}/comment/{commentId}:  
+  /photo/{photoId}/usercomment/{userId}/comment/{commentId}:  
       parameters:
         - $ref:  '#/components/parameters/photoId'
         - $ref: '#/components/parameters/userId'
@@ -773,7 +773,7 @@ components:
       schema: 
         type: string 
         description: "Single id comment"
-        example: phe4er87yh092e 
+        example: cme4er87yh092e 
         pattern: '^[a-zA-Z0-9]+$' 
         minLength: 10 
         maxLength: 40 
