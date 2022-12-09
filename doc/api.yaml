@@ -316,7 +316,7 @@ paths:
               description: Error server execution  
 
 
-  /photo/{photoId}/usercomment/{userId}/comment/{commentId}:  
+  /photo/{photoId}/user/{userId}/comment/{commentId}:  
       parameters:
         - $ref:  '#/components/parameters/photoId'
         - $ref: '#/components/parameters/userId'
