@@ -57,9 +57,14 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string
-	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='example_table';`).Scan(&tableName)
+	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE example_table (id INTEGER NOT NULL PRIMARY KEY, name TEXT);`
+		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, username TEXT NOT NULL, description TEXT NOT NULL);
+					CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY, description TEXT NOT NULL, userId INTEGER NOT NULL, photo TEXT NOT NULL);
+					CREATE TABLE ban (uid INTEGER NOT NULL, uid2 INTEGER NOT NULL, PRIMARY KEY(uid, uid2), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(uid2) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION);
+					CREATE TABLE like (phid INTEGER NOT NULL, uid INTEGER NOT NULL, PRIMARY KEY(phid, uid), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(phid) REFERENCES post(id) ON DELETE CASCADE ON UPDATE NO ACTION);
+					CREATE TABLE comment (cid INTEGER NOT NULL PRIMARY KEY, uid INTEGER NOT NULL, phid INTEGER NOT NULL, text TEXT NOT NULL,FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(phid) REFERENCES post(id) ON DELETE CASCADE ON UPDATE NO ACTION );
+		`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
