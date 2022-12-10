@@ -144,9 +144,6 @@ func run() error {
 		serverErrors <- apiserver.ListenAndServe()
 		logger.Infof("stopping API server")
 	}()
-	
-	
-	
 
 	// Waiting for shutdown signal or POSIX signals
 	select {
@@ -182,5 +179,6 @@ func run() error {
 			return fmt.Errorf("could not stop server gracefully: %w", err)
 		}
 	}
+
 	return nil
 }
