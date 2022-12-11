@@ -8,7 +8,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// PRENDE CORRETTAMENTE L'USERNAME PASSATO MA DA ERRORE SUL CONTROLLO VALIDITA' -> E' SBAGLIATA LA FUNZIONE DI VALIDAZIONE
+// PRENDE CORRETTAMENTE L'USERNAME PASSATO MA DA ERRORE SUL CONTROLLO VALIDITA' (ritorna false la funzione) -> E' SBAGLIATA LA FUNZIONE DI VALIDAZIONE
 
 func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
