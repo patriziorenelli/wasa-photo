@@ -1,68 +1,70 @@
 package api
 
-import "git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/database"
+import( "git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/database" 
+   		"reflect" 
+	)
 
-type userId struct {
-	id string `json:"userId"`
+type UserId struct {
+	ID int `json:"userId"`
 }
 
-type username struct {
-	username string `json:"username"`
+type Username struct {
+	USERNAME string `json:"username"`
 }
 
 type User struct {
-	id  string `json:"id"`
-	username  string `json:"username"`
+	ID  int `json:"id"`
+	USERNAME  string `json:"username"`
 }
 
 type Post struct {
-	id          string
-	description string
-	userId      string
-	photo       string
+	ID          int
+	DESCRIPTION string
+	USERID      int
+	PHOTO       string
 }
 
 type Ban struct {
-	uid  string
-	uid2 string
+	UID1  int
+	UID2 int
 }
 
 type Like struct {
-	phid string
-	uid  string
+	PHID int
+	UID  int
 }
 
 type Comment struct {
-	cid  string
-	uid  string
-	phid string
-	text string
+	CID  int
+	UID  int
+	PHID int
+	TEXT string
 }
 
-func (userId *userId) userIdIsValid() bool {
-	return 6 <= len(userId.id) && len(userId.id) <= 16
+func (userId *UserId) UserIdIsValid() bool {
+	var x = reflect.TypeOf(userId.ID).String()
+	return  x == "int"
+		
 }
 
-func (user *username) usernameIsValid() bool {
-	return 6 <= len(user.username) && len(user.username) <= 16
+func (user *Username) UsernameIsValid() bool {
+	return reflect.TypeOf(user.USERNAME).String() == "int"
 }
 
-// ToDatabase returns the user in a database-compatible representation
-func (user *User) ToDatabase() database.User {
-	return database.User{}
+func (user *Username) UsernameToDatabase() database.Username {
+	return database.Username{ USERNAME: user.USERNAME, }
 }
 
-// FromDatabase populates the struct with data from the database, overwriting all values.
-// You might think this is code duplication, which is correct. However, it's "good" code duplication because it allows
-// us to uncouple the database and API packages.
-// Suppose we were using the "database.Fountain" struct inside the API package; in that case, we were forced to conform
-// either the API specifications to the database package or the other way around. However, very often, the database
-// structure is different from the structure of the REST API.
-// Also, in this way the database package is freely usable by other packages without the assumption that structs from
-// the database should somehow be JSON-serializable (or, in general, serializable).
-func (u *User) FromDatabase(user database.User) {
-	u.id = user.id
+
+func (id *UserId) FromUserDatabase( i database.User) {
+	id.ID = i.ID
 }
 
+
+
+func (u *User) FromDatabase(us database.User) {
+	u.ID = us.ID
+	u.USERNAME = us.USERNAME
+}
 
 

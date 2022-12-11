@@ -36,8 +36,8 @@ info:
     This API allows you to manage the 
     data available in the project 
   version: 0.0.1 
-servers: 
-  - url: "http://localhost:3000" 
+servers:
+  - url: http://localhost:3000
 
    
 paths:  

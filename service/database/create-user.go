@@ -1,12 +1,27 @@
 package database
 
-func (db *appdbimpl) createUser(u User) (User, error) {
+func (db *appdbimpl) createUser(string) (User, error) {
 	
-	res, err := db.c.Exec(`INSERT USER fountains ( nickname) VALUES (?)`, u.username)
+	/*
+
+	res, err := db.c.Exec(`INSERT INTO fountains (id, latitude, longitude, status) VALUES (?, ?, ?, ?)`,
+		f.ID, f.Latitude, f.Longitude, f.Status)
 	if err != nil {
-		return u, err
+		return f, err
 	}
-    // QUI DEVO RITORNARE u con il valore id settato con : res.LastInsertId() in modo da ritornare il nuovo utente 
-	return  u, err
+
+	lastInsertID, err := res.LastInsertId()
+	if err != nil {
+		return f, err
+	}
+
+	f.ID = uint64(lastInsertID)
+	return f, nil
+
+
+	*/
+
+	var u User
+	return u, nil
 
 }

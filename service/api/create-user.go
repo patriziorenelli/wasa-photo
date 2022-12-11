@@ -10,7 +10,22 @@ import (
 
 func (rt *_router) createUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-// devo leggere solo l'id dal request body 
+
+	// Ricevo l'username, controllo che sia corretto 
+	var username Username
+
+	err := json.NewDecoder(r.Body).Decode(&username)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	} else if !username.UsernameIsValid(){
+		w.WriteHeader(http.StatusBadRequest)
+		return		
+	}
+
+
+	// Se l'username è nel formato giusto creo l'utente 
 
 /*
 
@@ -46,8 +61,7 @@ func (rt *_router) createUser(w http.ResponseWriter, r *http.Request, ps httprou
 	// Send the output to the user.
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(fountain)
-
-
+}
 
 	*/
 	return 

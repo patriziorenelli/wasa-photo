@@ -5,46 +5,57 @@ import (
 	"errors"
 	"fmt"
 )
+
 var ErrUserDoesNotExist = errors.New("User does not exist")
 
-type Id struct{
-	id string
+type UserId struct {
+	ID int
+}
+
+type Username struct {
+	USERNAME string
 }
 
 type User struct {
-	id  string
-	username  string
+	ID       int
+	USERNAME string
 }
 
 type Post struct {
-	id  string
-	description string
-	userId string
-	photo string 
+	ID          int
+	DESCRIPTION string
+	USERID      int
+	PHOTO       string
 }
 
 type Ban struct {
-	uid   string
-	uid2  string
+	UID1 int
+	UID2 int
 }
 
 type Like struct {
-	phid string
-	uid  string
+	PHID int
+	UID  int
 }
 
 type Comment struct {
-	cid  string
-	uid  string
-	phid string 
-	text string
+	CID  int
+	UID  int
+	PHID int
+	TEXT string
 }
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	
-	doLogin(username string) (Id , error)
-	createUser(id string) (User, error)
+
+	// Funzione che gestisce il login
+	DoLogin(name Username) (User, error)
+
+	// createUser(id int) (User, error)
+
+	// ritorna l'id dell'utente sotto forma di int
+	findUsername(string) (int, error)
+
 	Ping() error
 }
 
@@ -64,7 +75,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
 
-		// cambiare tutti gli id in integer per l'autoincrement 
+		// cambiare tutti gli id in integer per l'autoincrement
 		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL);
 					CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uid INTEGER NOT NULL, photo TEXT NOT NULL);
 					CREATE TABLE ban (uid INTEGER NOT NULL, uid2 INTEGER NOT NULL, PRIMARY KEY(uid, uid2), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(uid2) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION);
@@ -76,14 +87,14 @@ func New(db *sql.DB) (AppDatabase, error) {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
 		}
 
-	    popola := `INSERT INTO user(id, username,description) VALUES (0000000, "marione_12");
-				   INSERT INTO user(id, username,description) VALUES (0000001, "luca_33");
-				   INSERT INTO user(id, username,description) VALUES (0000002, "Giorgia_Na");
-				   INSERT INTO post(id, description, uid, photo) VALUES (0000000001, 0000000, "LINK FOTO 1" );
-				   INSERT INTO post(id, description, uid, photo) VALUES (0000000002,0000000, "LINK FOTO 2" );
-				   INSERT INTO post(id, description, uid, photo) VALUES (0000000003, 0000001, "LINK FOTO 3" );
-				   INSERT INTO post(id, description, uid, photo) VALUES (0000000004, 0000000, "LINK FOTO 4" );
-				   INSERT INTO post(id, description, uid, photo) VALUES (0000000005, 0000001, "LINK FOTO 5" );
+		popola := `INSERT INTO user(id, username) VALUES (0000000, "marione_12");
+				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");
+				   INSERT INTO user(id, username) VALUES (0000002, "Giorgia_Na");
+				   INSERT INTO post(id, uid, photo) VALUES (0000000001, 0000000, "LINK FOTO 1" );
+				   INSERT INTO post(id, uid, photo) VALUES (0000000002,0000000, "LINK FOTO 2" );
+				   INSERT INTO post(id, uid, photo) VALUES (0000000003, 0000001, "LINK FOTO 3" );
+				   INSERT INTO post(id, uid, photo) VALUES (0000000004, 0000000, "LINK FOTO 4" );
+				   INSERT INTO post(id, uid, photo) VALUES (0000000005, 0000001, "LINK FOTO 5" );
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000000);
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000002);
@@ -98,19 +109,17 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000003,0000000,0000003, "Terzo commento");
 				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000005,00000001,0000004, "Quarto commeto ");
 				   `
-				   _, err = db.Exec(popola)
-				   if err != nil {
-					   return nil, fmt.Errorf("error creating database structure: %w", err)
-				   }
-			   }
-		   
-			   return &appdbimpl{
-				   c: db,
-			   }, nil
-		   }
-		   
-		   func (db *appdbimpl) Ping() error {
-			   return db.c.Ping()
-		   }
-		   
+		_, err = db.Exec(popola)
+		if err != nil {
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+	}
 
+	return &appdbimpl{
+		c: db,
+	}, nil
+}
+
+func (db *appdbimpl) Ping() error {
+	return db.c.Ping()
+}
