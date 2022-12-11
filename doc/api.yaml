@@ -63,7 +63,7 @@ paths:
               schema: 
                   $ref: "#/components/schemas/userId"
               example:
-                userId: "abcdef012345"
+                userId: 111112
                      
 
   /users/{userId}/username: 
@@ -437,23 +437,23 @@ paths:
                   $ref: "#/components/schemas/scStream"
                 example: 
                   Posts: 
-                    - Id: phe4er87yh092e
-                      AuthorId: abcdef012345
+                    - Id: 10
+                      AuthorId: 1024
                       AuthorNickname: Franchino_12
                       File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-29
                       Like: 950
                       Comment: 1203
-                    - Id: phe4er87yh092e
-                      AuthorId: abcdef012345
+                    - Id: 120
+                      AuthorId: 1453
                       AuthorNickname: Mario54_00
                       File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-29
                       Like: 950
                       Comment: 1203
 
-                    - Id: phe4e10000012
-                      AuthorId: abcdef012700
+                    - Id: 146324
+                      AuthorId: 136984
                       AuthorNickname: Martina_fra13
                       File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-28
@@ -487,30 +487,29 @@ paths:
                 schema:
                   $ref: "#/components/schemas/scProfile"
                 example:
-                  
-                  userId: abcdef012700
+                  userId: 120
                   userName: Franchino_12
                   numPosts: 15
                   numFollower: 1280
                   numFollowing: 1600
                   Posts: 
-                      - Id: phe4er87yh092e
-                        AuthorId: abcdef012345
+                      - Id: 125410
+                        AuthorId: 125
                         AuthorNickname: Franchino_12
                         File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                         Date: 2022-11-29
                         Like: 950
                         Comment: 1203
-                      - Id: phe4er87yh092e
-                        AuthorId: abcdef012345
+                      - Id: 12683
+                        AuthorId: 0254
                         AuthorNickname: Mario54_00
                         File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                         Date: 2022-11-29
                         Like: 950
                         Comment: 1203
 
-                      - Id: phe4e10000012
-                        AuthorId: abcdef012700
+                      - Id: 126985
+                        AuthorId: 255
                         AuthorNickname: Martina_fra13
                         File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                         Date: 2022-11-28
@@ -543,12 +542,9 @@ components:
           $ref: '#/components/schemas/identifier'
 
     identifier: 
-      type: string 
+      type: integer
       description: User Id 
-      example: abcdef012345 
-      pattern: '^[a-zA-Z0-9]+$' 
-      minLength: 6 
-      maxLength: 16  
+      example: 1 
 
     photoFile:
       type: string
@@ -573,11 +569,10 @@ components:
       maxLength: 11
 
     photoId:
-      type: string
+      type: integer
       description: Photo identifier
-      example: phe4er87yh092e
-      minLength: 10
-      maxLength: 40
+      example: 5
+
 
     likeNumber: 
       type: integer
@@ -732,12 +727,9 @@ components:
       required: true 
       description: User Id 
       schema: 
-        type: string 
+        type: integer 
         description: "User Id" 
-        example: abcdef012345 
-        pattern: '^[a-zA-Z0-9]+$' 
-        minLength: 6 
-        maxLength: 16 
+        example: 86 
 
     userId2: 
       in: path 
@@ -745,12 +737,9 @@ components:
       required: true 
       description: Second userId
       schema: 
-        type: string 
+        type: integer 
         description: "Second userId" 
-        example: abcdef012345 
-        pattern: '^[a-zA-Z0-9]+$' 
-        minLength: 6 
-        maxLength: 16 
+        example: 100 
 
     photoId: 
       in: path 
@@ -758,12 +747,9 @@ components:
       required: true 
       description: Single id photo
       schema: 
-        type: string 
+        type: integer 
         description: "Single id photo"
-        example: phe4er87yh092e 
-        pattern: '^[a-zA-Z0-9]+$' 
-        minLength: 10 
-        maxLength: 40 
+        example: 15368 
     
     commentId: 
       in: path 
@@ -771,12 +757,9 @@ components:
       required: true 
       description:   Single id comment 
       schema: 
-        type: string 
+        type: integer 
         description: "Single id comment"
-        example: cme4er87yh092e 
-        pattern: '^[a-zA-Z0-9]+$' 
-        minLength: 10 
-        maxLength: 40 
+        example: 456 
 
   securitySchemes: 
     userAuth: 
