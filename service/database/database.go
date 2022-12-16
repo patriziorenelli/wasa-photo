@@ -51,7 +51,7 @@ type AppDatabase interface {
 	// Funzione che gestisce il login
 	DoLogin(name Username) (User, error)
 
-	// createUser(id int) (User, error)
+	CreateUser(newNick string) (User, error)
 
 	// ritorna l'id dell'utente sotto forma di int
 	findUsername(string) (int, error)
@@ -86,6 +86,14 @@ func New(db *sql.DB) (AppDatabase, error) {
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
 		}
+
+		const q = `PRAGMA foreign_keys = ON`
+		_, err = db.Exec(q)
+
+		if err != nil{
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+
 
 		popola := `INSERT INTO user(id, username) VALUES (0000000, "marione_12");
 				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");

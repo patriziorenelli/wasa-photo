@@ -1,22 +1,28 @@
 package database
-
+import ( 
+		"database/sql" )
 func (db *appdbimpl) DoLogin(name Username) (User, error) {
-	var us User
+	
 	const query = ` SELECT * from user where username = ?`
-	row, err := db.c.Query(query, name.USERNAME)
-
-	if err != nil {
-		us.ID = -1
-		return us, err
+	//row := db.c.Query(query, name.USERNAME)
+	var us User
+	
+	row := db.c.QueryRow(query, name.USERNAME)
+	switch err := row.Scan(&us.ID, &us.USERNAME); err {
+	
+	case sql.ErrNoRows:
+	  us.USERNAME = name.USERNAME
+	  us.ID = -2
+	  return us, nil
+	case nil:
+	  return us, nil
+	default:
+	  us.ID = -1
+	  return us,err
+	  
 	}
-	// Read all fountains in the resultset
 
-	err = row.Scan(&us.ID, &us.USERNAME)
-
-	if err != nil {
-		us.ID = -1
-		return us, err
-	}
-
-	return us, nil
+	
 }
+
+

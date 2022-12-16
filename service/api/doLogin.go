@@ -3,13 +3,11 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
 )
 
-// PRENDE CORRETTAMENTE L'USERNAME PASSATO MA DA ERRORE SUL CONTROLLO VALIDITA' (ritorna false la funzione) -> E' SBAGLIATA LA FUNZIONE DI VALIDAZIONE
-
+// 
 func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// deve ritornare un json contentente id dell'utente
@@ -22,7 +20,7 @@ func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	} else if !user.UsernameIsValid() {
-		// entra qui anche se dovrebbe essere valido
+		
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -30,23 +28,39 @@ func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	dbUser, err := rt.db.DoLogin(user.UsernameToDatabase())
 
 	// se dbUser sarebbe -1 non esiste l'utente
-	if err != nil {
+	if err == nil && dbUser.ID == -2 {
 		// Utente non esiste
 		// bisogna chiamare la funzione che si occupa di creare il nuovo utente
+		
+		newUser, err := rt.db.CreateUser(dbUser.USERNAME)
 
-		us.FromDatabase(dbUser)
-		us.ID = -1
-		// Send the output to the user.
-		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(us)
 
-		return
+		if err != nil && dbUser.ID == -1{
+			ctx.Logger.WithError(err).Error("Error during creation user")
+			w.WriteHeader(http.StatusInternalServerError)
+			return 
+		}else if err != nil && dbUser.ID == -2{
+			ctx.Logger.WithError(err).Error("Error during extract new userId")
+			w.WriteHeader(http.StatusInternalServerError)
+			return 
+		}
+
+		us.ID = newUser.ID
+		us.USERNAME = newUser.USERNAME
+		
+	}else if err != nil && dbUser.ID == -1{
+		ctx.Logger.WithError(err).Error("Error during find userId")
+		w.WriteHeader(http.StatusInternalServerError)
+		return 
+
+	}else{	
+		us.ID = dbUser.ID
+		us.USERNAME = user.USERNAME
 	}
 
 	// qui forse andrebbe fatto qualcosa per la sicurezza
-	var id UserId
-	id.ID = dbUser.ID
-	id.FromUserDatabase(dbUser)
+
+	
 
 	// Send the output to the user.
 	w.Header().Set("Content-Type", "application/json")

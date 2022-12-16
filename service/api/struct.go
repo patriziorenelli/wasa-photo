@@ -48,7 +48,7 @@ func (userId *UserId) UserIdIsValid() bool {
 }
 
 func (user *Username) UsernameIsValid() bool {
-	return reflect.TypeOf(user.USERNAME).String() == "int"
+	return reflect.TypeOf(user.USERNAME).String() == "string"
 }
 
 func (user *Username) UsernameToDatabase() database.Username {

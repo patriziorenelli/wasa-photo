@@ -1,27 +1,25 @@
 package database
 
-func (db *appdbimpl) createUser(string) (User, error) {
-	
-	/*
-
-	res, err := db.c.Exec(`INSERT INTO fountains (id, latitude, longitude, status) VALUES (?, ?, ?, ?)`,
-		f.ID, f.Latitude, f.Longitude, f.Status)
+		
+func (db *appdbimpl) CreateUser(us string) (User, error) {
+	var u User
+	res, err := db.c.Exec(`INSERT INTO user (username) VALUES (?)`,us)
+	// In caso di errore nella creazione dell'utente 
 	if err != nil {
-		return f, err
+		u.ID = -1
+		return u, err
 	}
+
+	// Prendo l'id del nuovo utente
 
 	lastInsertID, err := res.LastInsertId()
 	if err != nil {
-		return f, err
+		u.ID = -1
+		return u, err
 	}
 
-	f.ID = uint64(lastInsertID)
-	return f, nil
-
-
-	*/
-
-	var u User
+	u.ID = int(lastInsertID)
+	u.USERNAME = us
 	return u, nil
 
 }
