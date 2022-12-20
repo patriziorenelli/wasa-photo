@@ -2,10 +2,8 @@ package database
 
 
 
-func (db *appdbimpl) findUsername(username string ) (int, error) {
+func (db *appdbimpl) FindUsername(username string ) (int, error) {
 	
-	
-
 	// Ricerca un user in base al suo username 
 	const query = `SELECT id FROM user WHERE username = ?`
 

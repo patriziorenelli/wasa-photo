@@ -51,10 +51,16 @@ type AppDatabase interface {
 	// Funzione che gestisce il login
 	DoLogin(name Username) (User, error)
 
+	// Crea un utente passandogli il suo nickname 
 	CreateUser(newNick string) (User, error)
 
-	// ritorna l'id dell'utente sotto forma di int
-	findUsername(string) (int, error)
+	// Ritorna l'id dell'utente sotto forma di int
+	FindUsername(username string) (int, error)
+
+	// Imposta un nuovo nickname ad un utente 
+	setMyUserName(userId UserId, newUsername string) (error)
+
+
 
 	Ping() error
 }

@@ -94,6 +94,8 @@ paths:
 
             '400': 
               description: Userid not found   
+            '401': 
+              description: User not authorized  
               
 
   /users/{userId}/followUser/{userId2}: 

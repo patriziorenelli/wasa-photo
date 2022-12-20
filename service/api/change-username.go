@@ -1,16 +1,55 @@
 package api
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"net/http"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
+	// "fmt"
+	// "reflect"
+	"strings"
 )
 
-// VA BENE 
-func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+//  curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}' 
 
-	// deve ritornare un json contentente id dell'utente
+//  CAPIRE COME AGGIUNGERE L'AUTH  -> va bene usare quest curl:   
+// curl -X PUT  http://localhost:3000/users/1/username -H "Content-Type: application/json User: 1" -d '{"username": "marione_12"}'
+func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+
+
+		//r.Header.Get("Authorization")  ->  Prendo l'autenticazione 
+ 		// x	 := r.Header.Get("Authorization")
+		// fmt.Print(x)
+
+		// r.RequestURI -> prende il path che si sta richiedendo 
+
+
+		auth := r.Header.Get("Authorization")
+
+		reqUser := strings.Split( r.RequestURI, "/")[2]
+
+		if (auth == reqUser){
+
+			// Prendere dal Body il nuovo username e usare reqUser come id utente 
+ 
+			/* Qui bisogna chiamare la funzione per fare il change username e poi ritornare
+			{
+				"newUserName": "Marco12"
+			}
+			*/
+
+
+		}else{
+			
+			w.WriteHeader(http.StatusUnauthorized)
+			return 
+		}
+		
+	
+
+
+	/*
+// deve ritornare un json contentente id dell'utente
 	var user Username
 	var us User
 	err := json.NewDecoder(r.Body).Decode(&user)
@@ -58,11 +97,20 @@ func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		us.USERNAME = user.USERNAME
 	}
 
-	var userId  UserId
-	userId.ID = us.ID
+	// qui forse andrebbe fatto qualcosa per la sicurezza
+
+	
 
 	// Send the output to the user.
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(userId)
+	_ = json.NewEncoder(w).Encode(us)
+
+	*/
+
+
+
+
+
+
 
 }
