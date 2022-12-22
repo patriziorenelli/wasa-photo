@@ -4,7 +4,7 @@ import (
 func (db *appdbimpl) DoLogin(name Username) (User, error) {
 	
 	const query = ` SELECT * from user where username = ?`
-	//row := db.c.Query(query, name.USERNAME)
+	// row := db.c.Query(query, name.USERNAME)
 	var us User
 	
 	row := db.c.QueryRow(query, name.USERNAME)
