@@ -43,12 +43,28 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-
+		// Converto l'id utente in un int 
 		userId, _ := strconv.Atoi(reqUser)
 
 		dbUser, err := rt.db.SetMyUserName(userId, user.USERNAME)
+
+		if err != nil{
+			ctx.Logger.WithError(err).Error("Error during change username")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		} else{
+			
+			w.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(w).Encode(dbUser)
+
+		}
+
+
+
+
 		// qui bisogna fare il json da ritornare 
-		fmt.Print(dbUser)
+		
+
 
 		/* Qui bisogna chiamare la funzione per fare il change username e poi ritornare
 		{

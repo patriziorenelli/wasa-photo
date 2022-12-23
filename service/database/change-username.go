@@ -11,7 +11,7 @@ func (db *appdbimpl) SetMyUserName( userId int, newUsername string) (Username, e
 	if err != nil {
 
 		use.USERNAME = "nil"
-		return use, nil
+		return use, err
 	} else{
 		use.USERNAME = newUsername
 		fmt.Print(use)
