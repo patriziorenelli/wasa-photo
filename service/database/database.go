@@ -51,16 +51,14 @@ type AppDatabase interface {
 	// Funzione che gestisce il login
 	DoLogin(name Username) (User, error)
 
-	// Crea un utente passandogli il suo nickname 
+	// Crea un utente passandogli il suo nickname
 	CreateUser(newNick string) (User, error)
 
 	// Ritorna l'id dell'utente sotto forma di int
 	FindUsername(username string) (int, error)
 
-	// Imposta un nuovo nickname ad un utente 
-	setMyUserName(userId UserId, newUsername string) (error)
-
-
+	// Imposta un nuovo nickname ad un utente
+	setMyUserName(userId UserId, newUsername string) error
 
 	Ping() error
 }
@@ -96,10 +94,9 @@ func New(db *sql.DB) (AppDatabase, error) {
 		const q = `PRAGMA foreign_keys = ON`
 		_, err = db.Exec(q)
 
-		if err != nil{
+		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
 		}
-
 
 		popola := `INSERT INTO user(id, username) VALUES (0000000, "marione_12");
 				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");

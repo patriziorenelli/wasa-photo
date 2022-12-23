@@ -2,12 +2,12 @@ package api
 
 import (
 	"encoding/json"
-	"net/http"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
+	"net/http"
 )
 
-// VA BENE 
+// VA BENE
 func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// deve ritornare un json contentente id dell'utente
@@ -20,7 +20,7 @@ func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	} else if !user.UsernameIsValid() {
-		
+
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -31,34 +31,33 @@ func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err == nil && dbUser.ID == -2 {
 		// Utente non esiste
 		// bisogna chiamare la funzione che si occupa di creare il nuovo utente
-		
+
 		newUser, err := rt.db.CreateUser(dbUser.USERNAME)
 
-
-		if err != nil && dbUser.ID == -1{
+		if err != nil && dbUser.ID == -1 {
 			ctx.Logger.WithError(err).Error("Error during creation user")
 			w.WriteHeader(http.StatusInternalServerError)
-			return 
-		}else if err != nil && dbUser.ID == -2{
+			return
+		} else if err != nil && dbUser.ID == -2 {
 			ctx.Logger.WithError(err).Error("Error during extract new userId")
 			w.WriteHeader(http.StatusInternalServerError)
-			return 
+			return
 		}
 
 		us.ID = newUser.ID
 		us.USERNAME = newUser.USERNAME
-		
-	}else if err != nil && dbUser.ID == -1{
+
+	} else if err != nil && dbUser.ID == -1 {
 		ctx.Logger.WithError(err).Error("Error during find userId")
 		w.WriteHeader(http.StatusInternalServerError)
-		return 
+		return
 
-	}else{	
+	} else {
 		us.ID = dbUser.ID
 		us.USERNAME = user.USERNAME
 	}
 
-	var userId  UserId
+	var userId UserId
 	userId.ID = us.ID
 
 	// Send the output to the user.

@@ -2,114 +2,103 @@ package api
 
 import (
 	// "encoding/json"
-	"net/http"
+	"fmt"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
-	"fmt"
+	"net/http"
 	// "reflect"
 	"strings"
 )
 
-//  curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}' 
+//  curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}'
 
-//  CAPIRE COME AGGIUNGERE L'AUTH  -> va bene usare quest curl:   
+// CAPIRE COME AGGIUNGERE L'AUTH  -> va bene usare quest curl:
 func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
+	// r.Header.Get("Authorization")  ->  Prendo l'autenticazione
+	x := r.Header.Get("Authorization")
+	// fmt.Print(x)
 
-		// r.Header.Get("Authorization")  ->  Prendo l'autenticazione 
- 		x	 := r.Header.Get("Authorization")
-		// fmt.Print(x)
+	fmt.Print(x)
 
-		fmt.Print(x)
+	auth := r.Header.Get("Authorization")
 
-		auth := r.Header.Get("Authorization")
+	// Prendo il cod utente indicato nel path
+	reqUser := strings.Split(r.RequestURI, "/")[2]
 
-		// Prendo il cod utente indicato nel path 
-		reqUser := strings.Split( r.RequestURI, "/")[2]
+	if auth == reqUser {
 
-		if (auth == reqUser){
+		// Prendere dal Body il nuovo username e usare reqUser come id utente
 
-			// Prendere dal Body il nuovo username e usare reqUser come id utente 
- 
-			/* Qui bisogna chiamare la funzione per fare il change username e poi ritornare
-			{
-				"newUserName": "Marco12"
-			}
-			*/
-
-
-		}else{
-			
-			w.WriteHeader(http.StatusUnauthorized)
-			return 
+		/* Qui bisogna chiamare la funzione per fare il change username e poi ritornare
+		{
+			"newUserName": "Marco12"
 		}
-		
-	
+		*/
 
+	} else {
+
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 
 	/*
-// deve ritornare un json contentente id dell'utente
-	var user Username
-	var us User
-	err := json.NewDecoder(r.Body).Decode(&user)
+	// deve ritornare un json contentente id dell'utente
+		var user Username
+		var us User
+		err := json.NewDecoder(r.Body).Decode(&user)
 
-	// controllo che l'username passato sia nel formato corretto
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	} else if !user.UsernameIsValid() {
-		
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+		// controllo che l'username passato sia nel formato corretto
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		} else if !user.UsernameIsValid() {
 
-	dbUser, err := rt.db.DoLogin(user.UsernameToDatabase())
-
-	// se dbUser sarebbe -1 non esiste l'utente
-	if err == nil && dbUser.ID == -2 {
-		// Utente non esiste
-		// bisogna chiamare la funzione che si occupa di creare il nuovo utente
-		
-		newUser, err := rt.db.CreateUser(dbUser.USERNAME)
-
-
-		if err != nil && dbUser.ID == -1{
-			ctx.Logger.WithError(err).Error("Error during creation user")
-			w.WriteHeader(http.StatusInternalServerError)
-			return 
-		}else if err != nil && dbUser.ID == -2{
-			ctx.Logger.WithError(err).Error("Error during extract new userId")
-			w.WriteHeader(http.StatusInternalServerError)
-			return 
+			w.WriteHeader(http.StatusBadRequest)
+			return
 		}
 
-		us.ID = newUser.ID
-		us.USERNAME = newUser.USERNAME
-		
-	}else if err != nil && dbUser.ID == -1{
-		ctx.Logger.WithError(err).Error("Error during find userId")
-		w.WriteHeader(http.StatusInternalServerError)
-		return 
+		dbUser, err := rt.db.DoLogin(user.UsernameToDatabase())
 
-	}else{	
-		us.ID = dbUser.ID
-		us.USERNAME = user.USERNAME
-	}
+		// se dbUser sarebbe -1 non esiste l'utente
+		if err == nil && dbUser.ID == -2 {
+			// Utente non esiste
+			// bisogna chiamare la funzione che si occupa di creare il nuovo utente
 
-	// qui forse andrebbe fatto qualcosa per la sicurezza
+			newUser, err := rt.db.CreateUser(dbUser.USERNAME)
 
-	
 
-	// Send the output to the user.
-	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(us)
+			if err != nil && dbUser.ID == -1{
+				ctx.Logger.WithError(err).Error("Error during creation user")
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}else if err != nil && dbUser.ID == -2{
+				ctx.Logger.WithError(err).Error("Error during extract new userId")
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			us.ID = newUser.ID
+			us.USERNAME = newUser.USERNAME
+
+		}else if err != nil && dbUser.ID == -1{
+			ctx.Logger.WithError(err).Error("Error during find userId")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+
+		}else{
+			us.ID = dbUser.ID
+			us.USERNAME = user.USERNAME
+		}
+
+		// qui forse andrebbe fatto qualcosa per la sicurezza
+
+
+
+		// Send the output to the user.
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(us)
 
 	*/
-
-
-
-
-
-
 
 }
