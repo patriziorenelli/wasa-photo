@@ -2,16 +2,31 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 )
 
 func (db *appdbimpl) DoLogin(name Username) (User, error) {
 
 	const query = ` SELECT * from user where username = ?`
-	//row := db.c.Query(query, name.USERNAME)
+	// row := db.c.Query(query, name.USERNAME)
 	var us User
 
 	row := db.c.QueryRow(query, name.USERNAME)
-	switch err := row.Scan(&us.ID, &us.USERNAME); err {
+	err := row.Scan(&us.ID, &us.USERNAME)
+
+	if errors.Is(err, sql.ErrNoRows){
+		us.USERNAME = name.USERNAME
+		us.ID = -2
+		return us, nil
+	}else if err == nil{
+		return us, nil
+	}else{
+		us.ID = -1
+		return us, err
+	}
+
+	/*
+	switch err {
 
 	case sql.ErrNoRows:
 		us.USERNAME = name.USERNAME
@@ -24,5 +39,5 @@ func (db *appdbimpl) DoLogin(name Username) (User, error) {
 		return us, err
 
 	}
-
+	*/
 }
