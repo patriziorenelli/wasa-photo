@@ -1,8 +1,24 @@
 package database
+import "fmt"
+func (db *appdbimpl) SetMyUserName( userId int, newUsername string) (Username, error) {
 
-func (db *appdbimpl) setMyUserName(userId UserId, newUsername string) error {
-	// Bisogna gestire il caso in cui l'utente richiesto non sia presente oppure nel caso in cui non vada a buon fine l'update
+	var use Username
 
-	return nil
+
+	_, err := db.c.Exec(`UPDATE user SET username = ? WHERE id = ?`, newUsername, userId)
+
+	// In caso di errore nel cambio username
+	if err != nil {
+
+		use.USERNAME = "nil"
+		return use, nil
+	} else{
+		use.USERNAME = newUsername
+		fmt.Print(use)
+		return use, nil
+	}
+
+
+
 
 }

@@ -58,7 +58,7 @@ type AppDatabase interface {
 	FindUsername(username string) (int, error)
 
 	// Imposta un nuovo nickname ad un utente
-	setMyUserName(userId UserId, newUsername string) error
+	SetMyUserName( userId int, newUsername string) (Username, error)
 
 	Ping() error
 }

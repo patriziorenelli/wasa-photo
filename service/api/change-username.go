@@ -8,6 +8,8 @@ import (
 	"net/http"
 	// "reflect"
 	"strings"
+	"encoding/json"
+	"strconv"
 )
 
 //  curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}'
@@ -19,16 +21,34 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	x := r.Header.Get("Authorization")
 	// fmt.Print(x)
 
-	fmt.Print(x)
+
 
 	auth := r.Header.Get("Authorization")
 
 	// Prendo il cod utente indicato nel path
 	reqUser := strings.Split(r.RequestURI, "/")[2]
 
-	if auth == reqUser {
+	fmt.Print(x)
 
-		// Prendere dal Body il nuovo username e usare reqUser come id utente
+	if auth == reqUser {
+		// Ottengo il nuovo username che l'utente vuole impostare 
+		var user Username
+		err := json.NewDecoder(r.Body).Decode(&user)
+		// Controllo che l'username sia valido
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		} else if !user.UsernameIsValid() {
+
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		userId, _ := strconv.Atoi(reqUser)
+
+		dbUser, err := rt.db.SetMyUserName(userId, user.USERNAME)
+		// qui bisogna fare il json da ritornare 
+		fmt.Print(dbUser)
 
 		/* Qui bisogna chiamare la funzione per fare il change username e poi ritornare
 		{
