@@ -60,6 +60,9 @@ type AppDatabase interface {
 	// Imposta un nuovo nickname ad un utente
 	SetMyUserName( userId int, newUsername string) (Username, error)
 
+	// Segue un altro utente 
+	FollowUser(userId int, followId int) (int, error)
+
 	Ping() error
 }
 
@@ -85,7 +88,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 					CREATE TABLE ban (uid INTEGER NOT NULL, uid2 INTEGER NOT NULL, PRIMARY KEY(uid, uid2), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(uid2) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION);
 					CREATE TABLE like (phid INTEGER NOT NULL, uid INTEGER NOT NULL, PRIMARY KEY(phid, uid), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(phid) REFERENCES post(id) ON DELETE CASCADE ON UPDATE NO ACTION);
 					CREATE TABLE comment (cid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uid INTEGER NOT NULL, phid INTEGER NOT NULL, text TEXT NOT NULL,FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(phid) REFERENCES post(id) ON DELETE CASCADE ON UPDATE NO ACTION );
-		`
+					CREATE TABLE follow (uid INTEGER NOT NULL, uid2 INTEGER NOT NULL, PRIMARY KEY(uid, uid2), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION, FOREIGN KEY(uid2) REFERENCES user(id) ON DELETE CASCADE ON UPDATE NO ACTION);
+					`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
@@ -106,6 +110,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO post(id, uid, photo) VALUES (0000000003, 0000001, "LINK FOTO 3" );
 				   INSERT INTO post(id, uid, photo) VALUES (0000000004, 0000000, "LINK FOTO 4" );
 				   INSERT INTO post(id, uid, photo) VALUES (0000000005, 0000001, "LINK FOTO 5" );
+				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000000);
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000002);
