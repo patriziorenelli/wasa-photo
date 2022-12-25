@@ -61,7 +61,7 @@ type AppDatabase interface {
 	SetMyUserName( userId int, newUsername string) (Username, error)
 
 	// Segue un altro utente 
-	FollowUser(userId int, followId int) (int, error)
+	FollowUser(userId int, followId int) (int, Username)
 
 	Ping() error
 }

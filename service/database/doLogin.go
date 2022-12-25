@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 )
-
+// VA BENE 
 func (db *appdbimpl) DoLogin(name Username) (User, error) {
 
 	const query = ` SELECT * from user where username = ?`
@@ -25,19 +25,5 @@ func (db *appdbimpl) DoLogin(name Username) (User, error) {
 		return us, err
 	}
 
-	/*
-	switch err {
 
-	case sql.ErrNoRows:
-		us.USERNAME = name.USERNAME
-		us.ID = -2
-		return us, nil
-	case nil:
-		return us, nil
-	default:
-		us.ID = -1
-		return us, err
-
-	}
-	*/
 }

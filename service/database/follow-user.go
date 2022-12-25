@@ -1,21 +1,11 @@
 package database
 import (	"errors"
 			"database/sql" 
-			"fmt"
 		)
 
-func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
+func (db *appdbimpl) FollowUser(userId int, followId int) ( int, Username) {
 
-	/* 
-	DEVO CONTROLLARE:
-		- CHE USERID ESISTA  ->  SQLITE3 NON FA CONTROLLO SULLE FK 
-		- CHE FOLLOWID ESISTA -> SQLITE3 NON FA CONTROLLO SULLE FK 
-		- CHE L'UTENTE FOLLOWID NON MI ABBIA BANNATO 
-		- USERID NON ABBIA BANNATO FOLLOWID 
-	FARE LA INSERT IN ban
-
-	*/
-
+	var username Username
 	var us User
 
 	// Controllo che l'utente indicato esista
@@ -23,8 +13,7 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 	err := row.Scan(&us.ID, &us.USERNAME)
 
 	if errors.Is(err, sql.ErrNoRows){
-		fmt.Print("Utente non esistente")
-		return -1, nil
+		return -1, username
 	}
 
 	// Controllo che l'utente che si vuole seguire esista
@@ -32,9 +21,11 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 	err = row.Scan(&us.ID, &us.USERNAME)
 
 	if errors.Is(err, sql.ErrNoRows){
-		fmt.Print("Utente2 non esistente")
-		return -2, nil
+		return -2, username
 	}
+
+	username.USERNAME = us.USERNAME
+
 	// Variabile di tipo Ban usata per i check
 	var ban Ban 
 
@@ -43,8 +34,7 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 	err = row.Scan(&ban.UID1,  &ban.UID2)
 
 	if !errors.Is(err, sql.ErrNoRows){
-		fmt.Print("Utente bloccato")
-		return -3, nil
+		return -3, username
 	}
 
 	// Controllo che l'utente non abbia bloccato chi vuole seguire 
@@ -52,8 +42,7 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 	err = row.Scan(&ban.UID1,  &ban.UID2)
 
 	if !errors.Is(err, sql.ErrNoRows){
-		fmt.Print("Utente ha bloccato user2")
-		return -4, nil
+		return -4, username
 	}
 
 	// Aggiungo il follow nel database 
@@ -61,14 +50,14 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 
 	// Caso in cui ci sia già quel follow
 	if err != nil && ( err.Error() ) == "UNIQUE constraint failed: follow.uid, follow.uid2"{
-		fmt.Print("DUPLICATO")
-		return -5, nil
+		return -5, username
 	} else if err != nil {
-		return -6, nil
+		return -6, username
 	}
 	
 
-	return 0, nil
+
+	return 0, username
 
 
 }
