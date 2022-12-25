@@ -29,6 +29,11 @@ type Ban struct {
 	UID2 int
 }
 
+type Follow struct {
+	UID1 int
+	UID2 int
+}
+
 type Like struct {
 	PHID int
 	UID  int

@@ -33,6 +33,11 @@ type Ban struct {
 	UID2 int
 }
 
+type Follow struct {
+	UID1 int
+	UID2 int
+}
+
 type Like struct {
 	PHID int
 	UID  int
@@ -63,6 +68,8 @@ type AppDatabase interface {
 	// Segue un altro utente 
 	FollowUser(userId int, followId int) (int, Username)
 
+	// Smette di seguire un altro utente
+	UnfollowUser(userId int, unfollowId int) (int, Username)
 	Ping() error
 }
 

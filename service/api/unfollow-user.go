@@ -9,24 +9,21 @@ import (
 	"strings"
 )
 
-//	rt.router.PUT("/users/:userId/followUser/:userId2", rt.wrap(rt.followUser))
-//
-// VA BENE
-func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext)  {
 
 	auth := r.Header.Get("Authorization")
 
 	// Prendo il cod utente indicato nel path
 	reqUser := strings.Split(r.RequestURI, "/")[2]
-	followId := strings.Split(r.RequestURI, "/")[4]
+	unfollowId := strings.Split(r.RequestURI, "/")[4]
 
 	// Se l'autenticazione va a buon fine e si sta cercando di seguire un altro user, si invia la richiesta di follow
-	if auth == reqUser && auth != followId {
+	if auth == reqUser && auth != unfollowId {
 
 		reqUser, _ := strconv.Atoi(reqUser)
-		followId, _ := strconv.Atoi(followId)
+		unfollowId, _ := strconv.Atoi(unfollowId)
 
-		ris, username := rt.db.FollowUser(reqUser, followId)
+		ris, username := rt.db.FollowUser(reqUser, unfollowId)
 
 		switch ris {
 
@@ -41,22 +38,22 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 			return
 
 		case -2:
-			ctx.Logger.Error("User you want to follow does not exist")
+			ctx.Logger.Error("User you want to unfollow does not exist")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
 		case -3:
-			ctx.Logger.Error("User you want to follow has banned you")
+			ctx.Logger.Error("User you want to unfollow has banned you")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
 		case -4:
-			ctx.Logger.Error("You ban the user you want to follow")
+			ctx.Logger.Error("You ban the user you want to unfollow")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
 		case -5:
-			ctx.Logger.Error("You already follow the user")
+			ctx.Logger.Error("You don't already follow the user")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
