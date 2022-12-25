@@ -10,22 +10,19 @@ import (
 	"strconv"
 )
 
-//  curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}'
+// TESTARE LA FUNZIONALITA'
 
-// CAPIRE COME AGGIUNGERE L'AUTH  -> va bene usare quest curl:
+//  curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}'
 func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	// r.Header.Get("Authorization")  ->  Prendo l'autenticazione
-	// x := r.Header.Get("Authorization")
 
-
+	// Prendo l'autenticazione
 	auth := r.Header.Get("Authorization")
 
 	// Prendo il cod utente indicato nel path
 	reqUser := strings.Split(r.RequestURI, "/")[2]
 
-	
-
+	//Controllo che l'utente sia correttamente loggato 
 	if auth == reqUser {
 		// Ottengo il nuovo username che l'utente vuole impostare 
 		var user Username

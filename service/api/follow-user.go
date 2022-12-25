@@ -30,7 +30,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 
 
 		res, err := rt.db.FollowUser(reqUser, followId)
-
+		// FARE TEST SUL CORRETTO FUNZIONAMENTO
 		// Qui bisogna controllare il res e mandare il json adeguato se serve 
 		fmt.Print("\n FINITO")
 		fmt.Print(res, err)

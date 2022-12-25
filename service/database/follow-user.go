@@ -2,7 +2,6 @@ package database
 import (	"errors"
 			"database/sql" 
 			"fmt"
-			// "strings"
 		)
 
 func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
@@ -36,10 +35,8 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 		fmt.Print("Utente2 non esistente")
 		return -2, nil
 	}
-
-
+	// Variabile di tipo Ban usata per i check
 	var ban Ban 
-	// -----------------------------------
 
 	// Controllo che l'utente che si vuole seguire non abbia bloccato l'utente che lo vuole seguire 
 	row = db.c.QueryRow(`SELECT * from ban where uid = ? and uid2 = ?`,  followId, userId)
@@ -59,17 +56,17 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 		return -4, nil
 	}
 
+	// Aggiungo il follow nel database 
+	_ , err = db.c.Exec(`INSERT INTO follow VALUES (? , ?)`, userId, followId)
 
-	//---------------------------------
-
-	// Aggiunto il follow nel database 
-	res , err := db.c.Exec(`INSERT INTO follow VALUES (? , ?)`, userId, followId)
-
+	// Caso in cui ci sia già quel follow
+	if err != nil && ( err.Error() ) == "UNIQUE constraint failed: follow.uid, follow.uid2"{
+		fmt.Print("DUPLICATO")
+		return -5, nil
+	} else if err != nil {
+		return -6, nil
+	}
 	
-	fmt.Print(err)
-	fmt.Print(res)
-	// Bisogna gestire il caso in cui l'errore sia UNIQUE constraint failed: follow.uid, follow.uid2
-	// Bisogna gestire il caso di un qualunque altro errore 
 
 	return 0, nil
 
