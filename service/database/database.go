@@ -63,9 +63,9 @@ type AppDatabase interface {
 	FindUsername(username string) (int, error)
 
 	// Imposta un nuovo nickname ad un utente
-	SetMyUserName( userId int, newUsername string) (Username, error)
+	SetMyUserName(userId int, newUsername string) (Username, error)
 
-	// Segue un altro utente 
+	// Segue un altro utente
 	FollowUser(userId int, followId int) (int, Username)
 
 	// Smette di seguire un altro utente

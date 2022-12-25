@@ -1,9 +1,10 @@
 package database
+
 import "fmt"
-func (db *appdbimpl) SetMyUserName( userId int, newUsername string) (Username, error) {
+
+func (db *appdbimpl) SetMyUserName(userId int, newUsername string) (Username, error) {
 
 	var use Username
-
 
 	_, err := db.c.Exec(`UPDATE user SET username = ? WHERE id = ?`, newUsername, userId)
 
@@ -12,13 +13,10 @@ func (db *appdbimpl) SetMyUserName( userId int, newUsername string) (Username, e
 
 		use.USERNAME = "nil"
 		return use, err
-	} else{
+	} else {
 		use.USERNAME = newUsername
 		fmt.Print(use)
 		return use, nil
 	}
-
-
-
 
 }

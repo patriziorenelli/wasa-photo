@@ -1,8 +1,9 @@
 package api
 
-import( "git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/database" 
-   		"reflect" 
-	)
+import (
+	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/database"
+	"reflect"
+)
 
 type UserId struct {
 	ID int `json:"userId"`
@@ -13,8 +14,8 @@ type Username struct {
 }
 
 type User struct {
-	ID  int `json:"id"`
-	USERNAME  string `json:"username"`
+	ID       int    `json:"id"`
+	USERNAME string `json:"username"`
 }
 
 type Post struct {
@@ -25,7 +26,7 @@ type Post struct {
 }
 
 type Ban struct {
-	UID1  int
+	UID1 int
 	UID2 int
 }
 
@@ -48,8 +49,8 @@ type Comment struct {
 
 func (userId *UserId) UserIdIsValid() bool {
 	var x = reflect.TypeOf(userId.ID).String()
-	return  x == "int"
-		
+	return x == "int"
+
 }
 
 func (user *Username) UsernameIsValid() bool {
@@ -57,19 +58,14 @@ func (user *Username) UsernameIsValid() bool {
 }
 
 func (user *Username) UsernameToDatabase() database.Username {
-	return database.Username{ USERNAME: user.USERNAME, }
+	return database.Username{USERNAME: user.USERNAME}
 }
 
-
-func (id *UserId) FromUserDatabase( i database.User) {
+func (id *UserId) FromUserDatabase(i database.User) {
 	id.ID = i.ID
 }
-
-
 
 func (u *User) FromDatabase(us database.User) {
 	u.ID = us.ID
 	u.USERNAME = us.USERNAME
 }
-
-

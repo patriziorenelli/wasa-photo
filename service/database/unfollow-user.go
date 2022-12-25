@@ -3,9 +3,9 @@ package database
 import (
 	"database/sql"
 	"errors"
-	
 )
 
+// Va bene
 func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 
 	var username Username
@@ -47,33 +47,23 @@ func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 		return -4, username
 	}
 
-	
 	var follow Follow
-
-	// -------------------------------------------------
-
 
 	// Verifico se userId segue
 	row = db.c.QueryRow(`SELECT * FROM follow WHERE uid = ? AND uid2 = ?`, userId, unfollowId)
 	err = row.Scan(&follow.UID1, &follow.UID2)
 
-	if err != nil && errors.Is(err, sql.ErrNoRows){
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return -5, username
-	}else if  err != nil {
+	} else if err != nil {
 		return -6, username
 	}
 
-
+	// Se l'utente segue l'user indicato smette di seguirlo
 	_, err = db.c.Exec(`DELETE FROM follow WHERE uid = ? AND uid2 = ?`, userId, unfollowId)
 	if err != nil {
 		return -6, username
 	}
 
-	// --------------------------------------------
-
-
-
-
 	return 0, username
-
 }

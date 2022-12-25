@@ -9,7 +9,8 @@ import (
 	"strings"
 )
 
-func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext)  {
+// Va bene
+func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
 

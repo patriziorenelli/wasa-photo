@@ -8,7 +8,7 @@ import (
 func (rt *_router) Handler() http.Handler {
 	// Register routes
 	rt.router.POST("/session", rt.wrap(rt.DoLogin))
-    rt.router.PUT("/users/:userId/username", rt.wrap(rt.setMyUserName))
+	rt.router.PUT("/users/:userId/username", rt.wrap(rt.setMyUserName))
 	rt.router.PUT("/users/:userId/followUser/:userId2", rt.wrap(rt.followUser))
 	rt.router.DELETE("/users/:userId/followUser/:userId2", rt.wrap(rt.unfollowUser))
 	// rt.router.PUT("/users/:userId/banUser/:userId2", rt.wrap(rt.banUser))
@@ -22,9 +22,6 @@ func (rt *_router) Handler() http.Handler {
 	// rt.router.GET("/users/:userId/stream", rt.wrap(rt.getMyStream))
 	// rt.router.GET("/users/:userId/profile", rt.wrap(rt.getUserProfile))
 
-	
-
-	
 	// Special routes
 	rt.router.GET("/liveness", rt.liveness)
 
