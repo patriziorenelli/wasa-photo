@@ -23,7 +23,7 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		reqUser, _ := strconv.Atoi(reqUser)
 		unfollowId, _ := strconv.Atoi(unfollowId)
 
-		ris, username := rt.db.FollowUser(reqUser, unfollowId)
+		ris, username := rt.db.UnfollowUser(reqUser, unfollowId)
 
 		switch ris {
 

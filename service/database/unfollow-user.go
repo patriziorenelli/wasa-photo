@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	
 )
 
 func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
@@ -30,7 +31,6 @@ func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 
 	// Variabile di tipo Ban usata per i check
 	var ban Ban
-
 	// Controllo che l'utente che si vuole seguire non abbia bloccato l'utente che lo vuole seguire
 	row = db.c.QueryRow(`SELECT * from ban where uid = ? and uid2 = ?`, unfollowId, userId)
 	err = row.Scan(&ban.UID1, &ban.UID2)
@@ -47,9 +47,11 @@ func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 		return -4, username
 	}
 
+	
 	var follow Follow
-	// Verificare se esiste tupla in follow -> se non esiste si ritorna errore -5 oppure se errore -6 
-	// Se esiste la tupla la elimino -> verifico risultato se tutto ok ritorno nick se no -6 
+
+	// -------------------------------------------------
+
 
 	// Verifico se userId segue
 	row = db.c.QueryRow(`SELECT * FROM follow WHERE uid = ? AND uid2 = ?`, userId, unfollowId)
@@ -62,12 +64,12 @@ func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 	}
 
 
-	_, err = db.c.Query(`DELETE FROM follow WHERE uid = ? AND uid2 = ?`, userId, unfollowId)
+	_, err = db.c.Exec(`DELETE FROM follow WHERE uid = ? AND uid2 = ?`, userId, unfollowId)
 	if err != nil {
 		return -6, username
 	}
 
-	
+	// --------------------------------------------
 
 
 
