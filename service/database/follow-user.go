@@ -2,7 +2,7 @@ package database
 import (	"errors"
 			"database/sql" 
 			"fmt"
-			"strings"
+			// "strings"
 		)
 
 func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
@@ -64,35 +64,12 @@ func (db *appdbimpl) FollowUser(userId int, followId int) (int, error) {
 
 	// Aggiunto il follow nel database 
 	res , err := db.c.Exec(`INSERT INTO follow VALUES (? , ?)`, userId, followId)
-	
-	if strings.Contains(err.Error(), "UNIQUE constraint" ){
-		fmt.Print("DUPLICATO")
-		return -5, nil
-	}
 
 	
-	
+	fmt.Print(err)
 	fmt.Print(res)
-
-
-	/*
-	var use Username
-
-
-	_, err := db.c.Exec(`UPDATE user SET username = ? WHERE id = ?`, newUsername, userId)
-
-	// In caso di errore nel cambio username
-	if err != nil {
-
-		use.USERNAME = "nil"
-		return use, err
-	} else{
-		use.USERNAME = newUsername
-		fmt.Print(use)
-		return use, nil
-	}
-
-*/
+	// Bisogna gestire il caso in cui l'errore sia UNIQUE constraint failed: follow.uid, follow.uid2
+	// Bisogna gestire il caso di un qualunque altro errore 
 
 	return 0, nil
 
