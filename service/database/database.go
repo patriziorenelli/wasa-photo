@@ -70,6 +70,10 @@ type AppDatabase interface {
 
 	// Smette di seguire un altro utente
 	UnfollowUser(userId int, unfollowId int) (int, Username)
+
+	// Banna un utente
+	BanUser(userId int, banId int) (int, Username)
+
 	Ping() error
 }
 

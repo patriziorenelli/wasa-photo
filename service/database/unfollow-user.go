@@ -19,7 +19,7 @@ func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 		return -1, username
 	}
 
-	// Controllo che l'utente che si vuole seguire esista
+	// Controllo che l'utente che si vuole smettere di seguire esista
 	row = db.c.QueryRow(`SELECT * from user where id = ?`, unfollowId)
 	err = row.Scan(&us.ID, &us.USERNAME)
 
@@ -31,7 +31,7 @@ func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 
 	// Variabile di tipo Ban usata per i check
 	var ban Ban
-	// Controllo che l'utente che si vuole seguire non abbia bloccato l'utente che lo vuole seguire
+	// Controllo che l'utente che si vuole smettere di seguire non abbia bloccato l'utente
 	row = db.c.QueryRow(`SELECT * from ban where uid = ? and uid2 = ?`, unfollowId, userId)
 	err = row.Scan(&ban.UID1, &ban.UID2)
 
@@ -39,7 +39,7 @@ func (db *appdbimpl) UnfollowUser(userId int, unfollowId int) (int, Username) {
 		return -3, username
 	}
 
-	// Controllo che l'utente non abbia bloccato chi vuole seguire
+	// Controllo che l'utente non abbia bloccato chi vuole smettere di seguire
 	row = db.c.QueryRow(`SELECT uid from ban where uid = ? and uid2 = ?`, userId, unfollowId)
 	err = row.Scan(&ban.UID1, &ban.UID2)
 
