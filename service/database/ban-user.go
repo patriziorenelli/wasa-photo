@@ -48,8 +48,7 @@ func (db *appdbimpl) BanUser(userId int, banId int) (int, Username) {
 		return -4, username
 	}
 
-	// 	BISOGNA FARE IL BAN DELL'UTENTE  E SMETTERE DI SEGUIRE L'UTENTE banId E VERIFICARNE IL BUON ESITO
-
+	// BAN DELL'UTENTE  E SMETTERE DI SEGUIRE L'UTENTE banId E VERIFICARNE IL BUON ESITO
 	_, err = db.c.Exec(`INSERT INTO ban VALUES (? , ?); DELETE FROM follow WHERE uid = ? AND uid2 = ?`, userId, banId, userId, banId)
 
 	// Caso in cui già si ha bannato l'user

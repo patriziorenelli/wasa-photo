@@ -20,7 +20,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	// Prendo il cod utente indicato nel path
 	reqUser := strings.Split(r.RequestURI, "/")[2]
 
-	//Controllo che l'utente sia correttamente loggato
+	// Controllo che l'utente sia correttamente loggato
 	if auth == reqUser {
 		// Ottengo il nuovo username che l'utente vuole impostare
 		var user Username
