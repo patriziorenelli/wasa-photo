@@ -8,7 +8,7 @@ import (
 )
 
 // VA BENE
-func (rt *_router) DoLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// deve ritornare un json contentente id dell'utente
 	var user Username

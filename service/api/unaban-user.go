@@ -61,7 +61,7 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 		}
 
 	} else {
-
+		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

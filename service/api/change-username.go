@@ -51,7 +51,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		}
 
 	} else {
-		ctx.Logger.Error("User aren't authorized")
+		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

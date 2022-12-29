@@ -14,38 +14,42 @@ type Username struct {
 }
 
 type User struct {
-	ID       int    `json:"id"`
+	ID       int    `json:"userId"`
 	USERNAME string `json:"username"`
 }
 
 type Post struct {
-	ID          int
-	DESCRIPTION string
-	USERID      int
-	PHOTO       string
+	ID          int `json:"id"`
+	USERID      int `json:"userId"`
+	PHOTO       string `json:"photo"`
 }
 
 type Ban struct {
-	UID1 int
-	UID2 int
+	UID1 int `json:"userId1"`
+	UID2 int `json:"userId2"`
 }
 
 type Follow struct {
-	UID1 int
-	UID2 int
+	UID1 int `json:"userId1"`
+	UID2 int `json:"userId2"`
 }
 
 type Like struct {
-	PHID int
-	UID  int
+	PHID int `json:"photoId"`
+	UID  int `json:"userId"`
 }
 
 type Comment struct {
-	CID  int
-	UID  int
-	PHID int
-	TEXT string
+	CID  int `json:"commentId"`
+	UID  int `json:"userId"`
+	PHID int `json:"photoId"`
+	TEXT string `json:"text"`
 }
+
+type Result struct {
+	TEXT string `json:"result"`
+}
+
 
 func (userId *UserId) UserIdIsValid() bool {
 	var x = reflect.TypeOf(userId.ID).String()

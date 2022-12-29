@@ -1,7 +1,7 @@
 package api
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
@@ -9,28 +9,29 @@ import (
 	"strings"
 )
 
-// Va bene
-func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+// DA FARE 
+func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
 
+	// Prendo l'id del post a cui mettere mi piace 
+	postId := strings.Split(r.RequestURI, "/")[2]
 	// Prendo il cod utente indicato nel path
-	reqUser := strings.Split(r.RequestURI, "/")[2]
-	unfollowId := strings.Split(r.RequestURI, "/")[4]
+	userId := strings.Split(r.RequestURI, "/")[4]
 
 	// Se l'autenticazione va a buon fine e si sta cercando di seguire un altro user, si invia la richiesta di follow
-	if auth == reqUser && auth != unfollowId {
+	if auth == userId  {
 
-		reqUser, _ := strconv.Atoi(reqUser)
-		unfollowId, _ := strconv.Atoi(unfollowId)
+		userId, _ := strconv.Atoi(userId)
+		postId, _ := strconv.Atoi(postId)
 
-		ris, username := rt.db.UnfollowUser(reqUser, unfollowId)
+		ris := rt.db.LikePost(userId, postId)
 
 		switch ris {
 
 		case 0:
 			w.Header().Set("Content-Type", "application/json")
-			_ = json.NewEncoder(w).Encode(username)
+			// _ = json.NewEncoder(w).Encode(username)
 			return
 
 		case -1:
@@ -39,22 +40,22 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 			return
 
 		case -2:
-			ctx.Logger.Error("User you want to unfollow does not exist")
+			ctx.Logger.Error("The post doesn't exist")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
 		case -3:
-			ctx.Logger.Error("User you want to unfollow has banned you")
+			ctx.Logger.Error("You banned other user")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
 		case -4:
-			ctx.Logger.Error("You ban the user you want to unfollow")
+			ctx.Logger.Error("The other user blocked you")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
 		case -5:
-			ctx.Logger.Error("You don't already follow the user")
+			ctx.Logger.Error("You already liked the post")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
