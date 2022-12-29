@@ -5,18 +5,8 @@ import (
 	"errors"
 )
 
+// VA BENE 
 func (db *appdbimpl) LikePost(userId int, photoId int) (int) {
-
-	/*
-	UTENTE ESISTE?
-	POST ESISTE?
-	PROPRIETARIO DEL POST HA BLOCCATO L'UTENTE?
-	USER HA BLOCCATO IL PROPRIETARIO?
-	USER HA GIA' MESSO MI PIACE? 
-					- SI -> RITORNO L'ERRORE
-					- NO -> METTO MI PIACE 
-	*/
-
 
 	// Variabile di tipo User usato per il check
 	var us User

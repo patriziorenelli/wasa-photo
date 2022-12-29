@@ -1,7 +1,7 @@
 package api
 
 import (
-	// "encoding/json"
+	"encoding/json"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// DA FARE 
+// VA BENE 
 func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
@@ -30,8 +30,11 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		switch ris {
 
 		case 0:
+			var risultato Result
+			risultato.TEXT = "Done" 
+			risultato.CODE = 200
 			w.Header().Set("Content-Type", "application/json")
-			// _ = json.NewEncoder(w).Encode(username)
+			 _ = json.NewEncoder(w).Encode(risultato)
 			return
 
 		case -1:
