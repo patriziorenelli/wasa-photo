@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+
 // TESTARE LA FUNZIONALITA'
 
 // curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}'
@@ -37,8 +38,37 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		// Converto l'id utente in un int
 		userId, _ := strconv.Atoi(reqUser)
 
-		dbUser, err := rt.db.SetMyUserName(userId, user.USERNAME)
+		ris := rt.db.SetMyUserName(userId, user.USERNAME)
 
+		switch ris{
+
+		case 0:
+			var username Username
+			username.USERNAME = user.USERNAME
+			w.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(w).Encode(username)
+			return
+
+		case -1:
+			ctx.Logger.Error("User not exist")
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		case -2:
+			ctx.Logger.Error("Username already used")
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		case -3:
+			ctx.Logger.Error("Error during execution")
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+
+
+
+		}
+
+		// QUI BISOGNA CONTROLLARE IL TIPO DI ERRORE 
+
+		/*
 		if err != nil {
 			ctx.Logger.WithError(err).Error("Error during change username")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -50,6 +80,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 		}
 
+		*/
 	} else {
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)

@@ -58,21 +58,4 @@ func (db *appdbimpl) UnBanUser(userId int, unbanId int) (int, Username) {
 		return 0, username
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	return 0, username
 }
