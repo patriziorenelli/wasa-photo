@@ -1,6 +1,5 @@
 package database
 
-import "fmt"
 
 func (db *appdbimpl) SetMyUserName(userId int, newUsername string) (Username, error) {
 
@@ -15,7 +14,6 @@ func (db *appdbimpl) SetMyUserName(userId int, newUsername string) (Username, er
 		return use, err
 	} else {
 		use.USERNAME = newUsername
-		fmt.Print(use)
 		return use, nil
 	}
 

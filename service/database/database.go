@@ -74,6 +74,9 @@ type AppDatabase interface {
 	// Banna un utente
 	BanUser(userId int, banId int) (int, Username)
 
+
+	UnBanUser(userId int, unbanId int) (int, Username)
+
 	Ping() error
 }
 
