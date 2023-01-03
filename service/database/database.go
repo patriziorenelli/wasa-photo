@@ -58,9 +58,6 @@ type AppDatabase interface {
 	// Crea un utente passandogli il suo nickname
 	CreateUser(newNick string) (User, error)
 
-	// Ritorna l'id dell'utente sotto forma di int
-	FindUsername(username string) (int, error)
-
 	// Imposta un nuovo nickname ad un utente
 	SetMyUserName(userId int, newUsername string) int
 
