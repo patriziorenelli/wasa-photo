@@ -9,7 +9,6 @@ import (
 	"strings"
 )
 
-
 // TESTARE LA FUNZIONALITA'
 
 // curl -X PUT  http://localhost:3000/users/1/username -H "Authorization: 1" -H "Content-Type: application/json" -d '{"username": "marione_12"}'
@@ -40,7 +39,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 		ris := rt.db.SetMyUserName(userId, user.USERNAME)
 
-		switch ris{
+		switch ris {
 
 		case 0:
 			var username Username
@@ -62,23 +61,21 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 
-
-
 		}
 
-		// QUI BISOGNA CONTROLLARE IL TIPO DI ERRORE 
+		// QUI BISOGNA CONTROLLARE IL TIPO DI ERRORE
 
 		/*
-		if err != nil {
-			ctx.Logger.WithError(err).Error("Error during change username")
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		} else {
+			if err != nil {
+				ctx.Logger.WithError(err).Error("Error during change username")
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			} else {
 
-			w.Header().Set("Content-Type", "application/json")
-			_ = json.NewEncoder(w).Encode(dbUser)
+				w.Header().Set("Content-Type", "application/json")
+				_ = json.NewEncoder(w).Encode(dbUser)
 
-		}
+			}
 
 		*/
 	} else {

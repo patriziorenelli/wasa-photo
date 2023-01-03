@@ -22,9 +22,9 @@ type User struct {
 }
 
 type Post struct {
-	ID          int
-	USERID      int
-	PHOTO       string
+	ID     int
+	USERID int
+	PHOTO  string
 }
 
 type Ban struct {
@@ -49,8 +49,6 @@ type Comment struct {
 	TEXT string
 }
 
-
-
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
@@ -64,7 +62,7 @@ type AppDatabase interface {
 	FindUsername(username string) (int, error)
 
 	// Imposta un nuovo nickname ad un utente
-	SetMyUserName(userId int, newUsername string) (int)
+	SetMyUserName(userId int, newUsername string) int
 
 	// Segue un altro utente
 	FollowUser(userId int, followId int) (int, Username)
@@ -75,11 +73,11 @@ type AppDatabase interface {
 	// Banna un utente
 	BanUser(userId int, banId int) (int, Username)
 
-	// Toglie il ban ad un utente 
+	// Toglie il ban ad un utente
 	UnBanUser(userId int, unbanId int) (int, Username)
 
 	// Mette like ad un post
-	LikePost(userId int, photoId int) (int)
+	LikePost(userId int, photoId int) int
 
 	Ping() error
 }

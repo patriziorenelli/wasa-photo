@@ -5,8 +5,8 @@ import (
 	"errors"
 )
 
-// VA BENE 
-func (db *appdbimpl) LikePost(userId int, photoId int) (int) {
+// VA BENE
+func (db *appdbimpl) LikePost(userId int, photoId int) int {
 
 	// Variabile di tipo User usato per il check
 	var us User
@@ -23,13 +23,11 @@ func (db *appdbimpl) LikePost(userId int, photoId int) (int) {
 	var post Post
 	row = db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
 	err = row.Scan(&post.ID, &post.USERID, &post.PHOTO)
-	
+
 	if errors.Is(err, sql.ErrNoRows) {
 		return -2
 	}
 
-
-	
 	// Variabile di tipo Ban usata per i check
 	var ban Ban
 
@@ -48,8 +46,7 @@ func (db *appdbimpl) LikePost(userId int, photoId int) (int) {
 		return -4
 	}
 
-
-	// Aggiungo il like al post 
+	// Aggiungo il like al post
 	_, err = db.c.Exec(`INSERT INTO like VALUES (? , ?)`, photoId, userId)
 
 	// Caso in cui ci sia già quel like
@@ -58,7 +55,6 @@ func (db *appdbimpl) LikePost(userId int, photoId int) (int) {
 	} else if err != nil {
 		return -6
 	}
-
 
 	return 0
 

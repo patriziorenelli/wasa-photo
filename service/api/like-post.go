@@ -9,18 +9,18 @@ import (
 	"strings"
 )
 
-// VA BENE 
+// VA BENE
 func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
 
-	// Prendo l'id del post a cui mettere mi piace 
+	// Prendo l'id del post a cui mettere mi piace
 	postId := strings.Split(r.RequestURI, "/")[2]
 	// Prendo il cod utente indicato nel path
 	userId := strings.Split(r.RequestURI, "/")[4]
 
 	// Se l'autenticazione va a buon fine e si sta cercando di seguire un altro user, si invia la richiesta di follow
-	if auth == userId  {
+	if auth == userId {
 
 		userId, _ := strconv.Atoi(userId)
 		postId, _ := strconv.Atoi(postId)
@@ -31,10 +31,10 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 		case 0:
 			var risultato Result
-			risultato.TEXT = "Done" 
+			risultato.TEXT = "Done"
 			risultato.CODE = 200
 			w.Header().Set("Content-Type", "application/json")
-			 _ = json.NewEncoder(w).Encode(risultato)
+			_ = json.NewEncoder(w).Encode(risultato)
 			return
 
 		case -1:

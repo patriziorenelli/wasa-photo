@@ -4,7 +4,8 @@ import (
 	"database/sql"
 	"errors"
 )
-func (db *appdbimpl) SetMyUserName(userId int, newUsername string) (int ) {
+
+func (db *appdbimpl) SetMyUserName(userId int, newUsername string) int {
 
 	var us User
 
@@ -16,8 +17,7 @@ func (db *appdbimpl) SetMyUserName(userId int, newUsername string) (int ) {
 		return -1
 	}
 
-
-	// Controllo che l'username selezionato non sia già utilizzato 
+	// Controllo che l'username selezionato non sia già utilizzato
 	row = db.c.QueryRow(`SELECT * from user where username = ?`, newUsername)
 	err = row.Scan(&us.ID, &us.USERNAME)
 

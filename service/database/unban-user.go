@@ -1,12 +1,11 @@
 package database
 
-
 import (
 	"database/sql"
 	"errors"
 )
 
-// VA BENE 
+// VA BENE
 func (db *appdbimpl) UnBanUser(userId int, unbanId int) (int, Username) {
 
 	var username Username
@@ -40,7 +39,7 @@ func (db *appdbimpl) UnBanUser(userId int, unbanId int) (int, Username) {
 		return -3, username
 	}
 
-	// Controllo che l'utente abbia veramente bannato l'altro user 
+	// Controllo che l'utente abbia veramente bannato l'altro user
 	row = db.c.QueryRow(`SELECT uid from ban where uid = ? and uid2 = ?`, userId, unbanId)
 	err = row.Scan(&ban.UID1, &ban.UID2)
 
@@ -48,13 +47,11 @@ func (db *appdbimpl) UnBanUser(userId int, unbanId int) (int, Username) {
 		return -4, username
 	}
 
-
-
 	// Se l'utente aveva bannato l'altro user allora lo sblocco
 	_, err = db.c.Exec(`DELETE FROM ban WHERE uid = ? AND uid2 = ?`, userId, unbanId)
 	if err != nil {
 		return -5, username
-	}else{
+	} else {
 		return 0, username
 	}
 

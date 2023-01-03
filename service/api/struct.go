@@ -19,9 +19,9 @@ type User struct {
 }
 
 type Post struct {
-	ID          int `json:"id"`
-	USERID      int `json:"userId"`
-	PHOTO       string `json:"photo"`
+	ID     int    `json:"id"`
+	USERID int    `json:"userId"`
+	PHOTO  string `json:"photo"`
 }
 
 type Ban struct {
@@ -40,17 +40,16 @@ type Like struct {
 }
 
 type Comment struct {
-	CID  int `json:"commentId"`
-	UID  int `json:"userId"`
-	PHID int `json:"photoId"`
+	CID  int    `json:"commentId"`
+	UID  int    `json:"userId"`
+	PHID int    `json:"photoId"`
 	TEXT string `json:"text"`
 }
 
 type Result struct {
-	CODE int `json:"code"`
+	CODE int    `json:"code"`
 	TEXT string `json:"result"`
 }
-
 
 func (userId *UserId) UserIdIsValid() bool {
 	var x = reflect.TypeOf(userId.ID).String()
