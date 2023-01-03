@@ -79,6 +79,9 @@ type AppDatabase interface {
 	// Mette like ad un post
 	LikePost(userId int, photoId int) int
 
+	// Rimuove un like ad un post
+	UnlikePost(userId int, photoId int) int
+
 	Ping() error
 }
 
