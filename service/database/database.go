@@ -74,13 +74,13 @@ type AppDatabase interface {
 	UnBanUser(userId int, unbanId int) (int, Username)
 
 	// Mette like ad un post
-	LikePost(userId int, photoId int) int
+	LikePhoto(userId int, photoId int) int
 
 	// Rimuove un like ad un post
-	UnlikePost(userId int, photoId int) int
+	UnlikePhoto(userId int, photoId int) int
 
 	// Aggiunge un commento ad un post
-	CommentPost(userId int, photoId int, text string) int
+	CommentPhoto(userId int, photoId int, text string) int
 
 	Ping() error
 }

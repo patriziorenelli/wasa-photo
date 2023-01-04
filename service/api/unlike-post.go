@@ -25,7 +25,7 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		userId, _ := strconv.Atoi(userId)
 		postId, _ := strconv.Atoi(postId)
 
-		ris := rt.db.UnlikePost(userId, postId)
+		ris := rt.db.UnlikePhoto(userId, postId)
 
 		switch ris {
 

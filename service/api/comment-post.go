@@ -10,7 +10,7 @@ import (
 )
 
 // VA BENE
-func (rt *_router) commentPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Prendo l'autenticazione
 	auth := r.Header.Get("Authorization")
@@ -42,7 +42,7 @@ func (rt *_router) commentPost(w http.ResponseWriter, r *http.Request, ps httpro
 		// Converto l'id del post in un int
 		postId, _ := strconv.Atoi(phId)
 
-		ris := rt.db.CommentPost(userId, postId, comment.TEXT)
+		ris := rt.db.CommentPhoto(userId, postId, comment.TEXT)
 
 		switch ris {
 		case 0:

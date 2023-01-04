@@ -6,7 +6,7 @@ import (
 )
 
 // VA BENE
-func (db *appdbimpl) UnlikePost(userId int, photoId int) int {
+func (db *appdbimpl) UnlikePhoto(userId int, photoId int) int {
 
 	// Variabile di tipo User usato per il check
 	var us User

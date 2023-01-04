@@ -25,7 +25,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		userId, _ := strconv.Atoi(userId)
 		postId, _ := strconv.Atoi(postId)
 
-		ris := rt.db.LikePost(userId, postId)
+		ris := rt.db.LikePhoto(userId, postId)
 
 		switch ris {
 

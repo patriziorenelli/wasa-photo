@@ -6,7 +6,7 @@ import (
 )
 
 // VA BENE
-func (db *appdbimpl) CommentPost(userId int, photoId int, text string) int {
+func (db *appdbimpl) CommentPhoto(userId int, photoId int, text string) int {
 
 	// Variabile di tipo User usato per il check
 	var us User
