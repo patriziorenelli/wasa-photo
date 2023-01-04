@@ -5,6 +5,7 @@ import (
 	"errors"
 )
 
+// VA BENE
 func (db *appdbimpl) SetMyUserName(userId int, newUsername string) int {
 
 	var us User

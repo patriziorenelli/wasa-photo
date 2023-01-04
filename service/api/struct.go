@@ -51,6 +51,10 @@ type Result struct {
 	TEXT string `json:"result"`
 }
 
+type CommentText struct {
+	TEXT string `json:"text"`
+}
+
 func (userId *UserId) UserIdIsValid() bool {
 	var x = reflect.TypeOf(userId.ID).String()
 	return x == "int"
@@ -58,13 +62,18 @@ func (userId *UserId) UserIdIsValid() bool {
 }
 
 func (user *Username) UsernameIsValid() bool {
-	return reflect.TypeOf(user.USERNAME).String() == "string"
+	return reflect.TypeOf(user.USERNAME).String() == "string" && len(user.USERNAME) >= 6 && len(user.USERNAME) <= 16
 }
 
 func (user *Username) UsernameToDatabase() database.Username {
 	return database.Username{USERNAME: user.USERNAME}
 }
 
+func (comment *CommentText) CommentTextIsValid() bool {
+	return len(comment.TEXT) > 0 && len(comment.TEXT) <= 100
+}
+
+// NON USATE
 func (id *UserId) FromUserDatabase(i database.User) {
 	id.ID = i.ID
 }
