@@ -9,35 +9,21 @@ import (
 	"strings"
 )
 
-// DA CAMBIARE
-func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+// VA BENE
+func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	// Prendo l'autenticazione
 	auth := r.Header.Get("Authorization")
-
-	// Prendo l'id del post a cui mettere mi piace
+	// Prendo l'id del post a cui togliere il commento
 	phId := strings.Split(r.RequestURI, "/")[2]
 
-	// Ottengo il testo del nuovo commento
-	var comment CommentText
-	err := json.NewDecoder(r.Body).Decode(&comment)
+	// Prendo l'id del commento da eliminare
+	cmId := strings.Split(r.RequestURI, "/")[4]
 
-	// Controllo che il testo del commento sia valido
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	} else if !comment.CommentTextIsValid() {
-
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	// Converto l'id utente in un int
 	userId, _ := strconv.Atoi(auth)
-
-	// Converto l'id del post in un int
 	postId, _ := strconv.Atoi(phId)
+	commentId, _ := strconv.Atoi(cmId)
 
-	ris := rt.db.CommentPhoto(userId, postId, comment.TEXT)
+	ris := rt.db.UncommentPhoto(userId, postId, commentId)
 
 	switch ris {
 
@@ -70,6 +56,21 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 
 	case -5:
+		ctx.Logger.Error("Comment doesn't exist")
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+
+	case -6:
+		ctx.Logger.Error("Failed authentication")
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+
+	case -7:
+		ctx.Logger.Error("Comment not associated with the post")
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+
+	case -8:
 		ctx.Logger.Error("Error during execution")
 		w.WriteHeader(http.StatusUnauthorized)
 		return

@@ -15,6 +15,7 @@ func (db *appdbimpl) CommentPhoto(userId int, photoId int, text string) int {
 	row := db.c.QueryRow(`SELECT * from user where id = ?`, userId)
 	err := row.Scan(&us.ID, &us.USERNAME)
 
+	// Controllo che l'user indicato esista
 	if errors.Is(err, sql.ErrNoRows) {
 		return -1
 	}
@@ -24,6 +25,7 @@ func (db *appdbimpl) CommentPhoto(userId int, photoId int, text string) int {
 	row = db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
 	err = row.Scan(&post.ID, &post.USERID, &post.PHOTO)
 
+	// Controllo che il post esista
 	if errors.Is(err, sql.ErrNoRows) {
 		return -2
 	}

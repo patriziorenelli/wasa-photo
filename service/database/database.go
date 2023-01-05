@@ -82,6 +82,9 @@ type AppDatabase interface {
 	// Aggiunge un commento ad un post
 	CommentPhoto(userId int, photoId int, text string) int
 
+	// Rimuove un commento da un post
+	UncommentPhoto(userId int, photoId int, commentId int) int
+
 	Ping() error
 }
 

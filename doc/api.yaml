@@ -283,10 +283,9 @@ paths:
             '500':
               description: Error server execution  
 
-  /photo/{photoId}/comment/{userId}:
+  /photo/{photoId}/comment/:
     parameters:
       - $ref:  '#/components/parameters/photoId'
-      - $ref: '#/components/parameters/userId'
 
     post:
           tags: ["commentPhoto"] 
@@ -298,6 +297,7 @@ paths:
           security: 
             - userAuth: []
           requestBody:  
+            
             $ref: "#/components/requestBodies/commentDetails"          
           responses:
             '201': 
@@ -318,10 +318,9 @@ paths:
               description: Error server execution  
 
 
-  /photo/{photoId}/user/{userId}/comment/{commentId}:  
+  /photo/{photoId}/comment/{commentId}:  
       parameters:
         - $ref:  '#/components/parameters/photoId'
-        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/commentId'
       delete:
           tags: ["uncommentPhoto"] 
