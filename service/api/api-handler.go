@@ -19,7 +19,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.POST("/photo/:photoId/comment", rt.wrap(rt.commentPhoto))
 	rt.router.DELETE("/photo/:photoId/comment/:commentId", rt.wrap(rt.uncommentPhoto))
 
-	// rt.router.POST("/users/:userId/photo", rt.wrap(rt.uploadPhoto))
+	rt.router.POST("/users/:userId/photo", rt.wrap(rt.uploadPhoto))
 	// rt.router.DELETE("/user/:userId/photo/:photoId", rt.wrap(rt.deletePhoto))
 	// rt.router.GET("/users/:userId/stream", rt.wrap(rt.getMyStream))
 	// rt.router.GET("/users/:userId/profile", rt.wrap(rt.getUserProfile))

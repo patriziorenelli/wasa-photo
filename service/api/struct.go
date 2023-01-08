@@ -55,6 +55,10 @@ type CommentText struct {
 	TEXT string `json:"text"`
 }
 
+type ImageBinary struct{
+	BINARY string `json:"binary"`
+}
+
 func (userId *UserId) UserIdIsValid() bool {
 	var x = reflect.TypeOf(userId.ID).String()
 	return x == "int"
