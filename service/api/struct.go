@@ -55,7 +55,7 @@ type CommentText struct {
 	TEXT string `json:"text"`
 }
 
-type ImageBinary struct{
+type ImageBinary struct {
 	BINARY string `json:"binary"`
 }
 

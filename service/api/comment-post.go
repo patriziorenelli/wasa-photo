@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// VA BENE 
+// VA BENE
 func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Prendo l'autenticazione
