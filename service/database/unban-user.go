@@ -51,8 +51,8 @@ func (db *appdbimpl) UnBanUser(userId int, unbanId int) (int, Username) {
 	_, err = db.c.Exec(`DELETE FROM ban WHERE uid = ? AND uid2 = ?`, userId, unbanId)
 	if err != nil {
 		return -5, username
-	} else {
-		return 0, username
 	}
+
+	return 0, username
 
 }

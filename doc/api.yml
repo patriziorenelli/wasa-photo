@@ -1,0 +1,790 @@
+
+tags: 
+  - name: "doLogin" 
+    description: "Logs in the user" 
+  - name: "setMyUserName" 
+    description: "Set Username of User selected by his id " 
+  - name: "followUser" 
+    description: "Follow another user"   
+  - name: "unfollowUser"
+    description: "Unfollow another user"
+  - name: "banUser"
+    description: "Ban another user"
+  - name: "unbanUser"
+    description: "UnBan another user"
+  - name: "likePhoto"
+    description: "Like a photo"       
+  - name: "unlikePhoto" 
+    description: " Remove like in a photo " 
+  - name: "commentPhoto"
+    description: "Comment a post"
+  - name: "uncommentPhoto"
+    description: "Uncomment a post"
+  - name: "uploadPhoto"
+    description: "Upload new photo"
+  - name: "deletePhoto"
+    description: "Delete a photo"
+  - name: "getMyStream"
+    description: "Returns an array of posts from followed users"   
+  - name: "getUserProfile"
+    description: "Returns user profile information"  
+openapi: 3.0.0 
+
+info:  
+  title: WasaPhoto 
+  description:  |  
+    This API allows you to manage the 
+    data available in the project 
+  version: 0.0.1 
+servers:
+  - url: http://localhost:3000
+
+   
+paths:  
+
+  /session: 
+    post: 
+      tags: ["doLogin"] 
+      summary: Logs in the user 
+      description: |- 
+        If the user does not exist, it will be created, 
+        and an identifier is returned. 
+        If the user exists, the user identifier is returned. 
+
+      operationId: doLogin 
+      requestBody:
+        $ref: "#/components/requestBodies/userDetailsNickname"
+
+      responses:  
+        '201': 
+          description: User log-in action successful 
+          content: 
+            application/json: 
+              schema: 
+                  $ref: "#/components/schemas/userId"
+              example:
+                userId: 111112
+                     
+
+  /users/{userId}/username: 
+
+    put: 
+          tags: ["setMyUserName"] 
+          summary: Set Username of User selected by his id  
+          description: | 
+            If the user does not exist, error is returned. 
+            If the user exists, his username is changed. 
+          operationId: setMyUserName 
+          security: 
+            - userAuth: [] 
+          parameters:  
+            - $ref: "#/components/parameters/userId" 
+          requestBody:  
+            $ref: "#/components/requestBodies/userDetailsNickname"
+
+          responses:  
+            '200': 
+              description: UserName changed
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: "#/components/schemas/errorSchema"
+                  example:
+                    newUserName: "Marco12"
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }
+            '401': { $ref: "#/components/responses/UserNotAuthorized" }
+              
+
+  /users/{userId}/followUser/{userId2}: 
+    parameters:  
+      - $ref: "#/components/parameters/userId" 
+      - $ref: "#/components/parameters/userId2"     
+
+    put: 
+          tags: ["followUser"] 
+          summary: Follow another user 
+          description: | 
+            If the user identified by userId2 does not exist, error is returned. 
+            If the user identified by userId2 exists, user identified by userId follow user identified by userId2 if user2 hasn't banned him. 
+          operationId: followUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Now you follow the other user 
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    followedUser: "Luigi11" 
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }                  
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '404': {$ref: "#/components/responses/UserId2NotFound"} 
+            '405': {$ref: "#/components/responses/userId2Banned"}
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+                   
+    delete:
+          tags: ["unfollowUser"] 
+          summary: Unfollow another user 
+          description: | 
+            If the user identified by userId2 does not exist or user doesn't follow userId2, error is returned. 
+            If user follow userId2, user identified by userId unfollow user identified by userId2. 
+          operationId: unfollowUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Now you don't follow the other user 
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    unfollowedUser: "Luigi11" 
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }                  
+            '403': {$ref: "#/components/responses/UserIdBanned"}   
+            '402': {$ref: "#/components/responses/UnfollowedUser"}    
+            '404': {$ref: "#/components/responses/UserId2NotFound"}                             
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+  
+
+  /users/{userId}/banUser/{userId2}:
+
+     parameters:  
+      - $ref: "#/components/parameters/userId" 
+      - $ref: "#/components/parameters/userId2" 
+
+     put: 
+          tags: ["banUser"] 
+          summary: Ban another user 
+          description: | 
+            If the user identified by userId2 does not exist, error is returned. 
+            If the user identified by userId2 exists and user isn't banned by user2, user identified by userId ban user identified by userId2. 
+          operationId: banUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: User2 banned
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    bannedUser: "Luigi11" 
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }            
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '404': {$ref: "#/components/responses/UserId2NotFound"}                 
+            '405': {$ref: "#/components/responses/userId2Banned"} 
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+                   
+     delete:
+          tags: ["unbanUser"] 
+          summary: Unban another user 
+          description: | 
+            If the user identified by userId2 does not exist or user doesn't ban userId2, error is returned. 
+            If user banned userId2, user identified by userId unabanned user identified by userId2. 
+          operationId: unbanUser 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: User2 unbanned
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    unbannedUser: "Luigi11" 
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }            
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '404': {$ref: "#/components/responses/UserId2NotFound"}                 
+            '405': {$ref: "#/components/responses/userId2Banned"} 
+            '406': {$ref: "#/components/responses/userNotBanned"}
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+
+
+  /photo/{photoId}/like/{userId}:
+    parameters:
+      - $ref:  '#/components/parameters/photoId'
+      - $ref: '#/components/parameters/userId'
+
+    put:
+          tags: ["likePhoto"] 
+          summary: Like a post
+          description: | 
+            If the user identified by userId or photo identified by phId don't exist, error is returned. 
+            If the user identified by userId and photo identified by phId exists and user can see the photo , the user likes the photo indicated by phId. 
+          operationId: likePhoto 
+          security: 
+            - userAuth: []
+          
+          responses:
+            '200': 
+              description: Liked
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done"     
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }    
+            '407': {$ref: "#/components/responses/photoNotFound"} 
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '405': {$ref: "#/components/responses/userId2Banned"} 
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+
+    delete:
+          tags: ["unlikePhoto"] 
+          summary:  Remove like in a photo 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't liked the photo, error is returned. 
+            If user had liked the photo and he isn't banned, he removes his likes on the post
+          operationId: unlikePhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove like in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }    
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '405': {$ref: "#/components/responses/userId2Banned"}
+            '407': {$ref: "#/components/responses/photoNotFound"} 
+            '408': {$ref: "#/components/responses/LikeNotFound"} 
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+  /photo/{photoId}/comment:
+    parameters:
+      - $ref:  '#/components/parameters/photoId'
+
+    post:
+          tags: ["commentPhoto"] 
+          summary: Comment a post
+          description: | 
+            If the user identified by userId or photo identified by phId don't exist, error is returned. 
+            If the user identified by userId and photo identified by phId exists and user can see the photo , the user can comment the photo indicated by phId. 
+          operationId: commentPhoto 
+          security: 
+            - userAuth: []
+          requestBody:  
+            
+            $ref: "#/components/requestBodies/commentDetails"          
+          responses:
+            '201': 
+              description: Commented
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done"          
+            '400': { $ref: "#/components/responses/UserIdNotFound" }                 
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '405': {$ref: "#/components/responses/userId2Banned"} 
+            '407': {$ref: "#/components/responses/photoNotFound"} 
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+
+  /photo/{photoId}/comment/{commentId}:  
+      parameters:
+        - $ref:  '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/commentId'
+      delete:
+          tags: ["uncommentPhoto"] 
+          summary:  Remove comment in a photo 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't commented the photo, error is returned. 
+            If user had commented the photo and he isn't banned, he removes his comment on the post
+          operationId: uncommentPhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove comment in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+            '400': { $ref: "#/components/responses/UserIdNotFound" }                 
+            '401': { $ref: "#/components/responses/UserNotAuthorized" }
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '405': {$ref: "#/components/responses/userId2Banned"} 
+            '407': {$ref: "#/components/responses/photoNotFound"} 
+            '409': {$ref: "#/components/responses/commentNotFound"} 
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+  /users/{userId}/photo:
+    post:
+          tags: ["uploadPhoto"] 
+          summary:  Upload new photo 
+          description: | 
+            If the user identified by userId  doesn't exist, error is returned. 
+            If the user identified by userId exist, the Photo is uploaded.
+          operationId: uploadPhoto 
+          parameters:
+            - $ref: '#/components/parameters/userId'
+          security: 
+            - userAuth: [] 
+          requestBody:
+            $ref: "#/components/requestBodies/postPhotoDetails"
+
+          responses:
+            '201': 
+              description: Remove comment in a photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }                       
+            '410': { $ref: "#/components/responses/InvalidFormat" }   
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+ 
+
+  /user/{userId}/photo/{photoId}:  
+      parameters:
+        - $ref:  '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/userId'
+      delete:
+          tags: ["deletePhoto"] 
+          summary:  Remove photo from his profile 
+          description: | 
+            If the user identified by userId or photoId  does not exist or user doesn't posted the photo, error is returned. 
+            If user had posted the photo and the photoId exists, he removes his  post
+          operationId: deletePhoto 
+          security: 
+            - userAuth: [] 
+
+          responses:  
+            '200': 
+              description: Remove photo
+              content: 
+                application/json: 
+                  schema: 
+                    $ref: '#/components/schemas/errorSchema' 
+                  example:
+                    result: "Done" 
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }    
+            '407': {$ref: "#/components/responses/photoNotFound"}              
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}         
+
+  /users/{userId}/stream:
+
+      get:
+        tags: ["getMyStream"]
+        summary: Stream of the user
+        operationId: getMyStream
+        description: |
+           If the user identified by userId  does not exist , error is returned. 
+           If the user is authenticated and follows other users, it gets the various posts of the users he follows
+        parameters:
+          - $ref: '#/components/parameters/userId'
+        security:
+          - userAuth: []
+        
+        responses:
+          '200':
+            description: The user is authenticated and follows other users gets the various posts of the users he follows
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/scStream"
+                example: 
+                  Posts: 
+                    - Id: 10
+                      AuthorId: 1024
+                      AuthorNickname: Franchino_12
+                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                      Date: 2022-11-29
+                      Like: 950
+                      Comment: 1203
+                    - Id: 120
+                      AuthorId: 1453
+                      AuthorNickname: Mario54_00
+                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                      Date: 2022-11-29
+                      Like: 950
+                      Comment: 1203
+
+                    - Id: 146324
+                      AuthorId: 136984
+                      AuthorNickname: Martina_fra13
+                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                      Date: 2022-11-28
+                      Like: 10
+                      Comment: 502
+
+          '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+
+
+  /users/{userId}/profile:
+
+      get:
+        tags: ["getUserProfile"]
+        summary: Profile of the user
+        operationId: getUserProfile
+        description: |
+          If the user identified by userId  does not exist , error is returned. 
+          if the user is authenticated and and if the user is not banned, it returns the profile of the user indicated by userId
+        parameters:
+          - $ref: '#/components/parameters/userId'
+        security:
+          - userAuth: []
+        
+        responses:
+          '200':
+            description: The user is authenticated and the user can see the user identified by userId, return the profile data
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/scProfile"
+                example:
+                  userId: 120
+                  userName: Franchino_12
+                  numPosts: 15
+                  numFollower: 1280
+                  numFollowing: 1600
+                  Posts: 
+                      - Id: 125410
+                        AuthorId: 125
+                        AuthorNickname: Franchino_12
+                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                        Date: 2022-11-29
+                        Like: 950
+                        Comment: 1203
+                      - Id: 12683
+                        AuthorId: 0254
+                        AuthorNickname: Mario54_00
+                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                        Date: 2022-11-29
+                        Like: 950
+                        Comment: 1203
+
+                      - Id: 126985
+                        AuthorId: 255
+                        AuthorNickname: Martina_fra13
+                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+                        Date: 2022-11-28
+                        Like: 10
+                        Comment: 502
+
+          '400': { $ref: "#/components/responses/UserIdNotFound" }    
+          '405': {$ref: "#/components/responses/userId2Banned"} 
+          '403': {$ref: "#/components/responses/UserIdBanned"}
+          '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+components:  
+
+  responses:
+    UserIdNotFound:
+      description: User id not found.
+
+    UserNotAuthorized:
+      description: User not authorized 
+
+    UserIdBanned:
+      description: User banned by User2
+
+    userId2Banned:
+      description: User banned User2
+
+    UserId2NotFound:
+      description: Userid2 not found    
+
+    ErrorServerExecution: 
+      description: Error server execution     
+
+    UnfollowedUser:
+      description: You don't follow userId2 
+
+    userNotBanned:
+      description: User wasn't banned 
+    
+    photoNotFound:
+      description: Photo Id not found
+
+    LikeNotFound:
+      description: User didn't like the photo
+
+    commentNotFound:
+      description: Comment doesn't exist 
+
+    InvalidFormat:
+      description: Invalid file format
+
+  schemas: 
+    username: 
+      type: string 
+      description: User's UserName 
+      example: Franchino_12 
+      pattern: '^[a-zA-Z0-9-_]+$' 
+      minLength: 6 
+      maxLength: 16  
+
+    userId:
+      type: object 
+      description: User log-in action successful 
+      properties: 
+        identifier: 
+          $ref: '#/components/schemas/identifier'
+
+    identifier: 
+      type: integer
+      description: User Id 
+      example: 1 
+
+    photoFile:
+      type: string
+      format: binary
+      description: Single photo file
+      example: "0000001011100010101010101"
+      minLength: 1
+      maxLength: 100000000
+
+    photoLink:
+      type: string
+      description: Link del file della foto da caricare
+      example: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
+      minLength: 1
+      maxLength: 10000
+    
+    photoDate:
+      type: string
+      format: date
+      description: Photo date upload
+      example: 2022-11-29
+      minLength: 10
+      maxLength: 11
+
+    photoId:
+      type: integer
+      description: Photo identifier
+      example: 5
+
+
+    likeNumber: 
+      type: integer
+      description: Number of likes of the post 
+      example: 987
+
+    commentNumber:
+      type: integer
+      description: Number of comment of the post  
+      example: 10000
+
+    followerNumber:
+      type: integer
+      description: Number of follower 
+      example: 1285
+
+    followingNumber:
+      type: integer
+      description: Number of followinf
+      example: 1350      
+
+    photoNumber:
+      type: integer
+      description: Number of post
+      example: 23    
+
+    Post:
+      type: object
+      description:  Rappresent a post 
+      properties:
+        Id:
+          $ref: '#/components/schemas/photoId'
+        AuthorId: 
+          $ref: '#/components/schemas/identifier'
+        AuthorNickname:
+          $ref: '#/components/schemas/username'
+        File:
+          $ref: '#/components/schemas/photoLink'
+        Date:
+          $ref: '#/components/schemas/photoDate'
+        Like: 
+          $ref: '#/components/schemas/likeNumber'
+        Comment: 
+          $ref: '#/components/schemas/commentNumber'
+
+
+    arrayStream:
+      type: array
+      description: Various posts of the users userId follows
+      items: 
+        $ref: '#/components/schemas/Post'
+      minItems: 0
+      maxItems: 10    
+
+    scStream:
+      type: object
+      description: Contenitor of various posts of the users userId follows
+      properties:
+        Posts:
+          $ref: '#/components/schemas/arrayStream'
+
+    scProfile:
+      type: object
+      description: Rappresent a user profile
+      properties:
+        userId:
+          $ref: '#/components/schemas/identifier'
+        userName:
+          $ref: '#/components/schemas/username'
+        numPosts:
+          $ref: '#/components/schemas/photoNumber'
+        numFollower:
+          $ref: '#/components/schemas/followerNumber'
+        numFollowing:
+          $ref: '#/components/schemas/followingNumber'
+        Posts:
+          $ref: '#/components/schemas/arrayStream'
+
+    errorSchema: 
+      description: Error example
+      type: object 
+      properties: 
+        Message: 
+          $ref: "#/components/schemas/errorDescription" 
+
+
+
+    errorDescription: 
+      type: string  
+      description: Status
+      example: Success 
+      pattern: '^[a-zA-Z0-9]+$' 
+      minLength: 5 
+      maxLength: 50 
+
+    comment: 
+      type: string 
+      description: "Comment" 
+      example: Nice post! 
+      pattern: '^[a-zA-Z0-9 !]+$' 
+      minLength: 1 
+      maxLength: 100 
+
+
+    scUserName:
+      type: object
+      description:  "Describe userName" 
+      properties:
+        username:
+          $ref: "#/components/schemas/username"  
+
+    scPhoto:
+      type: object
+      description:  "Describe photo file" 
+      properties:
+        photoString:
+          $ref: "#/components/schemas/photoFile"  
+
+    schComment:
+      type: object
+      description:  "Describe user comment" 
+      properties:
+        comment:
+          $ref: "#/components/schemas/comment" 
+
+
+  requestBodies: 
+
+    commentDetails:
+          description: User comment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/schComment" 
+
+                
+    userDetailsNickname:
+          description: User details Nickname
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/scUserName"
+
+    postPhotoDetails:
+      description: New Post details
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/scPhoto"
+        
+
+              
+
+
+  parameters:  
+    userId: 
+      in: path 
+      name: userId 
+      required: true 
+      description: User Id 
+      schema: 
+        type: integer 
+        description: "User Id" 
+        example: 86 
+
+    userId2: 
+      in: path 
+      name: userId2 
+      required: true 
+      description: Second userId
+      schema: 
+        type: integer 
+        description: "Second userId" 
+        example: 100 
+
+    photoId: 
+      in: path 
+      name: photoId 
+      required: true 
+      description: Single id photo
+      schema: 
+        type: integer 
+        description: "Single id photo"
+        example: 15368 
+    
+    commentId: 
+      in: path 
+      name: commentId 
+      required: true 
+      description:   Single id comment 
+      schema: 
+        type: integer 
+        description: "Single id comment"
+        example: 456 
+
+  securitySchemes: 
+    userAuth: 
+      description: login only as your user id 
+      type: http 
+      scheme: bearer 

@@ -56,7 +56,7 @@ func (db *appdbimpl) UncommentPhoto(userId int, photoId int, commentId int) int 
 	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return -5
 	} else if err != nil {
-		return -6
+		return -8
 	}
 
 	// Caso in cui l'utente non è autorizzato ad eliminare il commento

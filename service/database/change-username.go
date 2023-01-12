@@ -31,8 +31,8 @@ func (db *appdbimpl) SetMyUserName(userId int, newUsername string) int {
 	// In caso di errore nel cambio username
 	if err != nil {
 		return -3
-	} else {
-		return 0
 	}
+
+	return 0
 
 }
