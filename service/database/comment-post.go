@@ -1,56 +1,28 @@
 package database
 
-import (
-	"database/sql"
-	"errors"
-)
-
 // VA BENE
 func (db *appdbimpl) CommentPhoto(userId int, photoId int, text string) int {
 
-	// Variabile di tipo User usato per il check
-	var us User
-
-	// Controllo che l'utente indicato esista
-	row := db.c.QueryRow(`SELECT * from user where id = ?`, userId)
-	err := row.Scan(&us.ID, &us.USERNAME)
-
-	// Controllo che l'user indicato esista
-	if errors.Is(err, sql.ErrNoRows) {
-		return -1
-	}
-
 	// Variabile di tipo Post usata per il check
 	var post Post
-	row = db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
-	err = row.Scan(&post.ID, &post.USERID, &post.PHOTO)
 
-	// Controllo che il post esista
-	if errors.Is(err, sql.ErrNoRows) {
-		return -2
+	// Controllo che l'user indicato esista
+	if db.UserExist(userId) == -1  { return -1 }
+
+	// Controllo che il post indicato esista 
+	if db.PhotoExist(photoId) == -1 { return -2 } else{
+		post = db.GetPhoto(photoId)
 	}
 
-	// Variabile di tipo Ban usata per i check
-	var ban Ban
 
-	// Controllo che l'utente che a cui si vuole aggiungere un commento non abbia bloccato l'utente
-	row = db.c.QueryRow(`SELECT * from ban where uid = ? and uid2 = ?`, userId, post.USERID)
-	err = row.Scan(&ban.UID1, &ban.UID2)
+	// Controllo che l'utente che  non abbia bannato l'utente a cui si vuole aggiungere un commento 
+	if db.CheckBan(userId, post.USERID) == 0 { return -3 }
 
-	if !errors.Is(err, sql.ErrNoRows) {
-		return -3
-	}
-
-	// Controllo che l'utente non abbia bloccato l'utente che ha pubblicato il post a cui si vuole aggiungere il commento
-	row = db.c.QueryRow(`SELECT * from ban where uid = ? and uid2 = ?`, post.USERID, userId)
-	err = row.Scan(&ban.UID1, &ban.UID2)
-
-	if !errors.Is(err, sql.ErrNoRows) {
-		return -4
-	}
+	// Controllo che l'utente che ha pubblicato il post a cui si vuole aggiungere il commento non abbia bannato l'user
+	if db.CheckBan( post.USERID, userId) == 0 { return -4 }
 
 	// Aggiungo il commento al post
-	_, err = db.c.Exec(`INSERT INTO comment (uid, phid, text) VALUES (? , ?, ?)`, userId, photoId, text)
+	_, err := db.c.Exec(`INSERT INTO comment (uid, phid, text) VALUES (? , ?, ?)`, userId, photoId, text)
 
 	// Errore durante il salvataggio del commento
 	if err != nil {
