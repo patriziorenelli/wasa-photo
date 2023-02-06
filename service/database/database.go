@@ -52,6 +52,8 @@ type Comment struct {
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
+	
+
 	// Funzione che gestisce il login
 	DoLogin(name Username) (User, error)
 
