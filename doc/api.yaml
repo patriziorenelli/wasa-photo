@@ -718,12 +718,6 @@ components:
               schema:
                 $ref: "#/components/schemas/scUserName"
 
-    postPhotoDetails:
-      description: New Post details
-      content:
-        multipart/form-data:
-          schema:
-            $ref: "#/components/schemas/photoFile"
         
 
               
