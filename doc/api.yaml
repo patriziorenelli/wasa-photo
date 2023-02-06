@@ -92,8 +92,10 @@ paths:
                   example:
                     newUserName: "Marco12"
 
-            '400': { $ref: "#/components/responses/UserIdNotFound" }
-            '401': { $ref: "#/components/responses/UserNotAuthorized" }
+            '400': 
+              description: Userid not found   
+            '401': 
+              description: User not authorized  
               
 
   /users/{userId}/followUser/{userId2}: 
@@ -120,12 +122,14 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     followedUser: "Luigi11" 
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }                  
-            '403': {$ref: "#/components/responses/UserIdBanned"}
-            '404': {$ref: "#/components/responses/UserId2NotFound"} 
-            '405': {$ref: "#/components/responses/userId2Banned"}
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: Userid banned  
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution     
                    
     delete:
           tags: ["unfollowUser"] 
@@ -146,13 +150,14 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     unfollowedUser: "Luigi11" 
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }                  
-            '403': {$ref: "#/components/responses/UserIdBanned"}   
-            '402': {$ref: "#/components/responses/UnfollowedUser"}    
-            '404': {$ref: "#/components/responses/UserId2NotFound"}                             
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
-  
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: You don't follow userId2 
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution   
 
   /users/{userId}/banUser/{userId2}:
 
@@ -179,12 +184,14 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     bannedUser: "Luigi11" 
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }            
-            '403': {$ref: "#/components/responses/UserIdBanned"}
-            '404': {$ref: "#/components/responses/UserId2NotFound"}                 
-            '405': {$ref: "#/components/responses/userId2Banned"} 
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description: Userid2 banned  you
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution     
                    
      delete:
           tags: ["unbanUser"] 
@@ -205,13 +212,14 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     unbannedUser: "Luigi11" 
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }            
-            '403': {$ref: "#/components/responses/UserIdBanned"}
-            '404': {$ref: "#/components/responses/UserId2NotFound"}                 
-            '405': {$ref: "#/components/responses/userId2Banned"} 
-            '406': {$ref: "#/components/responses/userNotBanned"}
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId2 wasn't banned
+            '404': 
+              description: Userid2 not found                                           
+            '500':
+              description: Error server execution   
 
 
   /photo/{photoId}/like/{userId}:
@@ -237,14 +245,15 @@ paths:
                   schema: 
                     $ref: '#/components/schemas/errorSchema' 
                   example:
-                    result: "Done"     
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }    
-            '407': {$ref: "#/components/responses/photoNotFound"} 
-            '403': {$ref: "#/components/responses/UserIdBanned"}
-            '405': {$ref: "#/components/responses/userId2Banned"} 
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
-
+                    result: "Done"          
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: PhotoId not found                                           
+            '500':
+              description: Error server execution  
 
     delete:
           tags: ["unlikePhoto"] 
@@ -265,13 +274,14 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     result: "Done" 
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }    
-            '403': {$ref: "#/components/responses/UserIdBanned"}
-            '405': {$ref: "#/components/responses/userId2Banned"}
-            '407': {$ref: "#/components/responses/photoNotFound"} 
-            '408': {$ref: "#/components/responses/LikeNotFound"} 
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found                                           
+            '500':
+              description: Error server execution  
 
   /photo/{photoId}/comment:
     parameters:
@@ -298,11 +308,14 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     result: "Done"          
-            '400': { $ref: "#/components/responses/UserIdNotFound" }                 
-            '403': {$ref: "#/components/responses/UserIdBanned"}
-            '405': {$ref: "#/components/responses/userId2Banned"} 
-            '407': {$ref: "#/components/responses/photoNotFound"} 
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: PhotoId not found                                           
+            '500':
+              description: Error server execution  
 
 
   /photo/{photoId}/comment/{commentId}:  
@@ -328,13 +341,16 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     result: "Done" 
-            '400': { $ref: "#/components/responses/UserIdNotFound" }                 
-            '401': { $ref: "#/components/responses/UserNotAuthorized" }
-            '403': {$ref: "#/components/responses/UserIdBanned"}
-            '405': {$ref: "#/components/responses/userId2Banned"} 
-            '407': {$ref: "#/components/responses/photoNotFound"} 
-            '409': {$ref: "#/components/responses/commentNotFound"} 
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found
+            '406':
+              description: commentId not found                                            
+            '500':
+              description: Error server execution 
 
   /users/{userId}/photo:
     post:
@@ -349,7 +365,15 @@ paths:
           security: 
             - userAuth: [] 
           requestBody:
-            $ref: "#/components/requestBodies/postPhotoDetails"
+           description: The binary image file to upload
+           content:
+            image/*:
+              schema:
+                description: Photo file to upload in binary file.
+                type: string
+                minLength: 1
+                maxLength: 20971520 
+                format: binary
 
           responses:
             '201': 
@@ -360,11 +384,10 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     result: "Done" 
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }                       
-            '410': { $ref: "#/components/responses/InvalidFormat" }   
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
- 
+            '400': 
+              description: Userid not found                     
+            '403': 
+              description:  File not valid  
 
   /user/{userId}/photo/{photoId}:  
       parameters:
@@ -389,10 +412,16 @@ paths:
                     $ref: '#/components/schemas/errorSchema' 
                   example:
                     result: "Done" 
-
-            '400': { $ref: "#/components/responses/UserIdNotFound" }    
-            '407': {$ref: "#/components/responses/photoNotFound"}              
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}         
+            '400': 
+              description: Userid not found                                 
+            '403': 
+              description:  UserId is banned
+            '404': 
+              description: photoId not found
+            '406':
+              description: commentId not found                                            
+            '500':
+              description: Error server execution            
 
   /users/{userId}/stream:
 
@@ -439,9 +468,10 @@ paths:
                       Date: 2022-11-28
                       Like: 10
                       Comment: 502
-
-          '500': {$ref: "#/components/responses/ErrorServerExecution"}  
-
+          '400': 
+            description: Userid not found 
+          '500':
+            description: Error server execution  
 
 
   /users/{userId}/profile:
@@ -494,50 +524,15 @@ paths:
                         Date: 2022-11-28
                         Like: 10
                         Comment: 502
+          '400': 
+            description: Userid not found 
+          '500':
+            description: Error server execution  
 
-          '400': { $ref: "#/components/responses/UserIdNotFound" }    
-          '405': {$ref: "#/components/responses/userId2Banned"} 
-          '403': {$ref: "#/components/responses/UserIdBanned"}
-          '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+
 
 components:  
-
-  responses:
-    UserIdNotFound:
-      description: User id not found.
-
-    UserNotAuthorized:
-      description: User not authorized 
-
-    UserIdBanned:
-      description: User banned by User2
-
-    userId2Banned:
-      description: User banned User2
-
-    UserId2NotFound:
-      description: Userid2 not found    
-
-    ErrorServerExecution: 
-      description: Error server execution     
-
-    UnfollowedUser:
-      description: You don't follow userId2 
-
-    userNotBanned:
-      description: User wasn't banned 
-    
-    photoNotFound:
-      description: Photo Id not found
-
-    LikeNotFound:
-      description: User didn't like the photo
-
-    commentNotFound:
-      description: Comment doesn't exist 
-
-    InvalidFormat:
-      description: Invalid file format
 
   schemas: 
     username: 
@@ -564,7 +559,6 @@ components:
       type: string
       format: binary
       description: Single photo file
-      example: "0000001011100010101010101"
       minLength: 1
       maxLength: 100000000
 
@@ -699,13 +693,6 @@ components:
         username:
           $ref: "#/components/schemas/username"  
 
-    scPhoto:
-      type: object
-      description:  "Describe photo file" 
-      properties:
-        photoString:
-          $ref: "#/components/schemas/photoFile"  
-
     schComment:
       type: object
       description:  "Describe user comment" 
@@ -734,9 +721,9 @@ components:
     postPhotoDetails:
       description: New Post details
       content:
-        application/json:
+        multipart/form-data:
           schema:
-            $ref: "#/components/schemas/scPhoto"
+            $ref: "#/components/schemas/photoFile"
         
 
               
