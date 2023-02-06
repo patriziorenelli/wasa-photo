@@ -52,6 +52,9 @@ type Comment struct {
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
+	// Funzione che controlla se esiste un utente
+	UserExist(userId int) int
+
 	// Funzione che gestisce il login
 	DoLogin(name Username) (User, error)
 
@@ -85,6 +88,12 @@ type AppDatabase interface {
 	// Rimuove un commento da un post
 	UncommentPhoto(userId int, photoId int, commentId int) int
 
+	// Crea un record per una nuova foto all'interno del database
+	UploadPhoto(userId int) (int, int)
+
+	// Elimina il record relativo ad una foto dal database
+	DeletePhotoRecord(photoId int) int
+
 	Ping() error
 }
 
@@ -106,10 +115,10 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 		// cambiare tutti gli id in integer per l'autoincrement
 		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL);
-					CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uid INTEGER NOT NULL, photo TEXT NOT NULL);
+					CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uid INTEGER NOT NULL, date TEXT NOT NULL);
 					CREATE TABLE ban (uid INTEGER NOT NULL, uid2 INTEGER NOT NULL, PRIMARY KEY(uid, uid2), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(uid2) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE);
 					CREATE TABLE like (phid INTEGER NOT NULL, uid INTEGER NOT NULL, PRIMARY KEY(phid, uid), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(phid) REFERENCES post(id) ON DELETE CASCADE ON UPDATE CASCADE);
-					CREATE TABLE comment (cid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uid INTEGER NOT NULL, phid INTEGER NOT NULL, text TEXT NOT NULL,FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(phid) REFERENCES post(id) ON DELETE CASCADE ON UPDATE CASCADE );
+					CREATE TABLE comment (cid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uid INTEGER NOT NULL, phid INTEGER NOT NULL, text TEXT NOT NULL, date TEXT NOT NULL,FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(phid) REFERENCES post(id) ON DELETE CASCADE ON UPDATE CASCADE );
 					CREATE TABLE follow (uid INTEGER NOT NULL, uid2 INTEGER NOT NULL, PRIMARY KEY(uid, uid2), FOREIGN KEY(uid) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY(uid2) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE);
 					`
 		_, err = db.Exec(sqlStmt)
@@ -127,11 +136,11 @@ func New(db *sql.DB) (AppDatabase, error) {
 		popola := `INSERT INTO user(id, username) VALUES (0000000, "marione_12");
 				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");
 				   INSERT INTO user(id, username) VALUES (0000002, "Giorgia_Na");
-				   INSERT INTO post(id, uid, photo) VALUES (0000000001, 0000000, "LINK FOTO 1" );
-				   INSERT INTO post(id, uid, photo) VALUES (0000000002,0000000, "LINK FOTO 2" );
-				   INSERT INTO post(id, uid, photo) VALUES (0000000003, 0000001, "LINK FOTO 3" );
-				   INSERT INTO post(id, uid, photo) VALUES (0000000004, 0000000, "LINK FOTO 4" );
-				   INSERT INTO post(id, uid, photo) VALUES (0000000005, 0000001, "LINK FOTO 5" );
+				   INSERT INTO post(id, uid, photo) VALUES (0000000001, 0000000, "data1");
+				   INSERT INTO post(id, uid, photo) VALUES (0000000002,0000000, "data2" );
+				   INSERT INTO post(id, uid, photo) VALUES (0000000003, 0000001,  "data3" );
+				   INSERT INTO post(id, uid, photo) VALUES (0000000004, 0000000,  "data4");
+				   INSERT INTO post(id, uid, photo) VALUES (0000000005, 0000001,  "data5");
 				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000000);
@@ -142,10 +151,10 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO like(phid, uid) VALUES (0000000003,0000001);
 				   INSERT INTO like(phid, uid) VALUES (0000000002,0000000);
 				   INSERT INTO like(phid, uid) VALUES (0000000002,0000001);
-				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000002,0000000, 0000001, "Primo commento");
-				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000002,0000001, 0000002, "Secondo commento");
-				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000003,0000000,0000003, "Terzo commento");
-				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000005,00000001,0000004, "Quarto commeto ");
+				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000002,0000000, 0000001, "Primo commento", "data1");
+				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000002,0000001, 0000002, "Secondo commento", "data4");
+				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000003,0000000,0000003, "Terzo commento", "data2");
+				   INSERT INTO comment(phid, uid, cid, text) VALUES (0000000005,00000001,0000004, "Quarto commeto ", "data3");
 				   `
 		_, err = db.Exec(popola)
 		if err != nil {

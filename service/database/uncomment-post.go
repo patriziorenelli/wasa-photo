@@ -8,21 +8,29 @@ import (
 // VA BENE
 func (db *appdbimpl) UncommentPhoto(userId int, photoId int, commentId int) int {
 
-	if db.UserExist(userId) == -1 {return -1 }
+	if db.UserExist(userId) == -1 {
+		return -1
+	}
 
 	// Variabile di tipo Post usata per il check
 	var post Post
 
-	// Controllo che il post indicato esista e raccolgo i dati del post 
-	if db.PhotoExist(photoId) == -1 { return -2 } else{
-			post = db.GetPhoto(photoId)
+	// Controllo che il post indicato esista e raccolgo i dati del post
+	if db.PhotoExist(photoId) == -1 {
+		return -2
+	} else {
+		post = db.GetPhoto(photoId)
 	}
 
-	// Controllo che l'utente non abbia bannato l'utente che ha postato il post a cui si vuole togliere il commento 
-	if db.CheckBan(userId, post.USERID) == 0 { return -3 }
+	// Controllo che l'utente non abbia bannato l'utente che ha postato il post a cui si vuole togliere il commento
+	if db.CheckBan(userId, post.USERID) == 0 {
+		return -3
+	}
 
-	// Controllo che l'utente a cui si vuole togliere il commento non abbia bannato l'utente 
-	if db.CheckBan(post.USERID, userId) == 0 { return -4 }
+	// Controllo che l'utente a cui si vuole togliere il commento non abbia bannato l'utente
+	if db.CheckBan(post.USERID, userId) == 0 {
+		return -4
+	}
 
 	// Variabile di tipo Comment usata per il check
 	var comment Comment

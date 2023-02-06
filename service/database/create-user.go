@@ -10,7 +10,6 @@ func (db *appdbimpl) CreateUser(us string) (User, error) {
 	}
 
 	// Prendo l'id del nuovo utente
-
 	lastInsertID, err := res.LastInsertId()
 	if err != nil {
 		u.ID = -1
