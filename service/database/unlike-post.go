@@ -15,12 +15,11 @@ func (db *appdbimpl) UnlikePhoto(userId int, photoId int) int {
 		return -1
 	}
 
+	post, exist := db.GetPhoto(photoId)
 	// Controllo che il post indicato esista
-	if db.PhotoExist(photoId) == -1 {
+	if exist == -1 {
 		return -2
-	} else {
-		post = db.GetPhoto(photoId)
-	}
+	} 
 
 	// Controllo che l'utente che ha postato il post a cui si vuole togliere il like non abbia bloccato l'utente
 	if db.CheckBan(userId, post.USERID) == 0 {

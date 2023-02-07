@@ -68,25 +68,19 @@ func (db *appdbimpl) CheckFollow(userId int, followId int) int {
 	}
 }
 
-// Funzione per verificare se un post esiste
-func (db *appdbimpl) PhotoExist(photoId int) int {
+// Funzione che verifica se un post esiste e ritorna il post in caso esista 
+func (db *appdbimpl) GetPhoto(photoId int) (Post,int) {
 	var post Post
 	row := db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
 	err := row.Scan(&post.ID, &post.USERID, &post.DATE)
 	if errors.Is(err, sql.ErrNoRows) {
-		return -1
+		return post, -1
 	} else {
-		return 0
+		return post, 0
 	}
 }
 
-func (db *appdbimpl) GetPhoto(photoId int) Post {
-	var post Post
-	row := db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
-	row.Scan(&post.ID, &post.USERID, &post.DATE)
-	return post
-}
-
+// Elimina un post dal database
 func (db *appdbimpl) DeletePhotoRecord(photoId int) int {
 	_, err := db.c.Exec(`DELETE FROM post WHERE id = ? `, photoId)
 	if err != nil {

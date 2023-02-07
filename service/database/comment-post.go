@@ -12,11 +12,10 @@ func (db *appdbimpl) CommentPhoto(userId int, photoId int, text string) int {
 	}
 
 	// Controllo che il post indicato esista
-	if db.PhotoExist(photoId) == -1 {
-		return -2
-	} else {
-		post = db.GetPhoto(photoId)
-	}
+	post, exist := db.GetPhoto(photoId)
+	// Controllo che il post indicato esista e raccolgo i dati del post
+	if exist == -1 { return -2 } 
+
 
 	// Controllo che l'utente che  non abbia bannato l'utente a cui si vuole aggiungere un commento
 	if db.CheckBan(userId, post.USERID) == 0 {

@@ -529,9 +529,6 @@ paths:
           '500':
             description: Error server execution  
 
-
-
-
 components:  
 
   schemas: 
