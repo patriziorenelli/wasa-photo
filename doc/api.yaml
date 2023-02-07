@@ -555,13 +555,6 @@ components:
       description: User Id 
       example: 1 
 
-    photoFile:
-      type: string
-      format: binary
-      description: Single photo file
-      minLength: 1
-      maxLength: 100000000
-
     photoLink:
       type: string
       description: Link del file della foto da caricare
