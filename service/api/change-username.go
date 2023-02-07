@@ -28,7 +28,6 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		} else if !user.UsernameIsValid() {
-
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -44,22 +43,20 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			username.USERNAME = user.USERNAME
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(username)
-			return
 
 		case -1:
 			ctx.Logger.Error("User not exist")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
+
 		case -2:
 			ctx.Logger.Error("Username already used")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
+
 		case -3:
 			ctx.Logger.Error("Error during execution")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
-
 		}
+		return
 
 	} else {
 		ctx.Logger.Error("Failed authentication")

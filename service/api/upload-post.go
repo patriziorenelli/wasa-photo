@@ -46,13 +46,11 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	ris, photoId := rt.db.UploadPhoto(usId)
 
-	switch ris {
-
-	case -1:
+	if ris == -1 {
 		ctx.Logger.Error("User not exist")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
-	case -2:
+	} else if ris == -2 {
 		ctx.Logger.Error("Error during saving into database")
 		w.WriteHeader(http.StatusUnauthorized)
 		return

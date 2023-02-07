@@ -31,35 +31,29 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		case 0:
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(username)
-			return
 
 		case -1:
 			ctx.Logger.Error("User not exist")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -2:
 			ctx.Logger.Error("User you want to ban does not exist")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -3:
 			ctx.Logger.Error("User you want to ban has banned you")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -4:
 			ctx.Logger.Error("You already ban the user")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -6:
 			ctx.Logger.Error("Error during execution")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		}
-
+		return
 	} else {
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)

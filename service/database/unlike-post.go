@@ -19,7 +19,7 @@ func (db *appdbimpl) UnlikePhoto(userId int, photoId int) int {
 	// Controllo che il post indicato esista
 	if exist == -1 {
 		return -2
-	} 
+	}
 
 	// Controllo che l'utente che ha postato il post a cui si vuole togliere il like non abbia bloccato l'utente
 	if db.CheckBan(userId, post.USERID) == 0 {

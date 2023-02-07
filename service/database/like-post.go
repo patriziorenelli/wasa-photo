@@ -14,8 +14,9 @@ func (db *appdbimpl) LikePhoto(userId int, photoId int) int {
 	// Controllo che il post indicato esista
 	post, exist := db.GetPhoto(photoId)
 	// Controllo che il post indicato esista e raccolgo i dati del post
-	if exist == -1 { return -2 } 
-
+	if exist == -1 {
+		return -2
+	}
 
 	// Controllo che l'utente non abbia bannato l'utente a cui si vuole mettere mi piace
 	if db.CheckBan(userId, post.USERID) == 0 {

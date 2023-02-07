@@ -68,8 +68,8 @@ func (db *appdbimpl) CheckFollow(userId int, followId int) int {
 	}
 }
 
-// Funzione che verifica se un post esiste e ritorna il post in caso esista 
-func (db *appdbimpl) GetPhoto(photoId int) (Post,int) {
+// Funzione che verifica se un post esiste e ritorna il post in caso esista
+func (db *appdbimpl) GetPhoto(photoId int) (Post, int) {
 	var post Post
 	row := db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
 	err := row.Scan(&post.ID, &post.USERID, &post.DATE)

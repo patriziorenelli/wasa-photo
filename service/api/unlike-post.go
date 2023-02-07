@@ -35,39 +35,32 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 			risultato.CODE = 200
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(risultato)
-			return
 
 		case -1:
 			ctx.Logger.Error("User not exist")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -2:
 			ctx.Logger.Error("The post doesn't exist")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -3:
 			ctx.Logger.Error("You banned other user")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -4:
 			ctx.Logger.Error("The other user blocked you")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -5:
 			ctx.Logger.Error("You didn't like the post")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
 
 		case -6:
 			ctx.Logger.Error("Error during execution")
 			w.WriteHeader(http.StatusUnauthorized)
-			return
-
 		}
+		return
 
 	} else {
 		ctx.Logger.Error("Failed authentication")

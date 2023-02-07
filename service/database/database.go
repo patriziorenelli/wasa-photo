@@ -24,7 +24,7 @@ type User struct {
 type Post struct {
 	ID     int
 	USERID int
-	DATE  string
+	DATE   string
 }
 
 type Ban struct {
@@ -94,7 +94,7 @@ type AppDatabase interface {
 	// Elimina il record relativo ad una foto dal database
 	DeletePhotoRecord(photoId int) int
 
-	// Elimina una foto 
+	// Elimina una foto
 	DeletePhoto(userId int, photoId int) int
 
 	Ping() error
