@@ -16,7 +16,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// Prendo l'autenticazione
 	auth := r.Header.Get("Authorization")
 
-	// Prendo l'id del post a cui mettere mi piace
+	// Prendo l'id dell'utente che vuole pubblicare la foto
 	userId := strings.Split(r.RequestURI, "/")[2]
 
 	// Controllo che l'autenticazione vada a buon fine
