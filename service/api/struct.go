@@ -21,7 +21,7 @@ type User struct {
 type Post struct {
 	ID     int    `json:"id"`
 	USERID int    `json:"userId"`
-	PHOTO  string `json:"photo"`
+	DATE  string `json:"date"`
 }
 
 type Ban struct {

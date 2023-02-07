@@ -72,7 +72,7 @@ func (db *appdbimpl) CheckFollow(userId int, followId int) int {
 func (db *appdbimpl) PhotoExist(photoId int) int {
 	var post Post
 	row := db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
-	err := row.Scan(&post.ID, &post.USERID, &post.PHOTO)
+	err := row.Scan(&post.ID, &post.USERID, &post.DATE)
 	if errors.Is(err, sql.ErrNoRows) {
 		return -1
 	} else {
@@ -83,7 +83,7 @@ func (db *appdbimpl) PhotoExist(photoId int) int {
 func (db *appdbimpl) GetPhoto(photoId int) Post {
 	var post Post
 	row := db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
-	row.Scan(&post.ID, &post.USERID, &post.PHOTO)
+	row.Scan(&post.ID, &post.USERID, &post.DATE)
 	return post
 }
 
