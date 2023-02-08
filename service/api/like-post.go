@@ -62,12 +62,11 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 			w.WriteHeader(http.StatusUnauthorized)
 
 		}
-		return
 
 	} else {
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
-		return
 	}
+	return
 
 }

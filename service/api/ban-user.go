@@ -53,11 +53,10 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 			w.WriteHeader(http.StatusUnauthorized)
 
 		}
-		return
 	} else {
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
-		return
 	}
+	return
 
 }

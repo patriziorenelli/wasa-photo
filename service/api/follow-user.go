@@ -59,12 +59,11 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 			w.WriteHeader(http.StatusUnauthorized)
 
 		}
-		return
 
 	} else {
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
-		return
 	}
+	return
 
 }
