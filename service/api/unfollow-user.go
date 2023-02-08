@@ -60,6 +60,4 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
 	}
-	return
-
 }

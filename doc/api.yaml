@@ -358,7 +358,7 @@ paths:
                 format: binary
           responses:
             '201': 
-              description: Remove comment in a photo
+              description: Photo uploaded
               content: 
                 application/json: 
                   schema: 

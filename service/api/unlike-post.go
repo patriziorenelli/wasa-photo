@@ -64,6 +64,4 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
 	}
-
-	return
 }

@@ -67,7 +67,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// Salvo l'immagine, in caso di errore elimino il record relativo alla nuova foto
-	if err = os.WriteFile(path, bytes, 0644); err != nil {
+	err = os.WriteFile(path, bytes, 0644)
+	if err != nil {
 		ctx.Logger.Error("Error save photo file")
 		w.WriteHeader(http.StatusUnauthorized)
 		_ = rt.db.DeletePhotoRecord(photoId)
@@ -76,5 +77,4 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	ctx.Logger.Error("Photo uploaded")
 	w.WriteHeader(http.StatusUnauthorized)
-	return
 }
