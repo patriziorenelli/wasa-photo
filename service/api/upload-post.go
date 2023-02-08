@@ -1,13 +1,13 @@
 package api
 
 import (
-	"net/http"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
 	"io"
-	"strconv"
-	"path/filepath"
+	"net/http"
 	"os"
+	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -35,7 +35,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	mimeType := http.DetectContentType(bytes)
-	// Controllo il tipo del file caricato 
+	// Controllo il tipo del file caricato
 	if !strings.HasPrefix(mimeType, "image/") {
 		ctx.Logger.Error("File is not a valid image")
 		w.WriteHeader(http.StatusUnauthorized)

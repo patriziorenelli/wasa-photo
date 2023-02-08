@@ -22,10 +22,10 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// Prendo l'id del post da eliminare
 	photoId := strings.Split(r.RequestURI, "/")[4]
 
-	if auth != userId{ 
+	if auth != userId {
 		ctx.Logger.Error("Failed authentication")
 		w.WriteHeader(http.StatusUnauthorized)
-		return		
+		return
 	}
 
 	phId, _ := strconv.Atoi(photoId)
@@ -33,22 +33,17 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	ris := rt.db.DeletePhoto(usId, phId)
 
-	switch ris{
+	switch ris {
 
-		case 0:
-			// tutto ok faccio eliminazione del file 
+	case 0:
+		// tutto ok faccio eliminazione del file
 
-		case -1:
-			// foto non esistente 
-		
-		case -2:
-			// utente autenticato non è il proprietario del file
-		
+	case -1:
+		// foto non esistente
 
+	case -2:
+		// utente autenticato non è il proprietario del file
 
 	}
-
-
-
 
 }
