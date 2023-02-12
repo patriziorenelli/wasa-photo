@@ -103,10 +103,10 @@ type AppDatabase interface {
 	// Rimuove un commento da un post
 	UncommentPhoto(userId int, photoId int, commentId int) int
 
-	// Funzione che ritorna tutti i commenti di un post 
+	// Funzione che ritorna tutti i commenti di un post
 	GetPhotoComment(userId int, phId int) (int, []UserId)
 
-	// Funzione che ritorna i like di un post 
+	// Funzione che ritorna i like di un post
 	GetPhotoLike(userId int, phId int) (int, []UserId)
 
 	// Crea un record per una nuova foto all'interno del database
@@ -168,6 +168,9 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
+				   
+				   INSERT INTO ban(uid, uid2) VALUES (0000001,0000000 );
+
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000000);
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000002);
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000001);

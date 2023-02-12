@@ -8,7 +8,8 @@ import (
 	"strconv"
 	"strings"
 )
-// VA BENE 
+
+// VA BENE
 func (rt *_router) getUserFollowing(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
@@ -59,7 +60,5 @@ func (rt *_router) getUserFollowing(w http.ResponseWriter, r *http.Request, ps h
 		w.WriteHeader(http.StatusUnauthorized)
 
 	}
-
-	return
 
 }

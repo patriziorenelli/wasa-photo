@@ -49,7 +49,7 @@ func (db *appdbimpl) GetUserFollowers(userId int, userId2 int) (int, []UserId) {
 
 }
 
-// VA BENE 
+// VA BENE
 func (db *appdbimpl) GetUserFollowing(userId int, userId2 int) (int, []UserId) {
 
 	// Controllo che l'utente di cui si vogliono sapere i following esista
