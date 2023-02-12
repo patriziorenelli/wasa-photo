@@ -6,7 +6,7 @@ import (
 )
 
 type UserId struct {
-	ID int `json:"userId"`
+	USERID int `json:"userId"`
 }
 
 type Username struct {
@@ -55,12 +55,8 @@ type CommentText struct {
 	TEXT string `json:"text"`
 }
 
-type ImageBinary struct {
-	BINARY string `json:"binary"`
-}
-
 func (userId *UserId) UserIdIsValid() bool {
-	var x = reflect.TypeOf(userId.ID).String()
+	var x = reflect.TypeOf(userId.USERID).String()
 	return x == "int"
 
 }
@@ -75,14 +71,4 @@ func (user *Username) UsernameToDatabase() database.Username {
 
 func (comment *CommentText) CommentTextIsValid() bool {
 	return len(comment.TEXT) > 0 && len(comment.TEXT) <= 100
-}
-
-// NON USATE
-func (id *UserId) FromUserDatabase(i database.User) {
-	id.ID = i.ID
-}
-
-func (u *User) FromDatabase(us database.User) {
-	u.ID = us.ID
-	u.USERNAME = us.USERNAME
 }

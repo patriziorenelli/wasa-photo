@@ -9,44 +9,53 @@ import (
 var ErrUserDoesNotExist = errors.New("User does not exist")
 
 type UserId struct {
-	ID int
+	USERID int `json:"userId"`
 }
 
 type Username struct {
-	USERNAME string
+	USERNAME string `json:"username"`
 }
 
 type User struct {
-	ID       int
-	USERNAME string
+	ID       int    `json:"userId"`
+	USERNAME string `json:"username"`
 }
 
 type Post struct {
-	ID     int
-	USERID int
-	DATE   string
+	ID     int    `json:"id"`
+	USERID int    `json:"userId"`
+	DATE   string `json:"date"`
 }
 
 type Ban struct {
-	UID1 int
-	UID2 int
+	UID1 int `json:"userId1"`
+	UID2 int `json:"userId2"`
 }
 
 type Follow struct {
-	UID1 int
-	UID2 int
+	UID1 int `json:"userId1"`
+	UID2 int `json:"userId2"`
 }
 
 type Like struct {
-	PHID int
-	UID  int
+	PHID int `json:"photoId"`
+	UID  int `json:"userId"`
 }
 
 type Comment struct {
-	CID  int
-	UID  int
-	PHID int
-	TEXT string
+	CID  int    `json:"commentId"`
+	UID  int    `json:"userId"`
+	PHID int    `json:"photoId"`
+	TEXT string `json:"text"`
+}
+
+type Result struct {
+	CODE int    `json:"code"`
+	TEXT string `json:"result"`
+}
+
+type CommentText struct {
+	TEXT string `json:"text"`
 }
 
 // AppDatabase is the high level interface for the DB
@@ -57,6 +66,12 @@ type AppDatabase interface {
 
 	// Funzione che gestisce il login
 	DoLogin(name Username) (User, error)
+
+	// Funzione che restituisce la lista degli id degli utenti che seguono userId2
+	GetUserFollowers(userId int, userId2 int) (int, []UserId)
+
+	// Funzione che restituisce la lista degli id degli utente che segue un utente
+	GetUserFollowing(userId int, userId2 int) (int, []UserId)
 
 	// Crea un utente passandogli il suo nickname
 	CreateUser(newNick string) (User, error)
@@ -87,6 +102,12 @@ type AppDatabase interface {
 
 	// Rimuove un commento da un post
 	UncommentPhoto(userId int, photoId int, commentId int) int
+
+	// Funzione che ritorna tutti i commenti di un post 
+	GetPhotoComment(userId int, phId int) (int, []UserId)
+
+	// Funzione che ritorna i like di un post 
+	GetPhotoLike(userId int, phId int) (int, []UserId)
 
 	// Crea un record per una nuova foto all'interno del database
 	UploadPhoto(userId int) (int, int)
@@ -145,6 +166,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO post(id, uid, date) VALUES (0000000004, 0000000,  "data4");
 				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "data5");
 				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
+				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000000);
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000002);

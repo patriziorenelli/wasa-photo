@@ -15,18 +15,32 @@ tags:
     description: "Like a photo"       
   - name: "unlikePhoto" 
     description: " Remove like in a photo " 
+  - name: "getPhotoLike"
+    description: "Returns list of likes of a photo"   
   - name: "commentPhoto"
     description: "Comment a post"
   - name: "uncommentPhoto"
     description: "Uncomment a post"
+  - name: "getPhotoComments"
+    description: "Returns list of comments of a photo"
   - name: "uploadPhoto"
     description: "Upload new photo"
   - name: "deletePhoto"
     description: "Delete a photo"
+  - name: "getUserFollowers"
+    description: "Returns list of users follow the user"
+  - name: "getUserFollowing"
+    description: "Returns list of users followed by the user"
+  - name: "getUserPhotos"
+    description: "Return list of photo uploaded by the user"
   - name: "getMyStream"
     description: "Returns an array of posts from followed users"   
   - name: "getUserProfile"
     description: "Returns user profile information"  
+
+
+
+
 openapi: 3.0.0 
 
 info:  
@@ -274,7 +288,6 @@ paths:
   /photo/{photoId}/comment:
     parameters:
       - $ref:  '#/components/parameters/photoId'
-
     post:
           tags: ["commentPhoto"] 
           summary: Comment a post
@@ -285,7 +298,6 @@ paths:
           security: 
             - userAuth: []
           requestBody:  
-
             $ref: "#/components/requestBodies/commentDetails"          
           responses:
             '201': 
@@ -300,7 +312,39 @@ paths:
             '403': {$ref: "#/components/responses/UserIdBanned"}
             '405': {$ref: "#/components/responses/userId2Banned"} 
             '407': {$ref: "#/components/responses/photoNotFound"} 
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '500': {$ref: "#/components/responses/ErrorServerExecution"} 
+    get:
+      tags: ["getPhotoComments"]
+      summary: Gets photo comments
+      description: Gets  list of comments of a photo
+      operationId: getPhotoComments
+      security:
+        - userAuth: []
+      responses:
+        '200':
+          description: Returns the comments list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/commentList"
+              example:
+                comment:
+                  - userId: 1254
+                    name: "Luca_124"
+                    comment: "Nice photo!"
+                    commentId: 1
+                    date: "2022-12-20T12:00:00Z"
+                  - userId: 854
+                    name: "marione_12"
+                    comment: "I like this picture"
+                    commentId: 2
+                    date: "2022-11-28T13:04:00Z"
+
+        '400': { $ref: "#/components/responses/UserIdNotFound" }                 
+        '403': {$ref: "#/components/responses/UserIdBanned"}
+        '405': {$ref: "#/components/responses/userId2Banned"} 
+        '407': {$ref: "#/components/responses/photoNotFound"} 
+        '500': {$ref: "#/components/responses/ErrorServerExecution"} 
 
 
   /photo/{photoId}/comment/{commentId}:  
@@ -335,6 +379,8 @@ paths:
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
 
   /users/{userId}/photo:
+    parameters:
+      - $ref: '#/components/parameters/userId'
     post:
           tags: ["uploadPhoto"] 
           summary:  Upload new photo 
@@ -342,8 +388,6 @@ paths:
             If the user identified by userId  doesn't exist, error is returned. 
             If the user identified by userId exist, the Photo is uploaded.
           operationId: uploadPhoto 
-          parameters:
-            - $ref: '#/components/parameters/userId'
           security: 
             - userAuth: [] 
           requestBody:
@@ -369,6 +413,37 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }                       
             '410': { $ref: "#/components/responses/InvalidFormat" }   
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+          
+    get:
+      tags: ["getUserPhotos"]
+      summary: Returns user photos
+      description: |
+        If the user identified by userId  doesn't exist, error is returned. 
+        If the user identified by userId exist, returns the list of photos uploaded by a user
+      operationId: getUserPhotos
+      security:
+        - userAuth: []
+      responses:
+        '200':
+          description: Returns the user photos list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/photoStream"
+              example:
+                - photoId: 12
+                  likes: 109
+                  comments: 124
+                  upladTime: "2023-02-12T12:00:00Z"
+                - photoId: 52
+                  likes: 10
+                  comments: 18
+                  upladTime: "2023-03-18T12:00:00Z"
+
+        '400': { $ref: "#/components/responses/UserIdNotFound" }    
+        '500': {$ref: "#/components/responses/ErrorServerExecution"}    
+        '403': {$ref: "#/components/responses/UserIdBanned"}
+        '405': {$ref: "#/components/responses/userId2Banned"}      
 
 
   /user/{userId}/photo/{photoId}:  
@@ -425,14 +500,12 @@ paths:
                     - Id: 10
                       AuthorId: 1024
                       AuthorNickname: Franchino_12
-                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-29
                       Like: 950
                       Comment: 1203
                     - Id: 120
                       AuthorId: 1453
                       AuthorNickname: Mario54_00
-                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-29
                       Like: 950
                       Comment: 1203
@@ -440,7 +513,6 @@ paths:
                     - Id: 146324
                       AuthorId: 136984
                       AuthorNickname: Martina_fra13
-                      File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
                       Date: 2022-11-28
                       Like: 10
                       Comment: 502
@@ -462,7 +534,6 @@ paths:
           - $ref: '#/components/parameters/userId'
         security:
           - userAuth: []
-
         responses:
           '200':
             description: The user is authenticated and the user can see the user identified by userId, return the profile data
@@ -476,34 +547,110 @@ paths:
                   numPosts: 15
                   numFollower: 1280
                   numFollowing: 1600
-                  Posts: 
-                      - Id: 125410
-                        AuthorId: 125
-                        AuthorNickname: Franchino_12
-                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
-                        Date: 2022-11-29
-                        Like: 950
-                        Comment: 1203
-                      - Id: 12683
-                        AuthorId: 0254
-                        AuthorNickname: Mario54_00
-                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
-                        Date: 2022-11-29
-                        Like: 950
-                        Comment: 1203
-
-                      - Id: 126985
-                        AuthorId: 255
-                        AuthorNickname: Martina_fra13
-                        File: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
-                        Date: 2022-11-28
-                        Like: 10
-                        Comment: 502
 
           '400': { $ref: "#/components/responses/UserIdNotFound" }    
           '405': {$ref: "#/components/responses/userId2Banned"} 
           '403': {$ref: "#/components/responses/UserIdBanned"}
           '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
+  /users/{userId}/followers:
+       get:
+        tags: ["getUserFollowers"]
+        summary: User's followers
+        operationId: getUserFollowers
+        description: |
+          If the user identified by userId  does not exist , error is returned. 
+          if the user is not banned, it returns the list of user followers 
+        parameters:
+          - $ref: '#/components/parameters/userId'
+
+        responses:
+          '200':
+            description: Return the list of user's followers 
+            content:
+              application/json:
+                schema:
+                  type: array
+                  description: The list of followers
+                  minItems: 0
+                  maxItems: 100
+                  items:
+                    $ref: "#/components/schemas/userId"
+                example:
+                  - userId: 111112
+                  - userId: 1452
+          '400': { $ref: "#/components/responses/UserIdNotFound" }    
+          '405': {$ref: "#/components/responses/userId2Banned"} 
+          '403': {$ref: "#/components/responses/UserIdBanned"}
+          '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+
+  /users/{userId}/following:
+    get:
+      tags: ["getUserFollowing"]
+      summary: Gets following users
+      description: Get the users that a user following
+      operationId: getUserFollowing
+      security:
+          - userAuth: []
+      parameters:
+        - $ref: '#/components/parameters/userId'
+
+      responses:
+        '200':
+          description: Returns the user list of user that the user following 
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                maxItems: 100
+                description: The list of users that the user is following.
+                items:
+                  $ref: "#/components/schemas/userId"
+              example:
+                  - userId: 111112
+                  - userId: 1452
+
+        '400': { $ref: "#/components/responses/UserIdNotFound" }    
+        '405': {$ref: "#/components/responses/userId2Banned"} 
+        '403': {$ref: "#/components/responses/UserIdBanned"}
+        '500': {$ref: "#/components/responses/ErrorServerExecution"} 
+
+
+  /users/{userId}/photo/{photoId}/likes:
+    get:
+        tags: ["getPhotoLike"]
+        summary: Gets photo likes
+        description: Get the list of users liking a photo
+        operationId: getPhotoLike
+        security:
+          - userAuth: []
+        parameters:
+          - $ref: '#/components/parameters/userId'
+          - $ref: '#/components/parameters/photoId'
+
+        responses:
+          '200':
+            description: Returns the user list
+            content:
+              application/json:
+                schema:
+                  type: array
+                  minItems: 0
+                  maxItems: 100
+                  description: An array of users liking the photo.
+                  items:
+                    $ref: "#/components/schemas/userId"
+                example:
+                  - userId: 111112
+                  - userId: 1452
+          '400': { $ref: "#/components/responses/UserIdNotFound" }    
+          '405': {$ref: "#/components/responses/userId2Banned"} 
+          '403': {$ref: "#/components/responses/UserIdBanned"}
+          '500': {$ref: "#/components/responses/ErrorServerExecution"}    
+
+
+
 
 components:  
 
@@ -565,15 +712,6 @@ components:
       description: User Id 
       example: 1 
 
-
-
-    photoLink:
-      type: string
-      description: Link del file della foto da caricare
-      example: https://www.diag.uniroma1.it/sites/default/files/logo%20carta%20intestata%20dis_new.jpg
-      minLength: 1
-      maxLength: 10000
-
     photoDate:
       type: string
       format: date
@@ -606,13 +744,47 @@ components:
     followingNumber:
       type: integer
       description: Number of followinf
-      example: 1350      
+      example: 1350  
+
+    commentId:
+      type: integer
+      description: Comment identifier
+      example: 1350  
 
     photoNumber:
       type: integer
       description: Number of post
       example: 23    
 
+    uploadTime:
+      type: string
+      format: date-time
+      description: Upload time
+      minLength: 20
+      maxLength: 25
+      example: "2022-01-13T12:00:00Z"
+
+    userPhotoStream:
+      type: object
+      properties:
+        photoId:
+          $ref: '#/components/schemas/photoId'
+        likes:
+          $ref: '#/components/schemas/likeNumber'
+        comments: 
+          $ref: '#/components/schemas/commentNumber'
+        uploadTime:
+          $ref: '#/components/schemas/uploadTime'
+
+
+    photoStream:
+      type: array 
+      minItems: 0
+      maxItems: 100
+      description:  Various posts of the user 
+      items:
+        $ref: '#/components/schemas/userPhotoStream'
+  
     Post:
       type: object
       description:  Rappresent a post 
@@ -623,19 +795,16 @@ components:
           $ref: '#/components/schemas/identifier'
         AuthorNickname:
           $ref: '#/components/schemas/username'
-        File:
-          $ref: '#/components/schemas/photoLink'
         Date:
           $ref: '#/components/schemas/photoDate'
         Like: 
           $ref: '#/components/schemas/likeNumber'
         Comment: 
           $ref: '#/components/schemas/commentNumber'
-
-
+    
     arrayStream:
       type: array
-      description: Various posts of the users userId follows
+      description: Various posts of the users followe by userId 
       items: 
         $ref: '#/components/schemas/Post'
       minItems: 0
@@ -662,8 +831,7 @@ components:
           $ref: '#/components/schemas/followerNumber'
         numFollowing:
           $ref: '#/components/schemas/followingNumber'
-        Posts:
-          $ref: '#/components/schemas/arrayStream'
+
 
     errorSchema: 
       description: Error example
@@ -671,7 +839,6 @@ components:
       properties: 
         Message: 
           $ref: "#/components/schemas/errorDescription" 
-
 
 
     errorDescription: 
@@ -705,6 +872,36 @@ components:
         comment:
           $ref: "#/components/schemas/comment" 
 
+    commentList: 
+      type: object
+      description: Contenitor of various posts comment 
+      properties:
+        comment:
+          $ref: "#/components/schemas/comments"
+
+    comments:
+      type: array
+      minItems: 0
+      maxItems: 100
+      description: List of photo comments
+      items:
+          $ref: "#/components/schemas/userComment"
+
+    userComment: 
+      type: object
+      description:  "Describe user comment" 
+      properties:
+        userId:
+          $ref: "#/components/schemas/identifier"
+        name: 
+          $ref: "#/components/schemas/username"
+        comment:
+          $ref: "#/components/schemas/comment" 
+        commentId:
+          $ref: "#/components/schemas/commentId"
+        date:
+          $ref: "#/components/schemas/uploadTime"
+        
 
   requestBodies: 
 

@@ -58,7 +58,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	var userId UserId
-	userId.ID = us.ID
+	userId.USERID = us.ID
 
 	// Send the output to the user.
 	w.Header().Set("Content-Type", "application/json")
