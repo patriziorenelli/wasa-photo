@@ -13,7 +13,7 @@ func (rt *_router) getPhotoLike(w http.ResponseWriter, r *http.Request, ps httpr
 
 	auth := r.Header.Get("Authorization")
 
-	// Prendo l'id del post a cui mettere mi piace
+	// Prendo l'id del post di cui vogliamo sapere i like
 	postId, _ := strconv.Atoi(strings.Split(r.RequestURI, "/")[2])
 	userId, _ := strconv.Atoi(auth)
 	ris, userLike := rt.db.GetPhotoLike(userId, postId)
@@ -42,7 +42,7 @@ func (rt *_router) getPhotoLike(w http.ResponseWriter, r *http.Request, ps httpr
 		w.WriteHeader(http.StatusUnauthorized)
 
 	case -3:
-		ctx.Logger.Error("User who posted the photo whose number of likes you want to know has blocked you")
+		ctx.Logger.Error("User who posted the photo whose likes you want to know has blocked you")
 		w.WriteHeader(http.StatusUnauthorized)
 
 	case -4:

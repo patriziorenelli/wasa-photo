@@ -42,8 +42,10 @@ type Like struct {
 type Comment struct {
 	CID  int    `json:"commentId"`
 	UID  int    `json:"userId"`
+	NAME string `json:"name"`
 	PHID int    `json:"photoId"`
 	TEXT string `json:"text"`
+	DATE string `json:"date"`
 }
 
 type Result struct {

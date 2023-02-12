@@ -45,8 +45,10 @@ type Like struct {
 type Comment struct {
 	CID  int    `json:"commentId"`
 	UID  int    `json:"userId"`
+	NAME string `json:"name"`
 	PHID int    `json:"photoId"`
 	TEXT string `json:"text"`
+	DATE string `json:"date"`
 }
 
 type Result struct {
@@ -104,7 +106,7 @@ type AppDatabase interface {
 	UncommentPhoto(userId int, photoId int, commentId int) int
 
 	// Funzione che ritorna tutti i commenti di un post
-	GetPhotoComment(userId int, phId int) (int, []UserId)
+	GetPhotoComment(userId int, phId int) (int, []Comment)
 
 	// Funzione che ritorna i like di un post
 	GetPhotoLike(userId int, phId int) (int, []UserId)
@@ -168,9 +170,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
-				   
-				   INSERT INTO ban(uid, uid2) VALUES (0000001,0000000 );
-
+				
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000000);
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000002);
 				   INSERT INTO like(phid, uid) VALUES (0000000001,0000001);
