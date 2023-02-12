@@ -16,18 +16,15 @@ func (db *appdbimpl) GetPhotoLike(userId int, photoId int) (int, []UserId) {
 		return -2, nil
 	}
 
-
 	// Controllo che l'utente che ha pubblicato il post di cui si vogliono sapere i like non abbia bannato l'utente
 	if db.CheckBan(post.USERID, userId) == 0 {
-			return -3, nil
+		return -3, nil
 	}
 
-		
 	// Controllo che l'utente non abbia bannato l'utente che ha pubblicato la foto di cui si vogliono sapere i like
 	if db.CheckBan(userId, post.USERID) == 0 {
 		return -4, nil
 	}
-
 
 	var like Like
 
