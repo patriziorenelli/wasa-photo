@@ -94,7 +94,7 @@ func (db *appdbimpl) GetPhotoComment(userId int, photoId int) (int, []Comment) {
 	for row.Next() {
 		err = row.Scan(&comment.CID, &comment.UID, &comment.PHID, &comment.TEXT, &comment.DATE, &comment.NAME)
 		if err == nil {
-			commentList = append(commentList, Comment{comment.CID, comment.UID, comment.NAME, comment.PHID, comment.TEXT, comment.DATE})
+			commentList = append(commentList, Comment{comment.UID, comment.NAME, comment.TEXT, comment.CID, comment.DATE, comment.PHID})
 		}
 	}
 

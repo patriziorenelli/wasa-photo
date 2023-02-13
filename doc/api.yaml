@@ -100,9 +100,9 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: "#/components/schemas/errorSchema"
+                    $ref: "#/components/schemas/username"
                   example:
-                    newUserName: "Marco12"
+                    username: "Marco12"
 
             '400': { $ref: "#/components/responses/UserIdNotFound" }
             '401': { $ref: "#/components/responses/UserNotAuthorized" }
@@ -129,9 +129,9 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/errorSchema' 
+                    $ref: '#/components/schemas/username' 
                   example:
-                    followedUser: "Luigi11" 
+                    username: "Luigi11" 
 
             '400': { $ref: "#/components/responses/UserIdNotFound" }                  
             '403': {$ref: "#/components/responses/UserIdBanned"}
@@ -155,9 +155,9 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/errorSchema' 
+                    $ref: '#/components/schemas/username' 
                   example:
-                    unfollowedUser: "Luigi11" 
+                    username: "Luigi11" 
 
             '400': { $ref: "#/components/responses/UserIdNotFound" }                  
             '403': {$ref: "#/components/responses/UserIdBanned"}   
@@ -188,9 +188,9 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/errorSchema' 
+                    $ref: '#/components/schemas/username' 
                   example:
-                    bannedUser: "Luigi11" 
+                    username: "Luigi11" 
 
             '400': { $ref: "#/components/responses/UserIdNotFound" }            
             '403': {$ref: "#/components/responses/UserIdBanned"}
@@ -214,9 +214,9 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/errorSchema' 
+                    $ref: '#/components/schemas/username' 
                   example:
-                    unbannedUser: "Luigi11" 
+                    username: "Luigi11" 
 
             '400': { $ref: "#/components/responses/UserIdNotFound" }            
             '403': {$ref: "#/components/responses/UserIdBanned"}
@@ -334,11 +334,14 @@ paths:
                     comment: "Nice photo!"
                     commentId: 1
                     date: "2022-12-20T12:00:00Z"
+                    photoId: 1
                   - userId: 854
                     name: "marione_12"
                     comment: "I like this picture"
                     commentId: 2
                     date: "2022-11-28T13:04:00Z"
+                    photoId: 1
+
 
         '400': { $ref: "#/components/responses/UserIdNotFound" }                 
         '403': {$ref: "#/components/responses/UserIdBanned"}
@@ -432,10 +435,14 @@ paths:
                 $ref: "#/components/schemas/photoStream"
               example:
                 - photoId: 12
+                  userId: 3
+                  name: "Mario_1"
                   likes: 109
                   comments: 124
                   upladTime: "2023-02-12T12:00:00Z"
                 - photoId: 52
+                  userId: 3
+                  name: "Mario_1"
                   likes: 10
                   comments: 18
                   upladTime: "2023-03-18T12:00:00Z"
@@ -775,7 +782,10 @@ components:
           $ref: '#/components/schemas/commentNumber'
         uploadTime:
           $ref: '#/components/schemas/uploadTime'
-
+        userId: 
+          $ref: '#/components/schemas/userId'
+        name: 
+          $ref: '#/components/schemas/username'
 
     photoStream:
       type: array 
@@ -901,6 +911,8 @@ components:
           $ref: "#/components/schemas/commentId"
         date:
           $ref: "#/components/schemas/uploadTime"
+        photoId:
+          $ref: "#/components/schemas/photoId"
         
 
   requestBodies: 

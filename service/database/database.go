@@ -21,19 +21,27 @@ type User struct {
 	USERNAME string `json:"username"`
 }
 
+type CompleteUser struct {
+	ID        int    `json:"userId"`
+	USERNAME  string `json:"userName"`
+	POST      int    `json:"numPosts"`
+	FOLLOWER  int    `json:"numFollower"`
+	FOLLOWING int    `json:"numFollowing"`
+}
+
 type Post struct {
-	ID     int    `json:"id"`
+	ID     int    `json:"photoId"`
 	USERID int    `json:"userId"`
 	DATE   string `json:"date"`
 }
 
 type CompletePost struct {
-	ID       int    `json:"id"`
+	ID       int    `json:"photoId"`
 	USERID   int    `json:"userId"`
-	DATE     string `json:"date"`
-	USERNAME string `json:"username"`
+	USERNAME string `json:"name"`
 	LIKES    int    `json:"likes"`
 	COMMENTS int    `json:"comments"`
+	DATE     string `json:"upladTime"`
 }
 
 type Ban struct {
@@ -52,12 +60,12 @@ type Like struct {
 }
 
 type Comment struct {
-	CID  int    `json:"commentId"`
 	UID  int    `json:"userId"`
 	NAME string `json:"name"`
-	PHID int    `json:"photoId"`
-	TEXT string `json:"text"`
+	TEXT string `json:"comment"`
+	CID  int    `json:"commentId"`
 	DATE string `json:"date"`
+	PHID int    `json:"photoId"`
 }
 
 type Result struct {
