@@ -27,6 +27,15 @@ type Post struct {
 	DATE   string `json:"date"`
 }
 
+type CompletePost struct {
+	ID       int    `json:"id"`
+	USERID   int    `json:"userId"`
+	DATE     string `json:"date"`
+	USERNAME string `json:"username"`
+	LIKES    int    `json:"likes"`
+	COMMENTS int    `json:"comments"`
+}
+
 type Ban struct {
 	UID1 int `json:"userId1"`
 	UID2 int `json:"userId2"`
@@ -107,6 +116,9 @@ type AppDatabase interface {
 
 	// Funzione che ritorna tutti i commenti di un post
 	GetPhotoComment(userId int, phId int) (int, []Comment)
+
+	// Funzione che ritorna la lista dei post di un utente
+	GetUserPhotos(userId int, userId2 int) (int, []CompletePost)
 
 	// Funzione che ritorna i like di un post
 	GetPhotoLike(userId int, phId int) (int, []UserId)

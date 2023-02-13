@@ -25,7 +25,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.GET("/photo/:photoId/likes", rt.wrap(rt.getPhotoLike))
 	rt.router.GET("/photo/:photoId/comment", rt.wrap(rt.getPhotoComments))
 
-	//rt.router.GET("/users/:userId/photo", rt.wrap(rt.getUserPhotos))
+	rt.router.GET("/users/:userId/photo", rt.wrap(rt.getUserPhotos))
 
 	// rt.router.GET("/users/:userId/stream", rt.wrap(rt.getMyStream))
 	// rt.router.GET("/users/:userId/profile", rt.wrap(rt.getUserProfile))

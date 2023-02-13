@@ -50,6 +50,7 @@ func (db *appdbimpl) GetPhotoLike(userId int, photoId int) (int, []UserId) {
 	return 0, userLike
 }
 
+// VA BENE
 func (db *appdbimpl) GetPhotoComment(userId int, photoId int) (int, []Comment) {
 
 	// Variabile di tipo post per raccogliere le informazioni di un post

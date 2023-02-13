@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// VA BENE
 func (rt *_router) getPhotoComments(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
