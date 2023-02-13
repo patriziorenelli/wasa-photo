@@ -25,15 +25,11 @@ func (rt *_router) getUserFollowers(w http.ResponseWriter, r *http.Request, ps h
 	switch ris {
 
 	case 0:
-
-		// Ritorno la lista degli utenti che seguono l'utente
-		var arF []string
+		var user UserId
+		var arF []UserId
 		for x := 0; x < len(followers); x++ {
-			//user := UserId{  followers[x] }
-			//v, _ := json.Marshal(user)
-			//fmt.Println(string(v))
-			v, _ := json.Marshal(followers[x])
-			arF = append(arF, string(v))
+			user.USERID = followers[x].USERID
+			arF = append(arF, user)
 		}
 
 		w.Header().Set("Content-Type", "application/json")

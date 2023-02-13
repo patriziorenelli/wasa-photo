@@ -177,6 +177,7 @@ func (db *appdbimpl) GetUserPhotos(userId int, userId2 int) (int, []CompletePost
 
 }
 
+// VA BENE
 func (db *appdbimpl) GetUserProfile(userId int, userId2 int) (int, CompleteUser) {
 
 	// Controllo che l'utente che vuole prendere il profilo di un altro utente
