@@ -140,6 +140,9 @@ type AppDatabase interface {
 	// Elimina una foto
 	DeletePhoto(userId int, photoId int) int
 
+	// Ritorna il profilo di un utente
+	GetUserProfile(userId int, userId2 int) (int, CompleteUser)
+
 	Ping() error
 }
 

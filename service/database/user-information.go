@@ -147,11 +147,18 @@ func (db *appdbimpl) GetUserPhotos(userId int, userId2 int) (int, []CompletePost
 			return -5, nil
 		}
 		// Prendo il numero di mi piace
-		_, likes := db.GetPhotoLike(userId, post.ID)
+		err, likes := db.GetPhotoLike(userId, post.ID)
+		if err != 0 {
+			return -5, nil
+		}
+
 		post.LIKES = len(likes)
 
 		// 	Prendo il numero di commenti
-		_, comments := db.GetPhotoComment(userId, post.ID)
+		err, comments := db.GetPhotoComment(userId, post.ID)
+		if err != 0 {
+			return -5, nil
+		}
 		post.COMMENTS = len(comments)
 
 		// Prendo l'username del proprietario della foto
@@ -168,4 +175,60 @@ func (db *appdbimpl) GetUserPhotos(userId int, userId2 int) (int, []CompletePost
 
 	return 0, posts
 
+}
+
+func (db *appdbimpl) GetUserProfile(userId int, userId2 int) (int, CompleteUser) {
+
+	// Controllo che l'utente che vuole prendere il profilo di un altro utente
+	if db.UserExist(userId) == -1 {
+		return -1, CompleteUser{}
+	}
+
+	errore := db.UserExist(userId2)
+
+	// Controllo che l'utente di cui si vuole prendere il profilo esista
+	if errore == -1 {
+		return -2, CompleteUser{}
+	}
+
+	// Controllo che l'utente di cui si vuole prendere il profilo non abbia bannato l'utente
+	if db.CheckBan(userId2, userId) == 0 {
+		return -3, CompleteUser{}
+	}
+
+	// Controllo che l'utente non abbia bloccato l'utente di cui vuole prendere il profilo
+	if db.CheckBan(userId, userId2) == 0 {
+		return -4, CompleteUser{}
+	}
+
+	var user CompleteUser
+	// Prendo l'id e l'username dell'utente richiesto
+	row := db.c.QueryRow(`SELECT * from user where id = ?`, userId)
+	er := row.Scan(&user.ID, &user.USERNAME)
+	if er != nil {
+		return -5, CompleteUser{}
+	}
+
+	// Prendo il numero di post
+	err, nPost := db.GetUserPhotos(userId, userId2)
+	if err != 0 {
+		return -5, CompleteUser{}
+	}
+	user.POST = len(nPost)
+
+	// Prendo il numero dei follower
+	err, nFollower := db.GetUserFollowers(userId, userId2)
+	if err != 0 {
+		return -5, CompleteUser{}
+	}
+	user.FOLLOWER = len(nFollower)
+
+	// Prendo il numero dei following
+	err, nFollowing := db.GetUserFollowing(userId, userId2)
+	if err != 0 {
+		return -5, CompleteUser{}
+	}
+	user.FOLLOWER = len(nFollowing)
+
+	return 0, user
 }
