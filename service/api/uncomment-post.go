@@ -54,7 +54,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 		w.WriteHeader(http.StatusUnauthorized)
 
 	case -6:
-		ctx.Logger.Error("Failed authentication")
+		ctx.Logger.Error(Fail_Auth)
 		w.WriteHeader(http.StatusUnauthorized)
 
 	case -7:

@@ -21,7 +21,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	// Controllo che l'autenticazione vada a buon fine
 	if auth != userId {
-		ctx.Logger.Error("Failed authentication")
+		ctx.Logger.Error(Fail_Auth)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

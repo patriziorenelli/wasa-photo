@@ -24,7 +24,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	photoId := strings.Split(r.RequestURI, "/")[4]
 
 	if auth != userId {
-		ctx.Logger.Error("Failed authentication")
+		ctx.Logger.Error(Fail_Auth)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
