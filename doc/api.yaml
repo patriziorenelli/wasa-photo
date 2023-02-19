@@ -38,9 +38,6 @@ tags:
   - name: "getUserProfile"
     description: "Returns user profile information"  
 
-
-
-
 openapi: 3.0.0 
 
 info:  
@@ -100,7 +97,7 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: "#/components/schemas/username"
+                    $ref: "#/components/schemas/scUserName"
                   example:
                     username: "Marco12"
 
@@ -117,7 +114,7 @@ paths:
           tags: ["followUser"] 
           summary: Follow another user 
           description: | 
-            If the user identified by userId2 does not exist, error is returned. 
+            If the user identified by userId or userId2 does not exist, error is returned. 
             If the user identified by userId2 exists, user identified by userId follow user identified by userId2 if user2 hasn't banned him. 
           operationId: followUser 
           security: 
@@ -129,7 +126,7 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/username' 
+                    $ref: '#/components/schemas/scUserName' 
                   example:
                     username: "Luigi11" 
 
@@ -143,7 +140,7 @@ paths:
           tags: ["unfollowUser"] 
           summary: Unfollow another user 
           description: | 
-            If the user identified by userId2 does not exist or user doesn't follow userId2, error is returned. 
+            If the user identified by userId or userId2 does not exist or user doesn't follow userId2, error is returned. 
             If user follow userId2, user identified by userId unfollow user identified by userId2. 
           operationId: unfollowUser 
           security: 
@@ -155,7 +152,7 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/username' 
+                    $ref: '#/components/schemas/scUserName' 
                   example:
                     username: "Luigi11" 
 
@@ -176,8 +173,8 @@ paths:
           tags: ["banUser"] 
           summary: Ban another user 
           description: | 
-            If the user identified by userId2 does not exist, error is returned. 
-            If the user identified by userId2 exists and user isn't banned by user2, user identified by userId ban user identified by userId2. 
+            If the user identified by userId or userId2 does not exist, error is returned. 
+            If the user identified by userId or userId2 exists and user isn't banned by user2, user identified by userId ban user identified by userId2. 
           operationId: banUser 
           security: 
             - userAuth: [] 
@@ -188,7 +185,7 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/username' 
+                    $ref: '#/components/schemas/scUserName' 
                   example:
                     username: "Luigi11" 
 
@@ -202,7 +199,7 @@ paths:
           tags: ["unbanUser"] 
           summary: Unban another user 
           description: | 
-            If the user identified by userId2 does not exist or user doesn't ban userId2, error is returned. 
+            If the user identified by userId or userId2 does not exist or user doesn't ban userId2, error is returned. 
             If user banned userId2, user identified by userId unabanned user identified by userId2. 
           operationId: unbanUser 
           security: 
@@ -214,7 +211,7 @@ paths:
               content: 
                 application/json: 
                   schema: 
-                    $ref: '#/components/schemas/username' 
+                    $ref: '#/components/schemas/scUserName' 
                   example:
                     username: "Luigi11" 
 
@@ -235,7 +232,7 @@ paths:
           tags: ["likePhoto"] 
           summary: Like a post
           description: | 
-            If the user identified by userId or photo identified by phId don't exist, error is returned. 
+            If the user identified by userId or photo identified by phId don't exist or one user is banned, error is returned. 
             If the user identified by userId and photo identified by phId exists and user can see the photo , the user likes the photo indicated by phId. 
           operationId: likePhoto 
           security: 
@@ -292,8 +289,8 @@ paths:
           tags: ["commentPhoto"] 
           summary: Comment a post
           description: | 
-            If the user identified by userId or photo identified by phId don't exist, error is returned. 
-            If the user identified by userId and photo identified by phId exists and user can see the photo , the user can comment the photo indicated by phId. 
+            If the photo identified by phId don't exist, error is returned. 
+            If the photo identified by phId exists and user can see the photo , the user can comment the photo indicated by phId. 
           operationId: commentPhoto 
           security: 
             - userAuth: []
@@ -326,9 +323,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/commentList"
+                type: array
+                minItems: 0
+                maxItems: 10 
+                description: Various post comments
+                items: 
+                  $ref: '#/components/schemas/userComment'
               example:
-                comment:
                   - userId: 1254
                     name: "Luca_124"
                     comment: "Nice photo!"
@@ -341,7 +342,6 @@ paths:
                     commentId: 2
                     date: "2022-11-28T13:04:00Z"
                     photoId: 1
-
 
         '400': { $ref: "#/components/responses/UserIdNotFound" }                 
         '403': {$ref: "#/components/responses/UserIdBanned"}
@@ -358,7 +358,7 @@ paths:
           tags: ["uncommentPhoto"] 
           summary:  Remove comment in a photo 
           description: | 
-            If the user identified by userId or photoId  does not exist or user doesn't commented the photo, error is returned. 
+            If the photoId does not exist or user doesn't commented the photo, error is returned. 
             If user had commented the photo and he isn't banned, he removes his comment on the post
           operationId: uncommentPhoto 
           security: 
@@ -432,7 +432,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/photoStream"
+                type: array 
+                minItems: 0
+                maxItems: 100
+                description:  Various posts of the user 
+                items:
+                  $ref: '#/components/schemas/userPhotoStream'
               example:
                 - photoId: 12
                   userId: 3
@@ -595,7 +600,9 @@ paths:
     get:
       tags: ["getUserFollowing"]
       summary: Gets following users
-      description: Get the users that a user following
+      description:  |
+          If the user identified by userId  does not exist , error is returned. 
+          if the user is not banned, it returns the list of user following 
       operationId: getUserFollowing
       security:
           - userAuth: []
@@ -628,14 +635,14 @@ paths:
     get:
         tags: ["getPhotoLike"]
         summary: Gets photo likes
-        description: Get the list of users liking a photo
+        description:  |
+          If the photo identified by photoId  does not exist , error is returned. 
+          if the user is not banned, it returns the list of photo likes
         operationId: getPhotoLike
         security:
           - userAuth: []
         parameters:
-          - $ref: '#/components/parameters/userId'
           - $ref: '#/components/parameters/photoId'
-
         responses:
           '200':
             description: Returns the user list
@@ -655,9 +662,6 @@ paths:
           '405': {$ref: "#/components/responses/userId2Banned"} 
           '403': {$ref: "#/components/responses/UserIdBanned"}
           '500': {$ref: "#/components/responses/ErrorServerExecution"}    
-
-
-
 
 components:  
 
@@ -702,7 +706,7 @@ components:
     username: 
       type: string 
       description: User's UserName 
-      example: Franchino_12 
+      example: "Franchino_12"
       pattern: '^[a-zA-Z0-9-_]+$' 
       minLength: 6 
       maxLength: 16  
@@ -783,17 +787,11 @@ components:
         uploadTime:
           $ref: '#/components/schemas/uploadTime'
         userId: 
-          $ref: '#/components/schemas/userId'
+          $ref: '#/components/schemas/identifier'
         name: 
           $ref: '#/components/schemas/username'
 
-    photoStream:
-      type: array 
-      minItems: 0
-      maxItems: 100
-      description:  Various posts of the user 
-      items:
-        $ref: '#/components/schemas/userPhotoStream'
+
   
     Post:
       type: object
@@ -827,6 +825,7 @@ components:
         Posts:
           $ref: '#/components/schemas/arrayStream'
 
+
     scProfile:
       type: object
       description: Rappresent a user profile
@@ -856,7 +855,7 @@ components:
       description: Status
       example: Success 
       pattern: '^[a-zA-Z0-9]+$' 
-      minLength: 5 
+      minLength: 4
       maxLength: 50 
 
     comment: 
@@ -882,20 +881,6 @@ components:
         comment:
           $ref: "#/components/schemas/comment" 
 
-    commentList: 
-      type: object
-      description: Contenitor of various posts comment 
-      properties:
-        comment:
-          $ref: "#/components/schemas/comments"
-
-    comments:
-      type: array
-      minItems: 0
-      maxItems: 100
-      description: List of photo comments
-      items:
-          $ref: "#/components/schemas/userComment"
 
     userComment: 
       type: object
