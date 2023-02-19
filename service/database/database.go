@@ -142,6 +142,9 @@ type AppDatabase interface {
 	// Ritorna il profilo di un utente
 	GetUserProfile(userId int, userId2 int) (int, CompleteUser)
 
+	// Ritorna una parte dello stream relativa agli utenti che lo user segue
+	GetMyStream(userId int, limit int, startIndex int) (int, []CompletePost)
+
 	Ping() error
 }
 

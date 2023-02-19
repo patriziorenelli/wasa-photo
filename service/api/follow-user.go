@@ -16,10 +16,17 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 
 	// Prendo il cod utente indicato nel path
 	reqUser := strings.Split(r.RequestURI, "/")[2]
+	// Prendo il cod dell'utente da seguire
 	followId := strings.Split(r.RequestURI, "/")[4]
 
 	// Se l'autenticazione va a buon fine e si sta cercando di seguire un altro user, si invia la richiesta di follow
-	if auth == reqUser && auth != followId {
+	if auth == reqUser {
+
+		// Se si sta cercando di seguire se stessi si ritorna errore
+		if auth == followId {
+			ctx.Logger.Error(FollowHimself)
+			w.WriteHeader(http.StatusUnauthorized)
+		}
 
 		reqUser, _ := strconv.Atoi(reqUser)
 		followId, _ := strconv.Atoi(followId)
