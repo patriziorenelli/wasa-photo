@@ -27,6 +27,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	} else if !comment.CommentTextIsValid() {
+		ctx.Logger.Error("Comment isn't valid")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

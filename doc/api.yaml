@@ -719,7 +719,7 @@ components:
       type: string 
       description: User's UserName 
       example: "Franchino_12"
-      pattern: '^[a-zA-Z0-9-_]+$' 
+      pattern: '^[a-zA-Z0-9_.-]*$' 
       minLength: 6 
       maxLength: 16  
 
@@ -869,7 +869,7 @@ components:
       type: string 
       description: "Comment" 
       example: Nice post! 
-      pattern: '^[a-zA-Z0-9 !]+$' 
+      pattern: '^[a-zA-Z0-9_.-]*$'
       minLength: 1 
       maxLength: 100 
 

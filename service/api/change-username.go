@@ -28,6 +28,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		} else if !user.UsernameIsValid() {
+			ctx.Logger.Error("Username not valid")
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}

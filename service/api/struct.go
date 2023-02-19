@@ -3,6 +3,7 @@ package api
 import (
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/database"
 	"reflect"
+	"regexp"
 )
 
 type UserId struct {
@@ -80,6 +81,18 @@ func (userId *UserId) UserIdIsValid() bool {
 }
 
 func (user *Username) UsernameIsValid() bool {
+
+	/*
+	valid, err := regexp.MatchString("[a-zA-Z0-9-_]", user.USERNAME)
+
+	if err != nil {
+		return false
+	}
+
+	if !valid {
+		return false
+	}
+	*/
 	return reflect.TypeOf(user.USERNAME).String() == "string" && len(user.USERNAME) >= 6 && len(user.USERNAME) <= 16
 }
 
