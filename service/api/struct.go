@@ -101,7 +101,7 @@ func (user *Username) UsernameToDatabase() database.Username {
 
 func (comment *CommentText) CommentTextIsValid() bool {
 
-	valid, err := regexp.MatchString("^[a-zA-Z0-9_.-?!'%]*$", comment.TEXT)
+	valid, err := regexp.MatchString("^[a-zA-Z0-9_. -!?]*$", comment.TEXT)
 
 	if err != nil {
 		return false
