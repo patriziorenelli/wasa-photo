@@ -497,6 +497,18 @@ paths:
            If the user is authenticated and follows other users, it gets the various posts of the users he follows
         parameters:
           - $ref: '#/components/parameters/userId'
+          - name: limit
+            in: query
+            schema:
+              $ref: "#/components/schemas/limit"
+            description: The number of elements to show
+            required: false
+          - name: startIndex
+            in: query
+            schema:
+              $ref: "#/components/schemas/startIndex"
+            description: The number of posts to skip
+            required: false
         security:
           - userAuth: []
 
@@ -790,9 +802,6 @@ components:
           $ref: '#/components/schemas/identifier'
         name: 
           $ref: '#/components/schemas/username'
-
-
-  
     Post:
       type: object
       description:  Rappresent a post 
@@ -841,14 +850,12 @@ components:
         numFollowing:
           $ref: '#/components/schemas/followingNumber'
 
-
     errorSchema: 
       description: Error example
       type: object 
       properties: 
         Message: 
           $ref: "#/components/schemas/errorDescription" 
-
 
     errorDescription: 
       type: string  
@@ -881,7 +888,15 @@ components:
         comment:
           $ref: "#/components/schemas/comment" 
 
+    limit:
+      type: integer
+      description: The number of elements to show.
+      default: 10
 
+    startIndex:
+          type: integer
+          description: The number of posts to skip
+          default: 0
     userComment: 
       type: object
       description:  "Describe user comment" 
