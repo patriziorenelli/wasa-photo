@@ -75,6 +75,4 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	ctx.Logger.Error("Photo uploaded")
-	w.WriteHeader(http.StatusUnauthorized)
 }

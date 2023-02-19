@@ -29,8 +29,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 
 	case 0:
 		var risultato Result
-		risultato.TEXT = "Done"
-		risultato.CODE = 200
+		risultato.TEXT = Done
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(risultato)
 

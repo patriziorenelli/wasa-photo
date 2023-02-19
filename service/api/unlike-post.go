@@ -31,8 +31,7 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 		case 0:
 			var risultato Result
-			risultato.TEXT = "Done"
-			risultato.CODE = 200
+			risultato.TEXT = Done
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(risultato)
 

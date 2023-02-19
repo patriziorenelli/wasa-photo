@@ -38,8 +38,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	case 0:
 		// tutto ok faccio eliminazione del file
 		var risultato Result
-		risultato.TEXT = "Done"
-		risultato.CODE = 200
+		risultato.TEXT = Done
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(risultato)
 	case -1:

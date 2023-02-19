@@ -69,7 +69,6 @@ type Comment struct {
 }
 
 type Result struct {
-	CODE int    `json:"code"`
 	TEXT string `json:"result"`
 }
 

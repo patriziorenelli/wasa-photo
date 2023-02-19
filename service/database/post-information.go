@@ -44,6 +44,8 @@ func (db *appdbimpl) GetPhotoLike(userId int, photoId int) (int, []UserId) {
 		err = row.Scan(&like.PHID, &like.UID)
 		if err == nil {
 			userLike = append(userLike, UserId{int(like.UID)})
+		} else {
+			return -5, nil
 		}
 	}
 
@@ -95,6 +97,8 @@ func (db *appdbimpl) GetPhotoComment(userId int, photoId int) (int, []Comment) {
 		err = row.Scan(&comment.CID, &comment.UID, &comment.PHID, &comment.TEXT, &comment.DATE, &comment.NAME)
 		if err == nil {
 			commentList = append(commentList, Comment{comment.UID, comment.NAME, comment.TEXT, comment.CID, comment.DATE, comment.PHID})
+		} else {
+			return -5, nil
 		}
 	}
 
