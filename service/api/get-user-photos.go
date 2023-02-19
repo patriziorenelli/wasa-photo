@@ -20,14 +20,18 @@ func (rt *_router) getUserPhotos(w http.ResponseWriter, r *http.Request, ps http
 	switch ris {
 
 	case 0:
-		var photoList []string
+
+		var photoList []CompletePost
+		var post CompletePost
 		for x := 0; x < len(phList); x++ {
-			// user := UserId{  followers[x] }
-			// v, _ := json.Marshal(user)
-			// fmt.Println(string(v))
-			v, _ := json.Marshal(phList[x])
-			photoList = append(photoList, string(v))
+			post.ID = phList[x].ID
+			post.USERNAME = phList[x].USERNAME
+			post.LIKES = phList[x].LIKES
+			post.COMMENTS = phList[x].COMMENTS
+			post.DATE = phList[x].DATE
+			photoList = append(photoList, post)
 		}
+
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(photoList)
 
