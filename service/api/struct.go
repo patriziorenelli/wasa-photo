@@ -82,8 +82,7 @@ func (userId *UserId) UserIdIsValid() bool {
 
 func (user *Username) UsernameIsValid() bool {
 
-	/*
-	valid, err := regexp.MatchString("[a-zA-Z0-9-_]", user.USERNAME)
+	valid, err := regexp.MatchString("^[a-zA-Z0-9_.]*$", user.USERNAME)
 
 	if err != nil {
 		return false
@@ -92,7 +91,7 @@ func (user *Username) UsernameIsValid() bool {
 	if !valid {
 		return false
 	}
-	*/
+
 	return reflect.TypeOf(user.USERNAME).String() == "string" && len(user.USERNAME) >= 6 && len(user.USERNAME) <= 16
 }
 
@@ -101,5 +100,16 @@ func (user *Username) UsernameToDatabase() database.Username {
 }
 
 func (comment *CommentText) CommentTextIsValid() bool {
+
+	valid, err := regexp.MatchString("^[a-zA-Z0-9_.-?!'%]*$", comment.TEXT)
+
+	if err != nil {
+		return false
+	}
+
+	if !valid {
+		return false
+	}
+
 	return len(comment.TEXT) > 0 && len(comment.TEXT) <= 100
 }
