@@ -29,9 +29,9 @@ func (rt *_router) getUserFollowing(w http.ResponseWriter, r *http.Request, ps h
 		// Ritorno la lista degli utenti che  l'utente segue
 		var arF []string
 		for x := 0; x < len(following); x++ {
-			//user := UserId{  followers[x] }
-			//v, _ := json.Marshal(user)
-			//fmt.Println(string(v))
+			// user := UserId{  followers[x] }
+			// v, _ := json.Marshal(user)
+			// fmt.Println(string(v))
 			v, _ := json.Marshal(following[x])
 			arF = append(arF, string(v))
 		}

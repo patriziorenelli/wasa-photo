@@ -23,9 +23,9 @@ func (rt *_router) getPhotoLike(w http.ResponseWriter, r *http.Request, ps httpr
 	case 0:
 		var arL []string
 		for x := 0; x < len(userLike); x++ {
-			//user := UserId{  followers[x] }
-			//v, _ := json.Marshal(user)
-			//fmt.Println(string(v))
+			// user := UserId{  followers[x] }
+			// v, _ := json.Marshal(user)
+			// fmt.Println(string(v))
 			v, _ := json.Marshal(userLike[x])
 			arL = append(arL, string(v))
 		}

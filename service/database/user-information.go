@@ -154,7 +154,7 @@ func (db *appdbimpl) GetUserPhotos(userId int, userId2 int) (int, []CompletePost
 
 		post.LIKES = len(likes)
 
-		// 	Prendo il numero di commenti
+		// Prendo il numero di commenti
 		err, comments := db.GetPhotoComment(userId, post.ID)
 		if err != 0 {
 			return -5, nil

@@ -24,9 +24,9 @@ func (rt *_router) getPhotoComments(w http.ResponseWriter, r *http.Request, ps h
 	case 0:
 		var arC []string
 		for x := 0; x < len(commentList); x++ {
-			//user := UserId{  followers[x] }
-			//v, _ := json.Marshal(user)
-			//fmt.Println(string(v))
+			// user := UserId{  followers[x] }
+			// v, _ := json.Marshal(user)
+			// fmt.Println(string(v))
 			v, _ := json.Marshal(commentList[x])
 			arC = append(arC, string(v))
 		}

@@ -9,8 +9,6 @@ import (
 	"strings"
 )
 
-//	rt.router.PUT("/users/:userId/followUser/:userId2", rt.wrap(rt.followUser))
-//
 // VA BENE
 func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
