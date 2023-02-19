@@ -32,7 +32,6 @@ func (rt *_router) getUserFollowing(w http.ResponseWriter, r *http.Request, ps h
 		for x := 0; x < len(following); x++ {
 			user.USERID = following[x].USERID
 			arF = append(arF, user)
-
 		}
 
 		w.Header().Set("Content-Type", "application/json")

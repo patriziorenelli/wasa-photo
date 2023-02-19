@@ -22,13 +22,19 @@ func (rt *_router) getPhotoComments(w http.ResponseWriter, r *http.Request, ps h
 	switch ris {
 
 	case 0:
-		var arC []string
+
+		var arC []Comment
+		var commento Comment
 		for x := 0; x < len(commentList); x++ {
-			// user := UserId{  followers[x] }
-			// v, _ := json.Marshal(user)
-			// fmt.Println(string(v))
-			v, _ := json.Marshal(commentList[x])
-			arC = append(arC, string(v))
+			// Creo il commento
+			commento.UID = commentList[x].UID
+			commento.NAME = commentList[x].NAME
+			commento.TEXT = commentList[x].TEXT
+			commento.CID = commentList[x].CID
+			commento.DATE = commentList[x].DATE
+			commento.PHID = commentList[x].PHID
+			arC = append(arC, commento)
+
 		}
 
 		w.Header().Set("Content-Type", "application/json")
