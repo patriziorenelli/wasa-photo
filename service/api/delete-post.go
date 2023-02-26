@@ -17,7 +17,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// Prendo l'autenticazione
 	auth := r.Header.Get("Authorization")
 
-	// Prendo l'id del post a cui mettere mi piace
+	// Prendo l'id del proprietario del post
 	userId := strings.Split(r.RequestURI, "/")[2]
 
 	// Prendo l'id del post da eliminare

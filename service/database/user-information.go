@@ -130,7 +130,7 @@ func (db *appdbimpl) GetUserPhotos(userId int, userId2 int) (int, []CompletePost
 	var post CompletePost
 
 	// Prendo le tuple (oggetti di tipo post)
-	row, err := db.c.Query(`SELECT * FROM post WHERE uid = ?`, userId2)
+	row, err := db.c.Query(`SELECT * FROM post WHERE uid = ? ORDER BY date DESC`, userId2)
 
 	// Errore nella query
 	if err != nil {

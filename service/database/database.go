@@ -82,6 +82,12 @@ type AppDatabase interface {
 	// Funzione che controlla se esiste un utente
 	UserExist(userId int) int
 
+	// Funzione che controlla l'esistenza di un ban
+	CheckBan(userId int, banId int) int
+
+	// Funzione che verifica se un post esiste e ritorna il post in caso esista
+	GetPhoto(photoId int) (Post, int)
+
 	// Funzione che gestisce il login
 	DoLogin(name Username) (User, error)
 
@@ -191,7 +197,15 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO post(id, uid, date) VALUES (0000000002,0000000, "data2" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "data3" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000004, 0000000,  "data4");
+
+
 				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "data5");
+				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "data7" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000007, 0000001,  "data8" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000008, 0000001,  "data9" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "data6" );
+
+
 				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );

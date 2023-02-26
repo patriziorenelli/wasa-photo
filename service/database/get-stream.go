@@ -1,6 +1,6 @@
 package database
 
-// DA PROVARE
+// NON RITORNA TUTTE LE FOTO
 func (db *appdbimpl) GetMyStream(userId int, limit int, startIndex int) (int, []CompletePost) {
 
 	// Controllo se l'utente a cui si vuole cambiare il nome esiste
@@ -8,8 +8,8 @@ func (db *appdbimpl) GetMyStream(userId int, limit int, startIndex int) (int, []
 		return -1, nil
 	}
 
-	row, err := db.c.Query(`SELECT post.id, post.uid, post.date, user.username, 
-								FROM post , user
+	row, err := db.c.Query(`SELECT post.id, post.uid, post.date, user.username
+								FROM post, user
 								WHERE post.uid = user.id
 								AND post.uid IN (
 									SELECT uid2 FROM follow 
@@ -22,6 +22,7 @@ func (db *appdbimpl) GetMyStream(userId int, limit int, startIndex int) (int, []
 								ORDER BY date DESC
 								LIMIT ?
 								OFFSET ?`, userId, userId, limit, startIndex)
+
 	if err != nil {
 		return -2, nil
 	}
@@ -31,14 +32,14 @@ func (db *appdbimpl) GetMyStream(userId int, limit int, startIndex int) (int, []
 
 	// Per ogni tuplo inizializzo una variabile di tipo post
 	for row.Next() {
-		err = row.Scan(&post.ID, &post.USERID, &post.DATE)
+		err = row.Scan(&post.ID, &post.USERID, &post.DATE, &post.USERNAME)
 		if err != nil {
-			return -5, nil
+			return -2, nil
 		}
 		// Prendo il numero di mi piace
 		err, likes := db.GetPhotoLike(userId, post.ID)
 		if err != 0 {
-			return -5, nil
+			return -2, nil
 		}
 
 		post.LIKES = len(likes)
@@ -46,14 +47,14 @@ func (db *appdbimpl) GetMyStream(userId int, limit int, startIndex int) (int, []
 		// Prendo il numero di commenti
 		err, comments := db.GetPhotoComment(userId, post.ID)
 		if err != 0 {
-			return -5, nil
+			return -2, nil
 		}
 		post.COMMENTS = len(comments)
 
 		// Prendo l'username del proprietario della foto
 		err, username := db.FindUsername(post.USERID)
 		if err == -1 {
-			return -5, nil
+			return -2, nil
 		}
 		post.USERNAME = username
 
