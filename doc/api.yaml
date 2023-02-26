@@ -27,6 +27,8 @@ tags:
     description: "Upload new photo"
   - name: "deletePhoto"
     description: "Delete a photo"
+  - name: "getPhoto"
+    description: "Return single photo"
   - name: "getUserFollowers"
     description: "Returns list of users follow the user"
   - name: "getUserFollowing"
@@ -85,7 +87,7 @@ paths:
             If the user exists, his username is changed. 
           operationId: setMyUserName 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
           parameters:  
             - $ref: "#/components/parameters/userId" 
           requestBody:  
@@ -118,7 +120,7 @@ paths:
             If the user identified by userId2 exists, user identified by userId follow user identified by userId2 if user2 hasn't banned him. 
           operationId: followUser 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
 
           responses:  
             '200': 
@@ -144,7 +146,7 @@ paths:
             If user follow userId2, user identified by userId unfollow user identified by userId2. 
           operationId: unfollowUser 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
 
           responses:  
             '200': 
@@ -177,7 +179,7 @@ paths:
             If the user identified by userId or userId2 exists and user isn't banned by user2, user identified by userId ban user identified by userId2. 
           operationId: banUser 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
 
           responses:  
             '200': 
@@ -203,7 +205,7 @@ paths:
             If user banned userId2, user identified by userId unabanned user identified by userId2. 
           operationId: unbanUser 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
 
           responses:  
             '200': 
@@ -236,7 +238,7 @@ paths:
             If the user identified by userId and photo identified by phId exists and user can see the photo , the user likes the photo indicated by phId. 
           operationId: likePhoto 
           security: 
-            - userAuth: []
+            - BearerAuth: []
 
           responses:
             '200': 
@@ -263,7 +265,7 @@ paths:
             If user had liked the photo and he isn't banned, he removes his likes on the post
           operationId: unlikePhoto 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
 
           responses:  
             '200': 
@@ -293,7 +295,7 @@ paths:
             If the photo identified by phId exists and user can see the photo , the user can comment the photo indicated by phId. 
           operationId: commentPhoto 
           security: 
-            - userAuth: []
+            - BearerAuth: []
           requestBody:  
             $ref: "#/components/requestBodies/commentDetails"          
           responses:
@@ -316,7 +318,7 @@ paths:
       description: Gets  list of comments of a photo
       operationId: getPhotoComments
       security:
-        - userAuth: []
+        - BearerAuth: []
       responses:
         '200':
           description: Returns the comments list
@@ -362,7 +364,7 @@ paths:
             If user had commented the photo and he isn't banned, he removes his comment on the post
           operationId: uncommentPhoto 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
 
           responses:  
             '200': 
@@ -392,17 +394,13 @@ paths:
             If the user identified by userId exist, the Photo is uploaded.
           operationId: uploadPhoto 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
           requestBody:
            description: The binary image file to upload
            content:
             image/*:
               schema:
-                description: Photo file to upload in binary file.
-                type: string
-                minLength: 1
-                maxLength: 20971520 
-                format: binary
+                  $ref: "#/components/schemas/image"
           responses:
             '201': 
               description: Photo uploaded
@@ -425,7 +423,7 @@ paths:
         If the user identified by userId exist, returns the list of photos uploaded by a user
       operationId: getUserPhotos
       security:
-        - userAuth: []
+        - BearerAuth: []
       responses:
         '200':
           description: Returns the user photos list
@@ -470,7 +468,7 @@ paths:
             If user had posted the photo and the photoId exists, he removes his  post
           operationId: deletePhoto 
           security: 
-            - userAuth: [] 
+            - BearerAuth: [] 
 
           responses:  
             '200': 
@@ -485,6 +483,27 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }    
             '407': {$ref: "#/components/responses/photoNotFound"}              
             '500': {$ref: "#/components/responses/ErrorServerExecution"}         
+
+
+      get:
+          tags: ["getPhoto"]
+          summary:  Return single photo
+          description: Return the single requested photo in binary format.
+          operationId: getPhoto
+          security:
+            - BearerAuth: []
+          responses:
+            '200':
+              description: The requested photo in binary format.
+              content:
+                image/jpg:
+                  schema:
+                    $ref: "#/components/schemas/image"
+
+            '407': {$ref: "#/components/responses/photoNotFound"}              
+
+
+
 
   /users/{userId}/stream:
 
@@ -510,7 +529,7 @@ paths:
             description: The number of posts to skip
             required: false
         security:
-          - userAuth: []
+          - BearerAuth: []
 
         responses:
           '200':
@@ -557,7 +576,7 @@ paths:
         parameters:
           - $ref: '#/components/parameters/userId'
         security:
-          - userAuth: []
+          - BearerAuth: []
         responses:
           '200':
             description: The user is authenticated and the user can see the user identified by userId, return the profile data
@@ -617,7 +636,7 @@ paths:
           if the user is not banned, it returns the list of user following 
       operationId: getUserFollowing
       security:
-          - userAuth: []
+          - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/userId'
 
@@ -652,7 +671,7 @@ paths:
           if the user is not banned, it returns the list of photo likes
         operationId: getPhotoLike
         security:
-          - userAuth: []
+          - BearerAuth: []
         parameters:
           - $ref: '#/components/parameters/photoId'
         responses:
@@ -786,6 +805,14 @@ components:
       minLength: 20
       maxLength: 25
       example: "2022-01-13T12:00:00Z"
+    
+    image:
+      description: The photo file
+      type: string
+      format: binary
+      minLength: 1
+      maxLength: 10485760 
+      pattern: "((.|\n)*)" 
 
     userPhotoStream:
       type: object
@@ -974,7 +1001,7 @@ components:
         example: 456 
 
   securitySchemes: 
-    userAuth: 
+    BearerAuth: 
       description: login only as your user id 
       type: http 
       scheme: bearer 
