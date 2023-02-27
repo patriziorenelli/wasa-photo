@@ -229,7 +229,7 @@ func (db *appdbimpl) GetUserProfile(userId int, userId2 int) (int, CompleteUser)
 	if err != 0 {
 		return -5, CompleteUser{}
 	}
-	user.FOLLOWER = len(nFollowing)
+	user.FOLLOWING = len(nFollowing)
 
 	return 0, user
 }

@@ -51,7 +51,7 @@ export default {
 				
 					let response = await this.$axios.get("users/" + this.searchUsername + "/profile", {
 						headers: {
-							Authorization: "userAuth " + localStorage.getItem("token")
+							Authorization: "Bearer " + localStorage.getItem("token")
 						}
 					})
 					// Manca il controllo su esito api 
@@ -67,7 +67,7 @@ export default {
 		async getStream() {
 				let response = await this.$axios.get("users/" + localStorage.getItem("token") + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
 					headers: {
-						Authorization: "userAuth " + localStorage.getItem("token")
+						Authorization: "Bearer " + localStorage.getItem("token")
 					}
 				})
 				this.photoStream = response.data
@@ -83,7 +83,7 @@ export default {
 		async goToProfile(){
 			let response = await this.$axios.get("users/" + this.searchUsername + "/profile", {
 						headers: {
-							Authorization: "userAuth " + localStorage.getItem("token")
+							Authorization: "Bearer " + localStorage.getItem("token")
 						}
 					})
 					this.$router

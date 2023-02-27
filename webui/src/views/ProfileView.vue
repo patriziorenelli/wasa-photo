@@ -56,7 +56,7 @@ export default {
 				
 					let response = await this.$axios.get("users/" + this.searchUsername + "/profile", {
 						headers: {
-							Authorization: "userAuth " + localStorage.getItem("token")
+							Authorization: localStorage.getItem("token")
 						}
 					})
 					this.$router
@@ -70,20 +70,29 @@ export default {
         async searcUserInfo(){
             let response = await this.$axios.get("users/" + this.token + "/profile", {
 						headers: {
-							Authorization: "userAuth " + localStorage.getItem("token")
+							Authorization:  localStorage.getItem("token")
 						}
 		    })
             this.profile = response.data
         },
 
-
        async getUserPhoto() {
 				let response = await this.$axios.get("users/" + this.token + "/photo", {
 					headers: {
-						Authorization: "userAuth " + this.token
+						Authorization:  this.token
 					}
 				})
 				this.photoStream = response.data
+		},
+
+		async changeUsername(){
+
+			let response = await this.$axios.put("users/" + this.token + "/username", { username: this.newUsername }, {
+						headers: {
+							Authorization:  this.token
+						}
+		    })
+			alert("Username cambiato in " + response.data.username)
 		}
 
 		
@@ -122,9 +131,12 @@ export default {
         <hr>
         <table > 
             <tr class="firstPart">
+                <th ><input type="text" class="newUsername"  placeholder="newUsername" v-model="newUsername"></th>
+				<th class="firstPartR"><button class="changeButton" @click="changeUsername"><i class="fa fa-paper-plane-o"></i></button></th>
+
+
+
                 <th class="rowFirstPart">{{profile.userName}}</th>
-                <th class="moreSpaceFirstPart"><input type="text" class="newUsername"  placeholder="newUsername" dv-model="newUsername"></th>
-                <th class="rowFirstPart"><button class="changeButton" @click="changeUsername"><i class="fa fa-paper-plane-o"></i></button></th>
                 <th class="lFirstPart"><input type="file" accept="image/*" @change="uploadFile" ref="file"></th>
                 <th class="l2FistPart"><button class="changeButton" @click="uploadPhoto"><i class="fa fa-paper-plane-o"></i></button></th>
             </tr>

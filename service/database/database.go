@@ -204,6 +204,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO post(id, uid, date) VALUES (0000000007, 0000001,  "data8" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000008, 0000001,  "data9" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "data6" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000000,  "data10");
 
 
 				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
