@@ -14,6 +14,10 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	auth := r.Header.Get("Authorization")
 
+
+
+
+
 	// Prendo l'id del post a cui mettere mi piace
 	postId := strings.Split(r.RequestURI, "/")[2]
 	// Prendo il cod utente indicato nel path

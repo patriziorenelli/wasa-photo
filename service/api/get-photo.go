@@ -64,7 +64,6 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	file, erOpen := os.Open(path)
 
 	if erOpen != nil {
-
 		ctx.Logger.Error("Photo file not found")
 		w.WriteHeader(http.StatusUnauthorized)
 		return

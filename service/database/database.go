@@ -193,34 +193,31 @@ func New(db *sql.DB) (AppDatabase, error) {
 		popola := `INSERT INTO user(id, username) VALUES (0000000, "marione_12");
 				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");
 				   INSERT INTO user(id, username) VALUES (0000002, "Giorgia_Na");
-				   INSERT INTO post(id, uid, date) VALUES (0000000001, 0000000, "data1");
-				   INSERT INTO post(id, uid, date) VALUES (0000000002,0000000, "data2" );
+
 				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "data3" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000004, 0000000,  "data4");
-
-
 				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "data5");
 				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "data7" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000007, 000000,  "data8" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000008, 000000,  "data9" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "data6" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000000,  "data10");
 
+				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000000,  "2023-02-28T21:50:02+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000011, 0000000,  "2023-02-28T21:50:27+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000012, 0000000,  "2023-02-28T21:58:36+01:00" );
 
+				   
 				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
 				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
 				
-				   INSERT INTO like(phid, uid) VALUES (0000000001,0000000);
-				   INSERT INTO like(phid, uid) VALUES (0000000001,0000002);
-				   INSERT INTO like(phid, uid) VALUES (0000000001,0000001);
-				   INSERT INTO like(phid, uid) VALUES (0000000004,0000001);
+
+
+
+				   INSERT INTO like(phid, uid) VALUES (0000000010,0000000);
+				   INSERT INTO like(phid, uid) VALUES (0000000010,0000001);
+				   INSERT INTO like(phid, uid) VALUES (0000000012,0000001);
+
+
 				   INSERT INTO like(phid, uid) VALUES (0000000003,0000000);
 				   INSERT INTO like(phid, uid) VALUES (0000000003,0000001);
-				   INSERT INTO like(phid, uid) VALUES (0000000002,0000000);
-				   INSERT INTO like(phid, uid) VALUES (0000000002,0000001);
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000002,0000000, 0000001, "Primo commento", "data1");
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000002,0000001, 0000002, "Secondo commento", "data4");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000000,0000003, "Terzo commento", "data2");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000005,00000001,0000004, "Quarto commeto ", "data3");
 				   `

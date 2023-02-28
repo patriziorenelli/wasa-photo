@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
@@ -14,6 +15,11 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	auth := r.Header.Get("Authorization")
 
+	fmt.Println(r.Header)
+	fmt.Println()
+	fmt.Println("AUT: ", auth)
+
+	
 	// Prendo l'id del post a cui mettere mi piace
 	postId := strings.Split(r.RequestURI, "/")[2]
 	// Prendo il cod utente indicato nel path

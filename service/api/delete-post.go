@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
-	// "io"
 	"net/http"
 	"os"
-	// "path/filepath"
 	"strconv"
 	"strings"
 )
 
 func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+
+	var risultato Result
 
 	// Prendo l'autenticazione
 	auth := r.Header.Get("Authorization")
@@ -37,10 +37,8 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	switch ris {
 	case 0:
 		// tutto ok faccio eliminazione del file
-		var risultato Result
 		risultato.TEXT = Done
-		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(risultato)
+
 	case -1:
 		// foto non esistente
 		ctx.Logger.Error("The photo does not exist")
@@ -55,16 +53,26 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		w.WriteHeader(http.StatusUnauthorized)
 	}
 
-	path := "/photos/" + userId + "/" + photoId + ".jpg"
+	if ris != 0 {
+		return
+	}
 
+	mydir, err := os.Getwd()
+	if err != nil {
+		ctx.Logger.Error("Error during directory creation")
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	path := mydir + "/photos/" + userId + "/" + photoId + ".jpg"
 	// Elimino il file della foto
-	err := os.Remove(path)
+	err = os.Remove(path)
 	if err != nil {
 		ctx.Logger.Error("Error while deleting the photo")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	ctx.Logger.Error("Photo deleted")
-	w.WriteHeader(http.StatusUnauthorized)
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(risultato)
 }
