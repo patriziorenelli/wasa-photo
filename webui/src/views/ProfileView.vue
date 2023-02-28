@@ -161,13 +161,11 @@ export default {
 		},
 
 		async likePost(val){
-			let response = await this.$axios.put("photo/" + val + "/like/" + this.token ,  {
+			let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
 					headers: {
-							Authorization: localStorage.getItem("token")
+							Authorization: this.token
 					}
 		    })
-
-			alert()
 		},
 
 		async unlikePost(val){
