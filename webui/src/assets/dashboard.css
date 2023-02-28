@@ -94,3 +94,16 @@ body {
 	box-shadow: 0 0 0 3px rgba(255 255 255 / 25%);
 }
 
+
+
+.card-img,
+.card-img-top,
+.card-img-bottom {
+  width: 100%;
+}
+
+.card-img,
+.card-img-top {
+  border-top-left-radius: var(--bs-card-inner-border-radius);
+  border-top-right-radius: var(--bs-card-inner-border-radius);
+}

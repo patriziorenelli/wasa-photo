@@ -201,8 +201,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "data5");
 				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "data7" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000007, 0000001,  "data8" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000008, 0000001,  "data9" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000007, 000000,  "data8" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000008, 000000,  "data9" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "data6" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000000,  "data10");
 

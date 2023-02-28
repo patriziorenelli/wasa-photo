@@ -33,6 +33,10 @@ type Post struct {
 	DATE   string `json:"date"`
 }
 
+type PhotoFile struct {
+	PHOTOFILE string `json:"image"`
+}
+
 type CompletePost struct {
 	ID       int    `json:"photoId"`
 	USERID   int    `json:"userId"`

@@ -1,9 +1,12 @@
 package api
 
 import (
+	"bufio"
+	"encoding/base64"
+	"encoding/json"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -30,13 +33,13 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	if rt.db.CheckBan(authId, userId) == -1 {
+	if rt.db.CheckBan(authId, userId) == 0 {
 		ctx.Logger.Error("You ban the photo owner")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	if rt.db.CheckBan(userId, authId) == -1 {
+	if rt.db.CheckBan(userId, authId) == 0 {
 		ctx.Logger.Error("The photo owner ban you")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -49,24 +52,37 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	path := "/photos/" + strconv.Itoa(userId) + "/" + strconv.Itoa(postId) + ".jpg"
+	mydir, erro := os.Getwd()
+	if erro != nil {
+		ctx.Logger.Error("Error during execution")
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	path := mydir + "/photos/" + strconv.Itoa(userId) + "/" + strconv.Itoa(postId) + ".jpg"
 
 	file, erOpen := os.Open(path)
 
 	if erOpen != nil {
+
 		ctx.Logger.Error("Photo file not found")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	defer file.Close()
+	//  CONVERSIONE E SCRITTURA RITORNO
 
-	_, erOpen = io.Copy(w, file)
+	reader := bufio.NewReader(file)
+	content, _ := ioutil.ReadAll(reader)
 
-	if erOpen != nil {
-		ctx.Logger.Error("Error copying file")
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
+	// Encode as base64.
+	encoded := base64.StdEncoding.EncodeToString(content)
+
+	var photoFile PhotoFile
+
+	photoFile.PHOTOFILE = encoded
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(photoFile)
 
 }

@@ -10,6 +10,8 @@ export default {
 			successmsg: null,
 			detailedmsg: null,
 			limit: 10,
+			images: null,
+			imageD: null,
 			startIndex: 0,
 			photoStream: [
 					{
@@ -22,7 +24,7 @@ export default {
 					}
 				],
 			
-
+			userPhoto: null,
 			username: localStorage.getItem('username'),
 			token: localStorage.getItem('token'),
 			profile: {
@@ -76,14 +78,31 @@ export default {
             this.profile = response.data
         },
 
+		// Prende correttamente la stessa foto ma condividono variabile -> mostra solo una foto 
        async getUserPhoto() {
 				let response = await this.$axios.get("users/" + this.token + "/photo", {
 					headers: {
 						Authorization:  this.token
 					}
 				})
-				this.photoStream = response.data
+				this.photoStream =  response.data;
+
+				this.userPhoto = new Map();
+				
+				for(var i = 0; i < (response.data).length; i++){
+
+					let fotoFile = await this.$axios.get("user/" + this.token + "/photo/" + (response.data)[i].photoId,{
+						headers: {
+							Authorization:  this.token
+						}
+					})
+					this.userPhoto.set((response.data)[i].photoId,fotoFile.data.image );
+					//this.imageD = fotoFile.data.image
+
+				}
+
 		},
+
 
 		async changeUsername(){
 
@@ -93,7 +112,40 @@ export default {
 						}
 		    })
 			alert("Username cambiato in " + response.data.username)
+			this.$router
+					.push({ path: '/users/' + response.data.username + '/profile' })
+					.then(() => { this.$router.go() })
+		},
+
+		async uploadFile() {
+			this.images = this.$refs.file.files[0]
+		},
+		
+		async uploadPhoto() {
+			if (this.images === null) {
+				this.errormsg = "Please select a file to upload."
+			} else {
+				
+					let response = await this.$axios.post("users/" + this.token + "/photo" , this.images, {
+						headers: {
+							Authorization: this.token
+						}
+					})
+					this.successmsg = "Photo uploaded successfully."
+
+			}
+		},
+
+
+		async deletePhoto(val){
+			alert(val)
 		}
+
+
+
+
+
+
 
 		
 	},
@@ -134,8 +186,6 @@ export default {
                 <th ><input type="text" class="newUsername"  placeholder="newUsername" v-model="newUsername"></th>
 				<th class="firstPartR"><button class="changeButton" @click="changeUsername"><i class="fa fa-paper-plane-o"></i></button></th>
 
-
-
                 <th class="rowFirstPart">{{profile.userName}}</th>
                 <th class="lFirstPart"><input type="file" accept="image/*" @change="uploadFile" ref="file"></th>
                 <th class="l2FistPart"><button class="changeButton" @click="uploadPhoto"><i class="fa fa-paper-plane-o"></i></button></th>
@@ -170,21 +220,26 @@ export default {
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
 
-        <label id="photoId" for="photoId" >{{post.name}}</label><br>		
-        <br>
+        <label id="photoAuthor" for="photoAuthor" class="usPhoto">{{post.name}}</label>
+		<button class="deleteButton" @click="deletePhoto(post.photoId)"><i class="fa fa-trash"></i></button>
 
-  			<img src="img_avatar.png" alt="Avatar" style="width:100%">
+		<br>
+
+        <hr class="divUsername">
 
 
-				<div class="container">
-				<br>
-				  	<label id="photoId" for="photoId" >PhotoId:{{post.photoId}}</label><br>
 
-				  	<label id="userId"  >userId:{{post.userId}}</label><br>
-				</div>
-
+			<img alt="Image" :src="'data:image/jpeg;base64,'+userPhoto.get(post.photoId)" class="imageStandard">   
+  			
+			<div class="container">
+				<label id="nLike"  class="showNumber">Like:{{post.likes}}</label> <label id="nComment"  >Comment:{{post.comments}}     </label><br>
+				<br><br>
+				<label id="date" class="date" >{{post.upladTime}}</label><br>
 			</div>
+
+
 		</div>
+	</div>
 
 
 

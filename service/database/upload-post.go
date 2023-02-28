@@ -15,7 +15,7 @@ func (db *appdbimpl) UploadPhoto(userId int) (int, int) {
 	// Data di quando la foto viene postata
 	data := time.Now().Format(time.RFC3339)
 
-	res, err := db.c.Exec(`INSERT INTO post (uid, date) VALUES (?)`, userId, data)
+	res, err := db.c.Exec(`INSERT INTO post (uid, date) VALUES (?,?)`, userId, data)
 	// In caso di errore nella creazione dell'utente
 	if err != nil {
 		return -2, -1

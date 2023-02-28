@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
 	"io"
@@ -56,10 +57,18 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	path := "/photos/" + userId + "/" + strconv.Itoa(photoId) + ".jpg"
+	mydir, err := os.Getwd()
+	if err != nil {
+		ctx.Logger.Error("Error during directory creation")
+		w.WriteHeader(http.StatusUnauthorized)
+		_ = rt.db.DeletePhotoRecord(photoId)
+		return
+	}
 
+	path := mydir + "/photos/" + userId + "/" + strconv.Itoa(photoId) + ".jpg"
 	// Creo la directory, in caso di errore elimino anche il record relativo alla nuova foto
-	if os.MkdirAll(filepath.Dir(path), os.ModePerm) != nil {
+	err = os.MkdirAll(filepath.Dir(path), 0777)
+	if err != nil {
 		ctx.Logger.Error("Error during directory creation")
 		w.WriteHeader(http.StatusUnauthorized)
 		_ = rt.db.DeletePhotoRecord(photoId)
@@ -74,5 +83,10 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		_ = rt.db.DeletePhotoRecord(photoId)
 		return
 	}
+
+	var risultato Result
+	risultato.TEXT = Done
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(risultato)
 
 }
