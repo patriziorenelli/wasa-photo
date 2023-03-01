@@ -79,7 +79,7 @@ export default {
             this.profile = response.data
         },
 
-		// Prende correttamente la stessa foto ma condividono variabile -> mostra solo una foto 
+		
        async getUserPhoto() {
 				let response = await this.$axios.get("users/" + this.token + "/photo", {
 					headers: {
@@ -110,7 +110,7 @@ export default {
 					if ( users.data ){
 						for(var x = 0; x < (users.data).length; x++){
 							if ( users.data[x].userId == this.token){
-								alert
+								
 								this.photoLike.push((response.data)[i].photoId)
 							}
 						}
@@ -254,44 +254,36 @@ export default {
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
 
-        <label id="photoAuthor" for="photoAuthor" class="usPhoto">{{post.name}}</label>
-		<button class="deleteButton" @click="deletePhoto(post.photoId)"><i class="fa fa-trash"></i></button>
+			<label id="photoAuthor" for="photoAuthor" class="usPhoto">{{post.name}}</label>
+			<button class="deleteButton" @click="deletePhoto(post.photoId)"><i class="fa fa-trash"></i></button>
 
-		<br>
+			<br>
 
-        <hr class="divUsername">
-
-
-
-			<img alt="Image" :src="'data:image/jpeg;base64,'+userPhoto.get(post.photoId)" class="imageStandard">   
-  			
-			<div>
-
-
-				<table class="infoSection"> 
-							<tr >
-								<th ><button class="unlikeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)== -1"  @click="likePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId) == -1">{{post.likes}}</label></th>
-
-								<th ><button class="likeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)!== -1"  @click="unlikePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId)!= -1">{{post.likes}}</label></th>
-								<th class="commentInfo" ><i class="fa fa-comment" aria-hidden="true"></i><label id="nComment" class="nComment" >{{post.comments}}</label></th>
-							</tr>
-				</table>
-				<br>
-				<label id="date" class="date" >{{post.upladTime}}</label><br>
-
-							
+			<hr class="divUsername">
 
 
 
+				<img alt="Image" :src="'data:image/jpeg;base64,'+userPhoto.get(post.photoId)" class="imageStandard">   
+				
+				<div>
 
 
+					<table class="infoSection"> 
+								<tr >
+									<th ><button class="unlikeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)== -1"  @click="likePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId) == -1">{{post.likes}}</label></th>
 
-		
+									<th ><button class="likeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)!== -1"  @click="unlikePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId)!= -1">{{post.likes}}</label></th>
+									<th class="commentInfo" ><i class="fa fa-comment" aria-hidden="true"></i><label id="nComment" class="nComment" >{{post.comments}}</label></th>
+								</tr>
+					</table>
+					<br>
+					<label id="date" class="date" >{{post.upladTime}}</label><br>
+
+				</div>
+
+
 			</div>
-
-
 		</div>
-	</div>
 
 
 

@@ -23,9 +23,10 @@ export default {
 					}
 				],
 			
-
+			userPhoto: null,
 			username: localStorage.getItem('username'),
 			token: localStorage.getItem('token'),
+			photoLike: [],
 			
 		}
 	},
@@ -70,7 +71,43 @@ export default {
 						Authorization: "Bearer " + localStorage.getItem("token")
 					}
 				})
-				this.photoStream = response.data
+
+
+				this.photoStream =  response.data;
+
+				this.userPhoto = new Map();
+				
+				for(var i = 0; i < (response.data).length; i++){
+					
+					let fotoFile = await this.$axios.get("user/" + (response.data)[i].userId + "/photo/" + (response.data)[i].photoId,{
+						headers: {
+							Authorization:  this.token
+						}
+					})
+					this.userPhoto.set((response.data)[i].photoId,fotoFile.data.image );
+
+
+				//-- Costruisco array con gli id degli utenti che hanno messo mi piace alla foto 
+				
+					let users = await this.$axios.get("photo/" + (response.data)[i].photoId  +"/likes", {
+						headers: {
+							Authorization:  this.token
+						}
+					})
+
+					if ( users.data ){
+						for(var x = 0; x < (users.data).length; x++){
+							if ( users.data[x].userId == this.token){
+								
+								this.photoLike.push((response.data)[i].photoId)
+							}
+						}
+					}
+
+				}
+
+
+
 		},
 
 		
@@ -90,6 +127,25 @@ export default {
 					.push({ path: '/users/' + this.searchUsername + '/view' })
 					.then(() => { this.$router.go() })
 		},
+
+		async likePost(val){
+			let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
+					headers: {
+							Authorization: this.token
+					}
+		    })
+		},
+
+		async unlikePost(val){
+			let response = await this.$axios.delete("photo/" + val + "/like/" + this.token, {
+									headers: {
+										Authorization: this.token
+									}
+						})
+		},
+
+
+
 	},
 
 
@@ -133,19 +189,24 @@ export default {
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
 
-			<!-- Per andare al profilo dell'utente che ha postato la foto-->
-			<button v-on:click="goToProfile" value=post.name type="button" class="invisibleButton" >{{post.name}}</button>
-			<br>
-
-  			<img src="img_avatar.png" alt="Avatar" style="width:100%">
-
-
-				<div class="container">
+				<button v-on:click="goToProfile" value=post.name type="button" class="invisibleButton" >{{post.name}}</button>
 				<br>
-				  	<label id="photoId" for="photoId" >PhotoId:{{post.photoId}}</label><br>
+				<hr class="divUsername">
+				<img alt="Image" :src="'data:image/jpeg;base64,'+userPhoto.get(post.photoId)" class="imageStandard">   
+				<div>
+					<table class="infoSection"> 
+								<tr >
+									<th ><button class="unlikeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)== -1"  @click="likePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId) == -1">{{post.likes}}</label></th>
 
-				  	<label id="userId"  >userId:{{post.userId}}</label><br>
+									<th ><button class="likeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)!== -1"  @click="unlikePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId)!= -1">{{post.likes}}</label></th>
+									<th class="commentInfo" ><i class="fa fa-comment" aria-hidden="true"></i><label id="nComment" class="nComment" >{{post.comments}}</label></th>
+								</tr>
+					</table>
+					<br>
+					<label id="date" class="date" >{{post.upladTime}}</label><br>
+
 				</div>
+
 
 			</div>
 		</div>

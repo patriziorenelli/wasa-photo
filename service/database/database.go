@@ -194,10 +194,11 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");
 				   INSERT INTO user(id, username) VALUES (0000002, "Giorgia_Na");
 
-				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "data3" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "data5");
-				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "data7" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "data6" );
+
+				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "2023-02-28T21:50:02+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "2022-02-28T21:50:02+01:00");
+				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "2023-02-12T21:50:02+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "2022-12-28T21:50:02+01:00");
 
 				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000000,  "2023-02-28T21:50:02+01:00" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000011, 0000000,  "2023-02-28T21:50:27+01:00" );

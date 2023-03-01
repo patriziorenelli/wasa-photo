@@ -54,6 +54,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 			var post CompletePost
 			for x := 0; x < len(phList); x++ {
 				post.ID = phList[x].ID
+				post.USERID = phList[x].USERID
 				post.USERNAME = phList[x].USERNAME
 				post.LIKES = phList[x].LIKES
 				post.COMMENTS = phList[x].COMMENTS
