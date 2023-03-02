@@ -158,8 +158,8 @@ a{
 	color: #333;
 	background-color: white;
 	position: relative;
-	text-align: center;
-	left: 100px;
+	text-align: left;
+	left: 6%;
 	top:8px;
 	border: none;
     border-radius: 3px 0 0 3px;
@@ -280,7 +280,7 @@ a{
 .secondPart{
 	width: 100%;
 	height: 40%;
-	padding-left: 12%;
+	padding-left: 14%;
 	font-size: x-large;
 }
 
@@ -370,7 +370,6 @@ hr {
 	justify-content: center;
 	width: 100%;
 	height: 20%;
-
 }
 
 
@@ -409,4 +408,92 @@ hr {
 	font-size:medium;
 	border: 1px;
 	cursor: pointer;
+}
+
+.followUser{
+	position: relative;
+	color: white;
+	border-radius: 12px;
+	cursor: pointer;
+	background-color: green;
+	font-size: 20px;
+	border: none;
+	font-weight: bold;
+}
+
+.unfollowUser{
+	position: relative;
+	color: white;
+	border-radius: 12px;
+	cursor: pointer;
+	background-color: red;
+	font-size: 20px;
+	font-weight: bold;
+	border: none;
+}
+
+
+.unbanButton{
+	position: relative;
+	color: white;
+	border-radius: 12px;
+	cursor: pointer;
+	background-color: green;
+	font-size: 20px;
+	font-weight: bold;
+	border: none;
+
+}
+
+.banButton{
+	position: relative;
+	color: white;
+	border-radius: 50%;
+	cursor: pointer;
+	background-color: red;
+	font-size: 20px;
+	border: none;
+	font-weight: bold;
+	border-radius: 12px;
+}
+
+
+
+.firstRU{
+	position: relative;
+	width: 10%;
+	height: 40%;
+}
+
+.tableU{
+	position: relative;
+	width: 75%;
+	height: 30%;
+}
+
+
+.rowFirstPartU{
+	position: relative;
+	width: 40%;
+	height: 40%;
+	font-size: x-large;
+	padding-left: 15%;
+}
+
+
+
+.l2FistPartU{
+	position: relative;
+	padding-left: 40%;
+}
+
+
+
+.rowFirstPartUT{
+	position: relative;
+	width: 40%;
+	height: 40%;
+	font-size: x-large;
+	padding-left: 25%;
+
 }

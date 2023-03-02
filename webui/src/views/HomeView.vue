@@ -117,15 +117,19 @@ export default {
 				.then(() => { this.$router.go() })
 		},
 
-		async goToProfile(){
-			let response = await this.$axios.get("users/" + this.searchUsername + "/profile", {
+		async goToProfile(val, viewId){
+			let response = await this.$axios.get("users/" + val + "/profile", {
 						headers: {
 							Authorization: "Bearer " + localStorage.getItem("token")
 						}
 					})
+					localStorage.setItem("viewId", viewId);
+					localStorage.setItem("viewName", val);
+
 					this.$router
-					.push({ path: '/users/' + this.searchUsername + '/view' })
+					.push({ path: '/users/' + val + '/view' })
 					.then(() => { this.$router.go() })
+
 		},
 
 		async likePost(val){
@@ -189,7 +193,7 @@ export default {
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
 
-				<button v-on:click="goToProfile" value=post.name type="button" class="invisibleButton" >{{post.name}}</button>
+				<button v-on:click="goToProfile(post.name, post.userId)" value=post.name type="button" class="invisibleButton" >{{post.name}}</button>
 				<br>
 				<hr class="divUsername">
 				<img alt="Image" :src="'data:image/jpeg;base64,'+userPhoto.get(post.photoId)" class="imageStandard">   
