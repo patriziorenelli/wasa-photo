@@ -13,7 +13,7 @@ import (
 func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
-	
+
 	// Prendo l'id del post a cui mettere mi piace
 	postId := strings.Split(r.RequestURI, "/")[2]
 	// Prendo il cod utente indicato nel path

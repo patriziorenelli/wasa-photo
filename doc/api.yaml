@@ -39,6 +39,8 @@ tags:
     description: "Returns an array of posts from followed users"   
   - name: "getUserProfile"
     description: "Returns user profile information"  
+  - name: "getUserId"
+    description: "Get userId from his username"
 
 openapi: 3.0.0 
 
@@ -670,6 +672,33 @@ paths:
         '500': {$ref: "#/components/responses/ErrorServerExecution"} 
 
 
+  /users/{username}:
+    get:
+      tags: ["getUserId"]
+      summary: Get userId from his username
+      description:  |
+        If user identified by userId in authentication doesn't exist or user identified by the username passed doesn't exist, error is returned.
+        If user identified by userId in authentication exist and user identified by the username passed exist, the userId of the user is ruterned.
+      security:
+        - BearerAuth: []
+      parameters:
+          -  $ref: "#/components/parameters/username"
+      responses:
+          '201': 
+            description: User log-in action successful 
+            content: 
+              application/json: 
+                schema: 
+                    $ref: "#/components/schemas/userId"
+                example:
+                  userId: 111112
+          '404': { $ref: "#/components/responses/UsernameNotFound" }    
+          '400': { $ref: "#/components/responses/UserIdNotFound" }    
+
+        
+
+    
+
   /photo/{photoId}/likes:
     get:
         tags: ["getPhotoLike"]
@@ -705,6 +734,10 @@ paths:
 components:  
 
   responses:
+
+    UsernameNotFound:
+      description: Searched username not found
+
     UserIdNotFound:
       description: User id not found.
 
@@ -1015,6 +1048,20 @@ components:
         type: integer 
         description: "Single id comment"
         example: 456 
+
+    username:
+      in: path
+      name: username
+      required: true
+      description: User's username 
+      schema:
+        type: string 
+        description: User's UserName 
+        example: "Franchino_12"
+        pattern: '^[a-zA-Z0-9_.-]*$' 
+        minLength: 6 
+        maxLength: 16 
+
 
   securitySchemes: 
     BearerAuth: 
