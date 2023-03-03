@@ -1,13 +1,11 @@
 <script>
 import LogModal from "../components/Logmodal.vue";
-import SuccessMsg from "../components/SuccessMsg.vue";
 
 export default {
-	components: { LogModal, SuccessMsg },
+	components: { LogModal },
 	data: function () {
 		return {
 			errormsg: null,
-			successmsg: null,
 			detailedmsg: null,
 			limit: 10,
 			startIndex: 0,

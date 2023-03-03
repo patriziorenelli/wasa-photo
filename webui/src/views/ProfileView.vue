@@ -1,13 +1,11 @@
 <script>
 import LogModal from "../components/Logmodal.vue";
-import SuccessMsg from "../components/SuccessMsg.vue";
 
 export default {
-	components: { LogModal, SuccessMsg },
+	components: { LogModal },
 	data: function () {
 		return {
 			errormsg: null,
-			successmsg: null,
 			detailedmsg: null,
 			limit: 10,
 			images: null,
@@ -155,9 +153,11 @@ export default {
 							Authorization: this.token
 						}
 					})
-					this.successmsg = "Photo uploaded successfully."
 
 			}
+
+			alert("Nuovo post caricato")
+			this.viewProfile()
 		},
 		async deletePhoto(val){
 			let response = await this.$axios.delete("user/" + this.token + "/photo/" + val, {
