@@ -10,7 +10,7 @@ func (db *appdbimpl) UserExist(userId int) int {
 	var us User
 	row := db.c.QueryRow(`SELECT * from user where id = ?`, userId)
 	err := row.Scan(&us.ID, &us.USERNAME)
-	if errors.Is(err, sql.ErrNoRows) {
+	if  err != nil && errors.Is(err, sql.ErrNoRows) {
 		return -1
 	} else {
 		return 0
@@ -23,7 +23,7 @@ func (db *appdbimpl) FindUsername(userId int) (int, string) {
 	row := db.c.QueryRow(`SELECT * from user where id = ?`, userId)
 	err := row.Scan(&us.ID, &us.USERNAME)
 
-	if errors.Is(err, sql.ErrNoRows) {
+	if  err != nil && errors.Is(err, sql.ErrNoRows) {
 		return -1, ""
 	} else {
 		return 0, us.USERNAME
@@ -37,7 +37,7 @@ func (db *appdbimpl) CheckBan(userId int, banId int) int {
 	var ban Ban
 	row := db.c.QueryRow(`SELECT * from ban where uid = ? and uid2 = ?`, userId, banId)
 	err := row.Scan(&ban.UID1, &ban.UID2)
-	if !errors.Is(err, sql.ErrNoRows) {
+	if err == nil || !errors.Is(err, sql.ErrNoRows) {
 		return 0
 	} else {
 		return -1
@@ -49,7 +49,7 @@ func (db *appdbimpl) UsernamUsed(newUsername string) int {
 	var us User
 	row := db.c.QueryRow(`SELECT * from user where username = ?`, newUsername)
 	err := row.Scan(&us.ID, &us.USERNAME)
-	if errors.Is(err, sql.ErrNoRows) {
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return -1
 	} else {
 		return 0
@@ -61,7 +61,7 @@ func (db *appdbimpl) CheckFollow(userId int, followId int) int {
 	var follow Follow
 	row := db.c.QueryRow(`SELECT * FROM follow WHERE uid = ? AND uid2 = ?`, userId, followId)
 	err := row.Scan(&follow.UID1, &follow.UID2)
-	if err != nil && errors.Is(err, sql.ErrNoRows) {
+	if  err != nil && errors.Is(err, sql.ErrNoRows) {
 		return -1
 	} else {
 		return 0
@@ -73,7 +73,7 @@ func (db *appdbimpl) GetPhoto(photoId int) (Post, int) {
 	var post Post
 	row := db.c.QueryRow(`SELECT * from post where id = ?`, photoId)
 	err := row.Scan(&post.ID, &post.USERID, &post.DATE)
-	if errors.Is(err, sql.ErrNoRows) {
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return post, -1
 	} else {
 		return post, 0

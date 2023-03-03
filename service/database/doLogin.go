@@ -14,7 +14,7 @@ func (db *appdbimpl) DoLogin(name Username) (User, error) {
 	row := db.c.QueryRow(query, name.USERNAME)
 	err := row.Scan(&us.ID, &us.USERNAME)
 
-	if errors.Is(err, sql.ErrNoRows) {
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		us.USERNAME = name.USERNAME
 		us.ID = -2
 		return us, nil
