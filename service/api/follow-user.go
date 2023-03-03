@@ -20,7 +20,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	followId := strings.Split(r.RequestURI, "/")[4]
 
 	// Se l'autenticazione va a buon fine e si sta cercando di seguire un altro user, si invia la richiesta di follow
-	if auth == reqUser {
+	if auth == reqUser && auth != followId {
 
 		// Se si sta cercando di seguire se stessi si ritorna errore
 		if auth == followId {

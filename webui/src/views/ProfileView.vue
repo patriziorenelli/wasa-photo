@@ -51,24 +51,29 @@ export default {
 		},
 
 		async searchUser() {
-			/*
-			if (this.searchUsername === this.username) {
-				this.errormsg = "You can't search yourself"
-			} else if (this.searchUsername === "") {
-				this.errormsg = "The username to be searched must be inserted ..."
-			} else {
-				
-					let response = await this.$axios.get("users/" + this.searchUsername + "/profile", {
+			if (this.searchUsername != this.username){
+		
+				localStorage.setItem('viewName', this.searchUsername);
+				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
 						headers: {
-							Authorization: localStorage.getItem("token")
+							Authorization: "Bearer " + localStorage.getItem("token")
 						}
-					})
-					this.$router
+				})
+
+				localStorage.setItem('viewId', viewId.data.userId)
+
+				this.$router
 					.push({ path: '/users/' + this.searchUsername + '/view' })
 					.then(() => { this.$router.go() })
+			}else{
 				
+				this.viewProfile()
 			}
-			*/
+
+			
+			
+
+			
 		},
 
     
@@ -179,7 +184,11 @@ export default {
 		},
 		
 
-
+		async viewProfile() {
+			this.$router
+            	.push({ path: '/users/' + this.username + '/profile' })
+				.then(() => { this.$router.go() })
+		},
 
 
 

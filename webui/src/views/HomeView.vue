@@ -44,24 +44,27 @@ export default {
 		},
 
 		async searchUser() {
-
-			localStorage.setItem('viewName', this.searchUsername);
-			let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
-					headers: {
-						Authorization: "Bearer " + localStorage.getItem("token")
-					}
-			})
-
-			localStorage.setItem('viewId', viewId.data.userId)
-
-
-
-
-
-			this.$router
-				.push({ path: '/users/' + this.searchUsername + '/view' })
-				.then(() => { this.$router.go() })
 			
+			if (this.searchUsername != this.username){
+				localStorage.setItem('viewName', this.searchUsername);
+				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
+						headers: {
+							Authorization: "Bearer " + localStorage.getItem("token")
+						}
+				})
+
+				localStorage.setItem('viewId', viewId.data.userId)
+
+
+
+
+
+				this.$router
+					.push({ path: '/users/' + this.searchUsername + '/view' })
+					.then(() => { this.$router.go() })
+			}else{
+				this.viewProfile()
+			}
 
 			
 		},
