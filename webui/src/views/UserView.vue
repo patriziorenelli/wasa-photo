@@ -84,7 +84,6 @@ export default {
 		},
 
         async searcUserInfo(){
-            alert(this.viewId)
             let response = await this.$axios.get("users/" + this.viewId + "/profile", {
 						headers: {
 							Authorization:  localStorage.getItem("token")
@@ -176,6 +175,12 @@ export default {
                     Authorization: this.token
                 }
             })
+
+			this.$router
+            	.push({ path: '/users/' + this.viewName + '/view' })
+				.then(() => { this.$router.go() })
+
+
         },
 
         async unfollowUser(){
@@ -184,6 +189,10 @@ export default {
                     Authorization: this.token
                 }
             })
+
+			this.$router
+            	.push({ path: '/users/' + this.viewName + '/view' })
+				.then(() => { this.$router.go() })
         },
 
         async banUser(){
@@ -194,6 +203,10 @@ export default {
             })
 
             this.ban = 0;
+
+			this.$router
+            	.push({ path: '/users/' + this.viewName + '/view' })
+				.then(() => { this.$router.go() })
         },
 
 
@@ -204,7 +217,14 @@ export default {
                 }
             })
             this.ban = -1;
+
+			this.$router
+            	.push({ path: '/users/' + this.viewName + '/view' })
+				.then(() => { this.$router.go() })
+
+
         },
+
 
 
         async checkBan(){
@@ -223,8 +243,8 @@ export default {
 		
 	},
 	mounted() {
-        // Qui serve un check per i ban prima di fare il resto 
         this.checkBan()
+		this.checkFollow()
 		this.searcUserInfo()
         this.getUserPhoto()
         this.checkFollow()
