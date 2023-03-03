@@ -10,27 +10,28 @@ import (
 )
 
 // Va bene
-func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) checkUserBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
 
-	// Prendo il cod utente indicato nel path
 	reqUser := strings.Split(r.RequestURI, "/")[2]
 	banId := strings.Split(r.RequestURI, "/")[4]
 
-	// Se l'autenticazione va a buon fine e si sta cercando di bannare un altro user, si invia la richiesta di follow
 	if auth == reqUser && auth != banId {
 
 		reqUser, _ := strconv.Atoi(reqUser)
 		banId, _ := strconv.Atoi(banId)
 
-		ris, username := rt.db.BanUser(reqUser, banId)
+		ris, userId := rt.db.CheckUserBan(reqUser, banId)
 
 		switch ris {
 
 		case 0:
+			// Qui devo ritornare l'id utente verificato
+			var usId UserId
+			usId.USERID = userId.USERID
 			w.Header().Set("Content-Type", "application/json")
-			_ = json.NewEncoder(w).Encode(username)
+			_ = json.NewEncoder(w).Encode(usId)
 
 		case -1:
 			ctx.Logger.Error("User not exist")
@@ -45,11 +46,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 			w.WriteHeader(http.StatusUnauthorized)
 
 		case -4:
-			ctx.Logger.Error("You already ban the user")
-			w.WriteHeader(http.StatusUnauthorized)
-
-		case -6:
-			ctx.Logger.Error("Error during execution")
+			ctx.Logger.Error("You haven't ban the other user")
 			w.WriteHeader(http.StatusUnauthorized)
 
 		}

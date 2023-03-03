@@ -11,6 +11,8 @@ tags:
     description: "Ban another user"
   - name: "unbanUser"
     description: "UnBan another user"
+  - name: "checkBan"
+    description: "Check if user ban another user"
   - name: "likePhoto"
     description: "Like a photo"       
   - name: "unlikePhoto" 
@@ -226,6 +228,35 @@ paths:
             '405': {$ref: "#/components/responses/userId2Banned"} 
             '406': {$ref: "#/components/responses/userNotBanned"}
             '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+            
+     get:
+      tags: ["checkBan"] 
+      summary: Check if user ban another user 
+      description: | 
+            If the user identified by userId or userId2 does not exist error is returned. 
+            If user banned userId2, the id which identifies the userId2 is returned  
+      operationId: checkBan 
+      security: 
+          - BearerAuth: [] 
+
+      responses:  
+            '200': 
+              description: UserId2 wasa banned
+              content: 
+                application/json: 
+                  schema: 
+                      $ref: "#/components/schemas/userId"
+                  example:
+                    userId: 111112
+
+
+            '400': { $ref: "#/components/responses/UserIdNotFound" }            
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '404': {$ref: "#/components/responses/UserId2NotFound"}                 
+            '405': {$ref: "#/components/responses/userId2Banned"} 
+            '406': {$ref: "#/components/responses/userNotBanned"}
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+      
 
 
   /photo/{photoId}/like/{userId}:
@@ -672,7 +703,7 @@ paths:
         '500': {$ref: "#/components/responses/ErrorServerExecution"} 
 
 
-  /users/{username}:
+  /users:
     get:
       tags: ["getUserId"]
       summary: Get userId from his username

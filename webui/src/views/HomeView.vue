@@ -44,6 +44,8 @@ export default {
 		},
 
 		async searchUser() {
+
+			
 			if (this.searchUsername === this.username) {
 				this.errormsg = "You can't search yourself"
 			} else if (this.searchUsername === "") {
@@ -55,12 +57,24 @@ export default {
 							Authorization: "Bearer " + localStorage.getItem("token")
 						}
 					})
-					// Manca il controllo su esito api 
+					localStorage.setItem("viewName", this.searchUsername);
+
+					let userId = await this.$axios.get("/users", {
+						headers: {
+							Authorization: "Bearer " + localStorage.getItem("token")
+						}
+					})
+
+
+
+
+
 					this.$router
 					.push({ path: '/users/' + this.searchUsername + '/view' })
 					.then(() => { this.$router.go() })
 				
 			}
+			
 		},
 		
 

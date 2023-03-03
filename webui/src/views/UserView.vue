@@ -45,7 +45,15 @@ export default {
 			this.getStream()
 		},
 		
+        async clearVar(){
+            localStorage.removeItem('viewName');
+            localStorage.removeItem('viewId');
+
+
+        },
+
 		async doLogout() {
+            this.clearVar()
 			localStorage.removeItem("token")
 			localStorage.removeItem("username")
 			this.$router
@@ -54,6 +62,8 @@ export default {
 		},
 
 		async searchUser() {
+            /*
+
 			if (this.searchUsername === this.username) {
 				this.errormsg = "You can't search yourself"
 			} else if (this.searchUsername === "") {
@@ -70,15 +80,19 @@ export default {
 					.then(() => { this.$router.go() })
 				
 			}
+            */
 		},
 
         async searcUserInfo(){
+            
             let response = await this.$axios.get("users/" + this.viewId + "/profile", {
 						headers: {
 							Authorization:  localStorage.getItem("token")
 						}
 		    })
             this.profile = response.data
+
+            
         },
 
 		
@@ -194,13 +208,23 @@ export default {
 
 
         async checkBan(){
+            let response = await this.$axios.get("/users/" + this.token + "/banUser/" + this.viewId, {
+                headers: {
+                    Authorization: this.token
+                }
+            })
+
+            if (response.data.userId == this.viewId){
+                this.ban = 0;
+            }
+            
 
         },
 		
 	},
 	mounted() {
         // Qui serve un check per i ban prima di fare il resto 
-        thi.checkBan()
+        this.checkBan()
 		this.searcUserInfo()
         this.getUserPhoto()
         this.checkFollow()
@@ -234,7 +258,9 @@ export default {
 				<th class="firstPartRU"><button class="followUser" v-if="follow == 0"  @click="followUser">Follow</button></th>
 				<th class="firstPartRU"><button class="unfollowUser" v-if="follow == 1" @click="unfollowUser">Unfollow</button></th>
 
-                <th class="rowFirstPartU" v-if="ban == -1">{{viewName}}</th>
+                <th class="rowFirstPartU" v-if="ban == -1 && follow == 0">{{viewName}}</th>
+                <th class="rowFirstPartUU" v-if="ban == -1 && follow == 1">{{viewName}}</th>
+
                 <th class="rowFirstPartUT" v-if="ban == 0">{{viewName}}</th>
 
                 <th class="l2FistPartU"><button class="banButton" v-if="ban == -1"  @click="banUser">Ban</button></th> 

@@ -51,6 +51,7 @@ export default {
 		},
 
 		async searchUser() {
+			/*
 			if (this.searchUsername === this.username) {
 				this.errormsg = "You can't search yourself"
 			} else if (this.searchUsername === "") {
@@ -67,6 +68,7 @@ export default {
 					.then(() => { this.$router.go() })
 				
 			}
+			*/
 		},
 
     

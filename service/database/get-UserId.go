@@ -9,8 +9,6 @@ import (
 func (db *appdbimpl) GetUsreId(userId int, name Username) (UserId, int) {
 
 	var us UserId
-	// username associato a qualcuno?
-	// controllo parsing risultato
 
 	if db.UserExist(userId) == -1 {
 		return us, -2

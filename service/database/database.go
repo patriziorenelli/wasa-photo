@@ -151,6 +151,9 @@ type AppDatabase interface {
 	// Ritorna il profilo di un utente
 	GetUserProfile(userId int, userId2 int) (int, CompleteUser)
 
+	// Controlla se un utente ha bannato un altro user
+	CheckUserBan(userId int, banId int) (int, UserId)
+
 	// Ritorna una parte dello stream relativa agli utenti che lo user segue
 	GetMyStream(userId int, limit int, startIndex int) (int, []CompletePost)
 

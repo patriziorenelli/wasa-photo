@@ -34,7 +34,6 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 			risultato.TEXT = Done
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(risultato)
-			return
 
 		case -1:
 			ctx.Logger.Error("User not exist")
