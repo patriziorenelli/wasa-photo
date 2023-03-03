@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-// DA FARE
+// Va bene
 func (db *appdbimpl) GetUsreId(userId int, name Username) (UserId, int) {
 
 	var us UserId

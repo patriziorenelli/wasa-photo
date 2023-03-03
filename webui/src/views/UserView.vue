@@ -84,7 +84,7 @@ export default {
 		},
 
         async searcUserInfo(){
-            
+            alert(this.viewId)
             let response = await this.$axios.get("users/" + this.viewId + "/profile", {
 						headers: {
 							Authorization:  localStorage.getItem("token")

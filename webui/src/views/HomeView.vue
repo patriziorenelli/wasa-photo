@@ -45,35 +45,24 @@ export default {
 
 		async searchUser() {
 
+			localStorage.setItem('viewName', this.searchUsername);
+			let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
+					headers: {
+						Authorization: "Bearer " + localStorage.getItem("token")
+					}
+			})
+
+			localStorage.setItem('viewId', viewId.data.userId)
+
+
+
+
+
+			this.$router
+				.push({ path: '/users/' + this.searchUsername + '/view' })
+				.then(() => { this.$router.go() })
 			
-			if (this.searchUsername === this.username) {
-				this.errormsg = "You can't search yourself"
-			} else if (this.searchUsername === "") {
-				this.errormsg = "The username to be searched must be inserted ..."
-			} else {
-				
-					let response = await this.$axios.get("users/" + this.searchUsername + "/profile", {
-						headers: {
-							Authorization: "Bearer " + localStorage.getItem("token")
-						}
-					})
-					localStorage.setItem("viewName", this.searchUsername);
 
-					let userId = await this.$axios.get("/users", {
-						headers: {
-							Authorization: "Bearer " + localStorage.getItem("token")
-						}
-					})
-
-
-
-
-
-					this.$router
-					.push({ path: '/users/' + this.searchUsername + '/view' })
-					.then(() => { this.$router.go() })
-				
-			}
 			
 		},
 		

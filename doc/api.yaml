@@ -713,7 +713,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-          -  $ref: "#/components/parameters/username"
+        - name: username
+          in: query
+          schema:
+            $ref: "#/components/schemas/username"
+          required: true
+          description: Username of the user to search 
       responses:
           '201': 
             description: User log-in action successful 

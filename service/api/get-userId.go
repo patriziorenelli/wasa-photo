@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// DA FARE
+// Va bene
 func (rt *_router) getUserId(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// deve ritornare un json contentente id dell'utente
@@ -17,15 +17,12 @@ func (rt *_router) getUserId(w http.ResponseWriter, r *http.Request, ps httprout
 	auth, _ := strconv.Atoi(r.Header.Get("Authorization"))
 
 	var user Username
-	err := json.NewDecoder(r.Body).Decode(&user)
 
-	// controllo che l'username passato sia nel formato corretto
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	} else if !user.UsernameIsValid() {
+	user.USERNAME = (r.URL.Query()).Get("username")
 
-		w.WriteHeader(http.StatusBadRequest)
+	if !user.UsernameIsValid() {
+		ctx.Logger.Error("Username not valid")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -38,13 +35,13 @@ func (rt *_router) getUserId(w http.ResponseWriter, r *http.Request, ps httprout
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(userId)
 	case -1:
-		ctx.Logger.WithError(err).Error("Username doesn't exist")
+		ctx.Logger.Error("Username doesn't exist")
 		w.WriteHeader(http.StatusInternalServerError)
 	case -2:
-		ctx.Logger.WithError(err).Error("UserId doesn't exist")
+		ctx.Logger.Error("UserId doesn't exist")
 		w.WriteHeader(http.StatusInternalServerError)
 	case -3:
-		ctx.Logger.WithError(err).Error("Error during creation user")
+		ctx.Logger.Error("Error during execution")
 		w.WriteHeader(http.StatusInternalServerError)
 
 	}
