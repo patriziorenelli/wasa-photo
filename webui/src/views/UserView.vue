@@ -64,7 +64,7 @@ export default {
 				localStorage.setItem('viewName', this.searchUsername);
 				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
 						headers: {
-							Authorization: "Bearer " + localStorage.getItem("token")
+							Authorization: this.token
 						}
 				})
 

@@ -9,6 +9,20 @@ export default {
 			detailedmsg: null,
 			limit: 10,
 			startIndex: 0,
+			
+			photoComment:[
+					{	userId: 0,
+						name: "",
+						comment: "",
+						commentId: 0,
+						date: "",
+						photoId: 0,
+
+
+
+					}
+
+			],
 
 			photoStream: [
 					{
@@ -42,12 +56,11 @@ export default {
 		},
 
 		async searchUser() {
-			
 			if (this.searchUsername != this.username){
 				localStorage.setItem('viewName', this.searchUsername);
 				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
 						headers: {
-							Authorization: "Bearer " + localStorage.getItem("token")
+							Authorization: this.token
 						}
 				})
 
@@ -72,7 +85,7 @@ export default {
 		async getStream() {
 				let response = await this.$axios.get("users/" + localStorage.getItem("token") + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
 					headers: {
-						Authorization: "Bearer " + localStorage.getItem("token")
+						Authorization:  this.token
 					}
 				})
 
@@ -124,7 +137,7 @@ export default {
 		async goToProfile(val, viewId){
 			let response = await this.$axios.get("users/" + val + "/profile", {
 						headers: {
-							Authorization: "Bearer " + localStorage.getItem("token")
+							Authorization: this.token
 						}
 					})
 					localStorage.setItem("viewId", viewId);
@@ -153,6 +166,24 @@ export default {
 		},
 
 
+		async showComment(val){
+			let response = await this.$axios.get("photo/" + val + "/comment", {
+						headers: {
+							Authorization: this.token
+						}
+					})
+
+			this.photoComment = response.data;
+			document.getElementById("commentForm").style.display = "block";
+
+		},
+
+		async closeComment(){
+			document.getElementById("commentForm").style.display = "none";
+			this.photoComment = [];
+		},
+
+
 
 	},
 
@@ -164,9 +195,6 @@ export default {
 	loadImages(){
 		var  userId = document.getElementById('userId').innerHTML;
 		var  photoId = document.getElementById('photoId').innerHTML;
-
-		
-
 	}
 
 
@@ -207,13 +235,43 @@ export default {
 									<th ><button class="unlikeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)== -1"  @click="likePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId) == -1">{{post.likes}}</label></th>
 
 									<th ><button class="likeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)!== -1"  @click="unlikePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId)!= -1">{{post.likes}}</label></th>
-									<th class="commentInfo" ><i class="fa fa-comment" aria-hidden="true"></i><label id="nComment" class="nComment" >{{post.comments}}</label></th>
+									<th class="commentInfo" ><button class="commentButton" id="commentButton"  @click="showComment(post.photoId)"><i class="fa fa-comment" aria-hidden="true"></i></button><label id="nComment" class="nComment" >{{post.comments}}</label></th>
 								</tr>
 					</table>
 					<br>
 					<label id="date" class="date" >{{post.upladTime}}</label><br>
 
 				</div>
+
+
+		<!-- Popup usato per mostrare i commenti e commentare un post -->
+			<div class="commentPopup">
+				<div class="formPopup" id="commentForm">
+					<form action="/action_page.php" class="formContainer">
+						<label for="javascript" class="commentLabel">Comment</label>
+						<button type="button" class="btn cancel" @click="closeComment"><i class="fa fa-times" aria-hidden="true"></i></button>
+
+					<br><br>
+					<div style="overflow-y:scroll; height:400px; " >
+						<div v-if="photoComment.length == 0" class="noPost">
+							No Comment
+						</div>
+					
+
+
+
+
+
+
+					</div>
+				
+
+					<!-- Qui devo fare una tupla per ogni commento del post (provare a fare qualcosa tipo una cosa con cursore al lato) -->
+					<!-- Inserire il form per scrivere testo commento -->
+						<button type="submit" class="btn">Post Comment</button>
+					</form>
+				</div>
+    		</div>
 
 
 			</div>

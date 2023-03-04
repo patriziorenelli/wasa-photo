@@ -9,8 +9,7 @@ import (
 	"strings"
 )
 
-// DA FARE
-// /users/:userId/stream"
+// Va bene
 func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth, _ := strconv.Atoi(r.Header.Get("Authorization"))

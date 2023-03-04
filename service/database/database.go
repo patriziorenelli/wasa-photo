@@ -196,9 +196,10 @@ func New(db *sql.DB) (AppDatabase, error) {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
 		}
 
-		popola := `INSERT INTO user(id, username) VALUES (0000000, "marione_12");
+		popola := `INSERT INTO user(id, username) VALUES (0000004, "marione_12");
 				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");
 				   INSERT INTO user(id, username) VALUES (0000002, "Giorgia_Na");
+				   INSERT INTO user(id, username) VALUES (0000003, "Marisina");
 
 
 				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "2023-02-28T21:50:02+01:00" );
@@ -206,27 +207,43 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "2023-02-12T21:50:02+01:00" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "2022-12-28T21:50:02+01:00");
 
-				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000000,  "2023-02-28T21:50:02+01:00" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000011, 0000000,  "2023-02-28T21:50:27+01:00" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000012, 0000000,  "2023-02-28T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000004,  "2023-02-28T21:50:02+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000011, 0000004,  "2023-02-28T21:50:27+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000012, 0000004,  "2023-02-28T21:58:36+01:00" );
 
 				   
-				   INSERT INTO follow(uid, uid2) VALUES (000000, 000001);
+				   INSERT INTO follow(uid, uid2) VALUES (000004, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
-				   INSERT INTO ban(uid, uid2) VALUES (0000000,0000002 );
+				   INSERT INTO ban(uid, uid2) VALUES (0000003,0000002 );
 				
 
 
 
-				   INSERT INTO like(phid, uid) VALUES (0000000010,0000000);
+				   INSERT INTO like(phid, uid) VALUES (0000000010,0000003);
 				   INSERT INTO like(phid, uid) VALUES (0000000010,0000001);
 				   INSERT INTO like(phid, uid) VALUES (0000000012,0000001);
 
 
-				   INSERT INTO like(phid, uid) VALUES (0000000003,0000000);
+				   INSERT INTO like(phid, uid) VALUES (0000000003,0000003);
 				   INSERT INTO like(phid, uid) VALUES (0000000003,0000001);
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000000,0000003, "Terzo commento", "data2");
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000005,00000001,0000004, "Quarto commeto ", "data3");
+
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000003,0000001, "Primo commento", "2023-02-28T21:50:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000002, "Secondo commento", "2023-02-29T21:50:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000003,0000003, "Terzo commento", "2023-02-29T21:51:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000004, "Quarto commento", "2023-02-29T21:52:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000005, "Quinto commento", "2023-02-29T21:53:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000006, "Sesto commento", "2023-02-29T21:54:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000007, "Settimo commento", "2023-02-29T21:54:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000008, "Ottavo commento", "2023-02-29T21:55:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000009, "Nono commento", "2023-02-29T21:55:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000010, "Decimo commento", "2023-02-29T21:57:02+01:00");
+
+
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000010,0000001,0000011, "1 commento", "2023-02-29T21:55:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000010,0000002,0000012, "2 commento", "2023-02-30T21:55:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000010,0000003,0000013, "3 commento", "2023-03-1T21:55:02+01:00");
+
+
 				   `
 		_, err = db.Exec(popola)
 		if err != nil {
