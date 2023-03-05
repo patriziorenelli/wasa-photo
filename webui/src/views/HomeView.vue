@@ -256,6 +256,10 @@ export default {
 						<div v-if="photoComment.length == 0" class="noPost">
 							No Comment
 						</div>
+
+						<div v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
+
+						</div>
 					
 
 

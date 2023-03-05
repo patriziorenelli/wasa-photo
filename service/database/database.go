@@ -244,6 +244,12 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000010,0000003,0000013, "3 commento", "2023-03-1T21:55:02+01:00");
 
 
+
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000003,00000014, "Primo commento", "2023-02-28T21:50:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000001,00000015, "Secondo commento", "2023-02-29T21:50:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000003,00000016, "Terzo commento", "2023-02-29T21:51:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000004,00000017, "Quarto commento", "2023-02-29T21:52:02+01:00");
+
 				   `
 		_, err = db.Exec(popola)
 		if err != nil {

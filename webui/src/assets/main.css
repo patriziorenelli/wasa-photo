@@ -515,29 +515,6 @@ hr {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .commentPopup {
 	position: relative;
 	text-align: center;
@@ -602,6 +579,8 @@ hr {
 	background-color: white;
   }
 
-
- 
-
+  .commentSec {
+	border: 1px solid;
+	border-color: gray;
+	height: 30%;
+  }
