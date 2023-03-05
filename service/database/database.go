@@ -227,13 +227,13 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO like(phid, uid) VALUES (0000000003,0000003);
 				   INSERT INTO like(phid, uid) VALUES (0000000003,0000001);
 
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000003,0000001, "1458748794744444444444444444444444444444444444444444444444444444444444444444444444444444444444444411", "2023-02-28T21:50:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000003,0000001, "Primo commento", "2023-02-28T21:50:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000002, "Secondo commento", "2023-02-29T21:50:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000003,0000003, "Terzo commento", "2023-02-29T21:51:02+01:00");
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000004, "1458748794744444444444444444444444444444444444444444444444444444444444444444444444444444444444444411", "2023-02-29T21:52:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000004, "Quarto commento", "2023-02-29T21:52:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000005, "Quinto commento", "2023-02-29T21:53:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000006, "Sesto commento", "2023-02-29T21:54:02+01:00");
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000007, "1458748794744444444444444444444444444444444444444444444444444444444444444444444444444444444444444411", "2023-02-29T21:54:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000007, "Settimo", "2023-02-29T21:54:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000008, "Ottavo commento", "2023-02-29T21:55:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000004,0000009, "Nono commento", "2023-02-29T21:55:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000003,0000001,0000010, "Decimo commento", "2023-02-29T21:57:02+01:00");
@@ -247,7 +247,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000003,00000014, "Primo commento", "2023-02-28T21:50:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000001,00000015, "Secondo commento", "2023-02-29T21:50:02+01:00");
-				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000003,00000016, "Terzo commento", "2023-02-29T21:51:02+01:00");
+				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000003,00000016, "Commento felice :)", "2023-02-29T21:51:02+01:00");
 				   INSERT INTO comment(phid, uid, cid, text, date) VALUES (0000000006,0000004,00000017, "Quarto commento", "2023-02-29T21:52:02+01:00");
 
 				   `
