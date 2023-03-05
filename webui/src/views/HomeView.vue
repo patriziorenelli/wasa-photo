@@ -290,6 +290,7 @@ export default {
 
 						<div v-if="photoComment.length != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
 								<div class="userComment">
+								<label >{{comment.name}}</label>
 								</div>
 								<label class="dateComment">{{comment.date}}</label>
 								<button class="cancelComment" v-if="comment.userId == token" @click="deleteComment(comment.commentId, comment.photoId)"><i class="fa fa-trash"></i></button>
