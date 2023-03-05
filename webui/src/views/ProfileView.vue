@@ -22,8 +22,18 @@ export default {
 					}
 				],
 			photoLike: [],
-
+			photoComment:[
+					{	userId: 0,
+						name: "",
+						comment: "",
+						commentId: 0,
+						date: "",
+						photoId: 0,
+					}
+			],
 			userPhoto: null,
+			comments: 0,
+			photoId: 0,
 			username: localStorage.getItem('username'),
 			token: localStorage.getItem('token'),
 			profile: {
@@ -156,7 +166,6 @@ export default {
 
 			}
 
-			alert("Nuovo post caricato")
 			this.viewProfile()
 		},
 		async deletePhoto(val){
@@ -165,6 +174,8 @@ export default {
 							Authorization: this.token
 						}
 			})
+			this.viewProfile();
+
 		},
 
 		async likePost(val){
@@ -173,6 +184,8 @@ export default {
 							Authorization: this.token
 					}
 		    })
+			this.viewProfile();
+
 		},
 
 		async unlikePost(val){
@@ -181,6 +194,8 @@ export default {
 										Authorization: this.token
 									}
 						})
+			this.viewProfile();
+
 		},
 		
 
@@ -190,6 +205,45 @@ export default {
 				.then(() => { this.$router.go() })
 		},
 
+		async showComment(val){
+			let response = await this.$axios.get("photo/" + val + "/comment", {
+						headers: {
+							Authorization: this.token
+						}
+					})
+
+			this.photoComment = response.data;
+			this.photoId = val;
+			document.getElementById("commentForm").style.display = "block";
+
+		},
+
+		async closeComment(){
+			document.getElementById("commentForm").style.display = "none";
+			this.photoComment = [];
+		},
+
+		async deleteComment(commentId, photoId){
+
+			let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
+						headers: {
+							Authorization: this.token
+						}
+					})
+			this.viewProfile();
+
+
+		},
+
+		async postComment(photoId){
+			
+			let response = await this.$axios.post("photo/" + photoId + "/comment", {text: this.inputCommentText}, {
+						headers: {
+							Authorization: this.token
+						}
+			})
+			this.viewProfile();
+		},
 
 
 		
@@ -261,7 +315,7 @@ export default {
 		</div>
 
 
-		<!-- Controllo prima che ci siano post da visualizzare -->
+		<!-- Controllo prima che ci siano post da visualizzare e visualizzo tutta la lista di foto dell'utente -->
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
 
@@ -271,30 +325,53 @@ export default {
 			<br>
 
 			<hr class="divUsername">
-
-
-
 				<img alt="Image" :src="'data:image/jpeg;base64,'+userPhoto.get(post.photoId)" class="imageStandard">   
-				
 				<div>
-
-
 					<table class="infoSection"> 
 								<tr >
 									<th ><button class="unlikeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)== -1"  @click="likePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId) == -1">{{post.likes}}</label></th>
 									<th ><button class="likeButton" id="likeButton" v-if="photoLike.indexOf(post.photoId)!== -1"  @click="unlikePost(post.photoId)"><i class="fa fa-heart" aria-hidden="true"></i></button><label id="nLike"  class="showNumber" v-if="photoLike.indexOf(post.photoId)!= -1">{{post.likes}}</label></th>
-									<th class="commentInfo" ><i class="fa fa-comment" aria-hidden="true"></i><label id="nComment" class="nComment" >{{post.comments}}</label></th>
+									<th class="commentInfo" ><button class="commentButton" id="commentButton"  @click="showComment(post.photoId)"><i class="fa fa-comment" aria-hidden="true"></i></button><label id="nComment" class="nComment" >{{post.comments}}</label></th>
 								</tr>
 					</table>
 					<br>
 					<label id="date" class="date" >{{post.upladTime}}</label><br>
-
 				</div>
-
-
 			</div>
 		</div>
 
+
+		<!-- Popup usato per mostrare i commenti e commentare un post -->
+		<div class="commentPopup">
+				<div class="formPopup" id="commentForm">
+					<div class="formContainer">
+						<label for="javascript" class="commentLabel">Comment</label>
+						<button type="button" class="btn cancel" @click="closeComment"><i class="fa fa-times" aria-hidden="true"></i></button>
+
+					<br>
+					<div style="overflow-y:scroll; height:400px;" >
+						<div v-if="photoComment.length == 0" class="noPost">
+							No Comment
+						</div>
+
+							<div v-if="photoComment.length != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
+								<div class="userComment">
+									<label >{{comment.name}}</label>
+								</div>
+								<label class="dateComment">{{comment.date}}</label>
+								<button class="cancelComment" v-if="comment.userId == token" @click="deleteComment(comment.commentId, comment.photoId)"><i class="fa fa-trash"></i></button>
+								<br>
+								<label class="commentText">{{comment.comment}}</label>
+								
+							</div>
+					</div>
+				
+					<input type="text" id="inputCommentText" name="inputCommentText" v-model="inputCommentText" class="inputCommentText">
+
+					<button type="submit" class="btn" @click="postComment(photoId)" >Post Comment</button>
+					</div>
+				</div>
+    		</div>
 
 
 

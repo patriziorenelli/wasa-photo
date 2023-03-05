@@ -9,7 +9,6 @@ export default {
 			detailedmsg: null,
 			limit: 10,
 			startIndex: 0,
-			
 			photoComment:[
 					{	userId: 0,
 						name: "",
@@ -23,7 +22,6 @@ export default {
 					}
 
 			],
-
 			photoStream: [
 					{
 						photoId: 0,
@@ -34,7 +32,7 @@ export default {
 						upladTime: "",
 					}
 				],
-			
+			photoId: 0,
 			userPhoto: null,
 			username: localStorage.getItem('username'),
 			token: localStorage.getItem('token'),
@@ -135,7 +133,7 @@ export default {
 		},
 
 		async goToProfile(val, viewId){
-			let response = await this.$axios.get("users/" + val + "/profile", {
+			let response = await this.$axios.get("users/" + viewId + "/profile", {
 						headers: {
 							Authorization: this.token
 						}
@@ -143,7 +141,7 @@ export default {
 					localStorage.setItem("viewId", viewId);
 					localStorage.setItem("viewName", val);
 
-					this.$router
+			this.$router
 					.push({ path: '/users/' + val + '/view' })
 					.then(() => { this.$router.go() })
 
@@ -155,6 +153,8 @@ export default {
 							Authorization: this.token
 					}
 		    })
+			location.reload();
+
 		},
 
 		async unlikePost(val){
@@ -163,6 +163,8 @@ export default {
 										Authorization: this.token
 									}
 						})
+			location.reload();
+
 		},
 
 
@@ -174,6 +176,7 @@ export default {
 					})
 
 			this.photoComment = response.data;
+			this.photoId = val;
 			document.getElementById("commentForm").style.display = "block";
 
 		},
@@ -181,6 +184,31 @@ export default {
 		async closeComment(){
 			document.getElementById("commentForm").style.display = "none";
 			this.photoComment = [];
+		},
+
+
+
+		async deleteComment(commentId, photoId){
+
+			let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
+						headers: {
+							Authorization: this.token
+						}
+					})
+			location.reload();
+
+
+		},
+
+		async postComment(pId){
+			let response = await this.$axios.post("photo/" + pId + "/comment", {text: this.inputCommentText}, {
+						headers: {
+							Authorization: this.token
+						}
+			})
+
+			location.reload();
+
 		},
 
 
@@ -224,7 +252,6 @@ export default {
 		<!-- Controllo prima che ci siano post da visualizzare -->
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
-
 				<button v-on:click="goToProfile(post.name, post.userId)" value=post.name type="button" class="invisibleButton" >{{post.name}}</button>
 				<br>
 				<hr class="divUsername">
@@ -243,44 +270,41 @@ export default {
 
 				</div>
 
+			</div>
+		</div>
+		
 
-		<!-- Popup usato per mostrare i commenti e commentare un post -->
+
+			<!-- Popup usato per mostrare i commenti e commentare un post -->
 			<div class="commentPopup">
 				<div class="formPopup" id="commentForm">
-					<form action="/action_page.php" class="formContainer">
+					<div class="formContainer">
 						<label for="javascript" class="commentLabel">Comment</label>
 						<button type="button" class="btn cancel" @click="closeComment"><i class="fa fa-times" aria-hidden="true"></i></button>
 
-					<br><br>
-					<div style="overflow-y:scroll; height:400px; " >
+					<br>
+					<div style="overflow-y:scroll; height:400px;" >
 						<div v-if="photoComment.length == 0" class="noPost">
 							No Comment
 						</div>
 
-						<div v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
-
+						<div v-if="photoComment.length != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
+								<div class="userComment">
+								</div>
+								<label class="dateComment">{{comment.date}}</label>
+								<button class="cancelComment" v-if="comment.userId == token" @click="deleteComment(comment.commentId, comment.photoId)"><i class="fa fa-trash"></i></button>
+								<br>
+								<label class="commentText">{{comment.comment}}</label>
+								
 						</div>
-					
-
-
-
-
-
-
 					</div>
 				
+					<input type="text" id="inputCommentText" name="inputCommentText" v-model="inputCommentText" class="inputCommentText">
 
-					<!-- Qui devo fare una tupla per ogni commento del post (provare a fare qualcosa tipo una cosa con cursore al lato) -->
-					<!-- Inserire il form per scrivere testo commento -->
-						<button type="submit" class="btn">Post Comment</button>
-					</form>
+					<button type="submit"  class="btn" @click="postComment(photoId)">Post Comment</button>
+					</div>
 				</div>
     		</div>
-
-
-			</div>
-		</div>
-		
 
 
 

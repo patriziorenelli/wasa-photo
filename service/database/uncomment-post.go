@@ -34,7 +34,7 @@ func (db *appdbimpl) UncommentPhoto(userId int, photoId int, commentId int) int 
 	var comment Comment
 	// Seleziono il commento che si vuole eliminare
 	row := db.c.QueryRow(`SELECT * FROM comment WHERE cid = ? `, commentId)
-	err := row.Scan(&comment.CID, &comment.UID, &comment.PHID, &comment.TEXT)
+	err := row.Scan(&comment.CID, &comment.UID, &comment.PHID, &comment.TEXT, &comment.DATE)
 
 	// Caso in cui il commento indicato non esiste
 	if err != nil && errors.Is(err, sql.ErrNoRows) {
