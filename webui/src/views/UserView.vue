@@ -118,28 +118,33 @@ export default {
 				this.userPhoto = new Map();
 				
 				for(var i = 0; i < (response.data).length; i++){
+					try{
+						let fotoFile = await this.$axios.get("user/" + this.viewId + "/photo/" + (response.data)[i].photoId,{
+							headers: {
+								Authorization:  this.token
+							}
+						})
+						this.userPhoto.set((response.data)[i].photoId,fotoFile.data.image );
 
-					let fotoFile = await this.$axios.get("user/" + this.viewId + "/photo/" + (response.data)[i].photoId,{
-						headers: {
-							Authorization:  this.token
-						}
-					})
-					this.userPhoto.set((response.data)[i].photoId,fotoFile.data.image );
+						let users = await this.$axios.get("photo/" + (response.data)[i].photoId  +"/likes", {
+							headers: {
+								Authorization:  this.token
+							}
+						})
 
-					let users = await this.$axios.get("photo/" + (response.data)[i].photoId  +"/likes", {
-						headers: {
-							Authorization:  this.token
-						}
-					})
-
-					if ( users.data ){
-						for(var x = 0; x < (users.data).length; x++){
-							if ( users.data[x].userId == this.token){
-								
-								this.photoLike.push((response.data)[i].photoId)
+						if ( users.data ){
+							for(var x = 0; x < (users.data).length; x++){
+								if ( users.data[x].userId == this.token){
+									
+									this.photoLike.push((response.data)[i].photoId)
+								}
 							}
 						}
+
+					}catch (error) {
+							continue;
 					}
+
 
 				}
 
