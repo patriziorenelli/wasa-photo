@@ -31,6 +31,7 @@ export default {
 						photoId: 0,
 					}
 			],
+			c:0,
 			userPhoto: null,
 			comments: 0,
 			photoId: 0,
@@ -215,7 +216,11 @@ export default {
 							Authorization: this.token
 						}
 					})
-
+			if(response.data == null){
+				this.c = 0;
+			}else{
+				this.c = 1;
+			}
 			this.photoComment = response.data;
 			this.photoId = val;
 			document.getElementById("commentForm").style.display = "block";
@@ -354,11 +359,11 @@ export default {
 
 					<br>
 					<div style="overflow-y:scroll; height:400px;" >
-						<div v-if="photoComment.length == 0" class="noPost">
+						<div v-if="c == 0" class="noPost">
 							No Comment
 						</div>
 
-							<div v-if="photoComment.length != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
+							<div v-if="c != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
 								<div class="userComment">
 									<label >{{comment.name}}</label>
 								</div>

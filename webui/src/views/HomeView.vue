@@ -32,7 +32,9 @@ export default {
 						upladTime: "",
 					}
 				],
+			c: 0,
 			photoId: 0,
+			nCoomments: 0,
 			userPhoto: null,
 			username: localStorage.getItem('username'),
 			token: localStorage.getItem('token'),
@@ -180,6 +182,13 @@ export default {
 					})
 
 			this.photoComment = response.data;
+			if(response.data == null){
+				this.c = 0;
+			}else{
+				this.c = 1;
+			}
+
+
 			this.photoId = val;
 			document.getElementById("commentForm").style.display = "block";
 
@@ -288,11 +297,11 @@ export default {
 
 					<br>
 					<div style="overflow-y:scroll; height:400px;" >
-						<div v-if="photoComment.length == 0" class="noPost">
+						<div v-if="c == 0" class="noPost">
 							No Comment
 						</div>
 
-						<div v-if="photoComment.length != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
+						<div v-if="c != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
 								<div class="userComment">
 								<label >{{comment.name}}</label>
 								</div>

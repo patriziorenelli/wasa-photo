@@ -38,6 +38,7 @@ export default {
 			],
 			photoLike: [],
             follow: 0,
+			c: 0,
             ban: -1,
 			photoId: 0,
 			userPhoto: null,
@@ -253,7 +254,8 @@ export default {
             if (response.data.userId == this.viewId){
                 this.ban = 0;
             }
-            
+
+
 
         },
 
@@ -264,6 +266,13 @@ export default {
 							Authorization: this.token
 						}
 					})
+
+			if(response.data == null){
+				this.c = 0;
+			}else{
+				this.c = 1;
+			}
+            
 
 			this.photoComment = response.data;
 			this.photoId = val;
@@ -404,11 +413,11 @@ export default {
 
 					<br>
 					<div style="overflow-y:scroll; height:400px;" >
-						<div v-if="photoComment.length == 0" class="noPost">
+						<div v-if="c == 0" class="noPost">
 							No Comment
 						</div>
 
-							<div v-if="photoComment.length != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
+							<div v-if="c != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
 								<div class="userComment">
 									<label >{{comment.name}}</label>
 								</div>
