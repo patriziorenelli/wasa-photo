@@ -51,21 +51,28 @@ export default {
 		async searchUser() {
 			if (this.searchUsername != this.username){
 				localStorage.setItem('viewName', this.searchUsername);
-				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
+
+				try{
+					let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
 						headers: {
 							Authorization: this.token
 						}
-				})
+					})
 
-				localStorage.setItem('viewId', viewId.data.userId)
-
-
+					localStorage.setItem('viewId', viewId.data.userId)
 
 
 
-				this.$router
-					.push({ path: '/users/' + this.searchUsername + '/view' })
-					.then(() => { this.$router.go() })
+
+
+					this.$router
+						.push({ path: '/users/' + this.searchUsername + '/view' })
+						.then(() => { this.$router.go() })
+
+				}catch(error) {
+						continue;
+				}
+				
 			}else{
 				this.viewProfile()
 			}
@@ -76,7 +83,9 @@ export default {
 
 
 		async getStream() {
-				let response = await this.$axios.get("users/" + localStorage.getItem("token") + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
+
+			try{
+				let response = await this.$axios.get("users/" + this.token + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
 					headers: {
 						Authorization:  this.token
 					}
@@ -119,6 +128,9 @@ export default {
 					}
 				}
 
+			} catch (e) {
+				alert(e.response.data)
+			}
 		},
 
 		
@@ -262,7 +274,7 @@ export default {
 					}
 								
 
-							}
+			 }
 
 
 

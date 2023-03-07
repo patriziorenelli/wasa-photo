@@ -66,16 +66,16 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 
 		case -1:
 			ctx.Logger.Error("User not exist")
-			w.WriteHeader(http.StatusUnauthorized)
-
+			http.Error(w, "User not exist", http.StatusBadRequest)
 		case -2:
 			ctx.Logger.Error("Error during execution")
-			w.WriteHeader(http.StatusUnauthorized)
+			http.Error(w, "Error during execution", http.StatusInternalServerError)
 		}
 
 	} else {
 		ctx.Logger.Error(Fail_Auth)
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, Fail_Auth, http.StatusBadRequest)
+
 	}
 
 }

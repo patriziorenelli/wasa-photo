@@ -538,14 +538,6 @@ paths:
 
             '407': {$ref: "#/components/responses/photoNotFound"}              
 
-
-
-
-
-
-
-
-
   /users/{userId}/stream:
 
       get:
@@ -602,6 +594,7 @@ paths:
                       Comment: 502
 
           '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+          '400': { $ref: "#/components/responses/UserIdNotFound" }    
 
 
 
@@ -710,6 +703,7 @@ paths:
       description:  |
         If user identified by userId in authentication doesn't exist or user identified by the username passed doesn't exist, error is returned.
         If user identified by userId in authentication exist and user identified by the username passed exist, the userId of the user is ruterned.
+      operationId: getUserId
       security:
         - BearerAuth: []
       parameters:
