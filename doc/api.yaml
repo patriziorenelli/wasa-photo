@@ -777,7 +777,7 @@ components:
       description: Searched username not found
 
     UserIdNotFound:
-      description: User id not found.
+      description: User id not found
 
     UserNotAuthorized:
       description: User not authorized 
