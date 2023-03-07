@@ -630,3 +630,20 @@ hr {
 	margin-top: 1%;
 	height: 25px;
 }
+
+
+
+.moreButton{
+	position: relative;
+	width: 100%;
+	float: right;
+	height: 100%;
+	margin-top: 3%;
+	margin-left: 10%;
+	font-size:xx-large;
+	background-color: transparent;
+	border: 1px;
+	cursor: pointer;
+}
+
+

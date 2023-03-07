@@ -1,8 +1,5 @@
 <script>
-import LogModal from "../components/Logmodal.vue";
-
 export default {
-	components: { LogModal },
 	data: function () {
 		return {
 			errormsg: null,
@@ -61,7 +58,6 @@ export default {
 
 		async searchUser() {
 			if (this.searchUsername != this.username){
-		
 				localStorage.setItem('viewName', this.searchUsername);
 				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
 						headers: {
@@ -87,12 +83,20 @@ export default {
 
     
         async searcUserInfo(){
-            let response = await this.$axios.get("users/" + this.token + "/profile", {
-						headers: {
-							Authorization:  localStorage.getItem("token")
-						}
-		    })
-            this.profile = response.data
+			try{
+				let response = await this.$axios.get("users/" + this.token + "/profile", {
+								headers: {
+									Authorization:  localStorage.getItem("token")
+								}
+				})
+				this.profile = response.data
+			}catch(e){
+
+				alert(e.response.status)
+
+
+			}
+          
         },
 
 		

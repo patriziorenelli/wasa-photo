@@ -24,7 +24,6 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	ris, userProfile := rt.db.GetUserProfile(authI, reqUserI)
 
 	switch ris {
-
 	case 0:
 		// user, _ := json.Marshal(userProfile)
 		w.Header().Set("Content-Type", "application/json")
@@ -32,23 +31,23 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 	case -1:
 		ctx.Logger.Error("User not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, "User not exist", http.StatusBadRequest)
 
 	case -2:
-		ctx.Logger.Error("User you want to know the following  does not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error("User you want to know the information  does not exist")
+		http.Error(w, "User you want to know the information  does not exist", http.StatusBadRequest)
 
 	case -3:
-		ctx.Logger.Error("User you want to know the following has banned you")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error("User you want to know the infromation has banned you")
+		http.Error(w, "User you want to know the infromation has banned you", http.StatusForbidden)
 
 	case -4:
-		ctx.Logger.Error("You ban the user you want to know the following")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error("You ban the user you want to know the information")
+		http.Error(w, "You ban the user you want to know the information", http.StatusMethodNotAllowed)
 
 	case -5:
 		ctx.Logger.Error("Error during execution")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, "Error during execution", http.StatusInternalServerError)
 
 	}
 }

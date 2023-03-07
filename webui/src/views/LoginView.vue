@@ -1,6 +1,5 @@
 <script>
 export default {
-    components: {},
     data: function () {
         return {
             errormsg: null,
@@ -13,12 +12,17 @@ export default {
             if (this.username == "") {
                 this.errormsg = "You must enter the username first";
             } else {
-            
+                try{
                     let response = await this.$axios.post("/session", { username: this.username })
                     localStorage.setItem("token", response.data.userId);
                     localStorage.setItem("username", this.username);
 
                     this.$router.push({ path: '/session' })
+                } catch (e) {
+                    alert(e.response.data)
+                    
+                }
+                
             }
 
         }

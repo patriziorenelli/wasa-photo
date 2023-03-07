@@ -16,14 +16,11 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	// controllo che l'username passato sia nel formato corretto
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+	if err != nil || !user.UsernameIsValid()  {
+		ctx.Logger.WithError(err).Error("Username not valid")
+		http.Error(w, "Username not valid", http.StatusInternalServerError)
 		return
-	} else if !user.UsernameIsValid() {
-
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	} 
 
 	dbUser, err := rt.db.DoLogin(user.UsernameToDatabase())
 
@@ -36,11 +33,11 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 		if err != nil && dbUser.ID == -1 {
 			ctx.Logger.WithError(err).Error("Error during creation user")
-			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Error during creation user", http.StatusInternalServerError)
 			return
 		} else if err != nil && dbUser.ID == -2 {
 			ctx.Logger.WithError(err).Error("Error during extract new userId")
-			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Error during extract new userId", http.StatusInternalServerError)
 			return
 		}
 
@@ -49,7 +46,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	} else if err != nil && dbUser.ID == -1 {
 		ctx.Logger.WithError(err).Error("Error during find userId")
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Error during find userId", http.StatusInternalServerError)
 		return
 
 	} else {
@@ -62,6 +59,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	// Send the output to the user.
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(userId)
 
 }

@@ -202,20 +202,45 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO user(id, username) VALUES (0000003, "Marisina");
 
 
-				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "2023-02-28T21:50:02+01:00" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "2022-02-28T21:50:02+01:00");
-				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "2023-02-12T21:50:02+01:00" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "2022-12-28T21:50:02+01:00");
+				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "2023-05-29T21:50:02+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "2023-05-29T21:50:02+01:00");
+				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "2023-05-29T21:50:02+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "2023-05-29T21:50:02+01:00");
 
-				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000004,  "2023-02-28T21:50:02+01:00" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000011, 0000004,  "2023-02-28T21:50:27+01:00" );
-				   INSERT INTO post(id, uid, date) VALUES (0000000012, 0000004,  "2023-02-28T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000022, 0000001,  "2023-05-29T21:58:36+01:00" );
 
-				   
+
+				   INSERT INTO post(id, uid, date) VALUES (0000000010, 0000004,  "2023-02-29T21:50:02+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000011, 0000004,  "2023-02-29T21:50:27+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000012, 0000004,  "2023-02-29T21:58:36+01:00" );
+
+
+				   INSERT INTO post(id, uid, date) VALUES (0000000001, 0000003,  "2023-05-29T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000002, 0000003,  "2023-05-29T23:56:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000004, 0000003,  "2023-05-29T21:55:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000007, 0000003,  "2023-05-28T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000008, 0000003,  "2023-05-27T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000013, 0000003,  "2023-03-28T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000014, 0000003,  "2023-03-26T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000015, 0000003,  "2023-03-18T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000016, 0000003,  "2023-03-8T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000017, 0000003,  "2023-03-13T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000018, 0000003,  "2023-03-15T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000019, 0000003,  "2023-03-11T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000020, 0000003,  "2023-03-7T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000021, 0000003,  "2023-03-9T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000025, 0000003,  "2023-03-9T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000023, 0000003,  "2023-03-9T21:58:36+01:00" );
+				   INSERT INTO post(id, uid, date) VALUES (0000000024, 0000003,  "2023-03-9T21:58:36+01:00" );
+
+
+
 				   INSERT INTO follow(uid, uid2) VALUES (000004, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
+				   INSERT INTO follow(uid, uid2) VALUES (000004, 000003);
+
+
 				   INSERT INTO ban(uid, uid2) VALUES (0000003,0000002 );
-				
 
 
 

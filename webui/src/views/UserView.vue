@@ -1,8 +1,5 @@
 <script>
-import LogModal from "../components/Logmodal.vue";
-
 export default {
-	components: { LogModal },
 	data: function () {
 		return {
 			errormsg: null,
