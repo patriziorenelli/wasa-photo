@@ -18,4 +18,3 @@ const photoNotFound = "Photo Id not found"
 const LikeNotFound = "User didn't like the photo"
 const commentNotFound = "Comment doesn't exist"
 const InvalidFormat = "Invalid file format"
-

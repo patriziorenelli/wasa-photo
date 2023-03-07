@@ -141,20 +141,28 @@ export default {
 			}
 		},
 		async likePost(val){
-			let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
-					headers: {
-							Authorization: this.token
-					}
-		    })
-			location.reload();
+			try{
+				let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
+						headers: {
+								Authorization: this.token
+						}
+				})
+				location.reload();
+			}catch(e){
+				alert(e.response.data)
+			}
 		},
 		async unlikePost(val){
-			let response = await this.$axios.delete("photo/" + val + "/like/" + this.token, {
-									headers: {
-										Authorization: this.token
-									}
-						})
-			location.reload();
+			try{
+				let response = await this.$axios.delete("photo/" + val + "/like/" + this.token, {
+										headers: {
+											Authorization: this.token
+										}
+							})
+				location.reload();
+			}catch(e){
+				alert(e.response.data)
+			}
 		},
 		async showComment(val){
 			let response = await this.$axios.get("photo/" + val + "/comment", {

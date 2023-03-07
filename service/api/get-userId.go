@@ -21,8 +21,8 @@ func (rt *_router) getUserId(w http.ResponseWriter, r *http.Request, ps httprout
 	user.USERNAME = (r.URL.Query()).Get("username")
 
 	if !user.UsernameIsValid() {
-		ctx.Logger.Error(UsernameNotValid )
-		http.Error(w, UsernameNotValid , http.StatusLengthRequired)
+		ctx.Logger.Error(UsernameNotValid)
+		http.Error(w, UsernameNotValid, http.StatusLengthRequired)
 		return
 	}
 
@@ -40,11 +40,11 @@ func (rt *_router) getUserId(w http.ResponseWriter, r *http.Request, ps httprout
 		http.Error(w, UsernameNotFound, http.StatusNotFound)
 	case -2:
 		ctx.Logger.Error(UserIdNotFound)
-		http.Error(w, UserIdNotFound , http.StatusBadRequest)
+		http.Error(w, UserIdNotFound, http.StatusBadRequest)
 	case -3:
 		ctx.Logger.Error(ErrorServerExecution)
 		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
-		
+
 	}
 
 }

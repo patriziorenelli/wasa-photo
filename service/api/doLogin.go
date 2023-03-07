@@ -16,11 +16,11 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	// controllo che l'username passato sia nel formato corretto
-	if err != nil || !user.UsernameIsValid()  {
+	if err != nil || !user.UsernameIsValid() {
 		ctx.Logger.WithError(err).Error("Username not valid")
 		http.Error(w, "Username not valid", http.StatusInternalServerError)
 		return
-	} 
+	}
 
 	dbUser, err := rt.db.DoLogin(user.UsernameToDatabase())
 

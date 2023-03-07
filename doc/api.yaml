@@ -290,6 +290,7 @@ paths:
             '403': {$ref: "#/components/responses/UserIdBanned"}
             '405': {$ref: "#/components/responses/userId2Banned"} 
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
 
 
     delete:
@@ -318,6 +319,8 @@ paths:
             '407': {$ref: "#/components/responses/photoNotFound"} 
             '408': {$ref: "#/components/responses/LikeNotFound"} 
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
+
 
   /photo/{photoId}/comment:
     parameters:
@@ -596,6 +599,7 @@ paths:
 
           '500': {$ref: "#/components/responses/ErrorServerExecution"}  
           '400': { $ref: "#/components/responses/UserIdNotFound" }    
+          '502': {$ref: "#/components/responses/FailedAutentication"}  
 
 
 
@@ -770,9 +774,13 @@ paths:
 components:  
 
   responses:
+
     UsernameNotValid:
      description: Username not valid
 
+    FailedAutentication:
+      description: Failed authentication
+      
     UsernameNotFound:
       description: Searched username not found
 

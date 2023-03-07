@@ -75,7 +75,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 
 	} else {
 		ctx.Logger.Error(Fail_Auth)
-		http.Error(w, Fail_Auth, http.StatusBadRequest)
+		http.Error(w, Fail_Auth, http.StatusBadGateway)
 
 	}
 
