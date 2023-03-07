@@ -22,28 +22,29 @@ func (rt *_router) getUserId(w http.ResponseWriter, r *http.Request, ps httprout
 
 	if !user.UsernameIsValid() {
 		ctx.Logger.Error("Username not valid")
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Username not valid", http.StatusLengthRequired)
 		return
 	}
 
-	dbUser, errId := rt.db.GetUsreId(auth, user.UsernameToDatabase())
+	dbUser, errId := rt.db.GetUserId(auth, user.UsernameToDatabase())
 
 	switch errId {
 
 	case 0:
 		userId.USERID = dbUser.USERID
 		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
 		_ = json.NewEncoder(w).Encode(userId)
 	case -1:
 		ctx.Logger.Error("Username doesn't exist")
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Username doesn't exist", http.StatusNotFound)
 	case -2:
 		ctx.Logger.Error("UserId doesn't exist")
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "UserId doesn't exist", http.StatusBadRequest)
 	case -3:
 		ctx.Logger.Error("Error during execution")
-		w.WriteHeader(http.StatusInternalServerError)
-
+		http.Error(w, "Error during execution", http.StatusInternalServerError)
+		
 	}
 
 }

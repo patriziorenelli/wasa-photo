@@ -109,6 +109,7 @@ paths:
 
             '400': { $ref: "#/components/responses/UserIdNotFound" }
             '401': { $ref: "#/components/responses/UserNotAuthorized" }
+            '411': { $ref: "#/components/responses/UsernameNotValid" }
 
 
   /users/{userId}/followUser/{userId2}: 
@@ -629,6 +630,8 @@ paths:
           '405': {$ref: "#/components/responses/userId2Banned"} 
           '403': {$ref: "#/components/responses/UserIdBanned"}
           '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+          '404': { $ref: "#/components/responses/UserId2NotFound" }    
+
 
   /users/{userId}/followers:
        get:
@@ -724,6 +727,9 @@ paths:
                   userId: 111112
           '404': { $ref: "#/components/responses/UsernameNotFound" }    
           '400': { $ref: "#/components/responses/UserIdNotFound" }    
+          '500': {$ref: "#/components/responses/ErrorServerExecution"} 
+          '411': { $ref: "#/components/responses/UsernameNotValid" }
+
 
         
 
@@ -764,6 +770,8 @@ paths:
 components:  
 
   responses:
+    UsernameNotValid:
+     description: Username not valid
 
     UsernameNotFound:
       description: Searched username not found

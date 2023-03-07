@@ -30,8 +30,8 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		_ = json.NewEncoder(w).Encode(userProfile)
 
 	case -1:
-		ctx.Logger.Error("User not exist")
-		http.Error(w, "User not exist", http.StatusBadRequest)
+		ctx.Logger.Error("User id not found")
+		http.Error(w, "User id not found", http.StatusBadRequest)
 
 	case -2:
 		ctx.Logger.Error("User you want to know the information  does not exist")

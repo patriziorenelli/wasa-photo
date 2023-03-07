@@ -146,7 +146,7 @@ type AppDatabase interface {
 	DeletePhoto(userId int, photoId int) int
 
 	// Ritorno lo userId partendo dall'username di un utente
-	GetUsreId(userId int, name Username) (UserId, int)
+	GetUserId(userId int, name Username) (UserId, int)
 
 	// Ritorna il profilo di un utente
 	GetUserProfile(userId int, userId2 int) (int, CompleteUser)
