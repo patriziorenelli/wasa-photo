@@ -66,11 +66,11 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 			_ = json.NewEncoder(w).Encode(photoList)
 
 		case -1:
-			ctx.Logger.Error("User not exist")
-			http.Error(w, "User not exist", http.StatusBadRequest)
+			ctx.Logger.Error(UserIdNotFound)
+			http.Error(w, UserIdNotFound, http.StatusBadRequest)
 		case -2:
-			ctx.Logger.Error("Error during execution")
-			http.Error(w, "Error during execution", http.StatusInternalServerError)
+			ctx.Logger.Error(ErrorServerExecution)
+			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		}
 
 	} else {
