@@ -41,7 +41,7 @@ func (db *appdbimpl) GetUserFollowers(userId int, userId2 int) (int, []UserId) {
 	for row.Next() {
 		err = row.Scan(&follow.UID1, &follow.UID2)
 		if err == nil {
-			followers = append(followers, UserId{int(follow.UID1)})
+			followers = append(followers, UserId{follow.UID1})
 		} else {
 			return -5, nil
 		}
@@ -92,7 +92,7 @@ func (db *appdbimpl) GetUserFollowing(userId int, userId2 int) (int, []UserId) {
 	for row.Next() {
 		err = row.Scan(&follow.UID1, &follow.UID2)
 		if err == nil {
-			followers = append(followers, UserId{int(follow.UID2)})
+			followers = append(followers, UserId{follow.UID2})
 		} else {
 			return -5, nil
 		}
