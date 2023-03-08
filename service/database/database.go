@@ -206,7 +206,6 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO post(id, uid, date) VALUES (0000000005, 0000001,  "2023-05-29T21:50:02+01:00");
 				   INSERT INTO post(id, uid, date) VALUES (0000000006, 0000001,  "2023-05-29T21:50:02+01:00" );
 				   INSERT INTO post(id, uid, date) VALUES (0000000009, 0000001,  "2023-05-29T21:50:02+01:00");
-
 				   INSERT INTO post(id, uid, date) VALUES (0000000022, 0000001,  "2023-05-29T21:58:36+01:00" );
 
 

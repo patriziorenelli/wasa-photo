@@ -43,7 +43,7 @@ func (db *appdbimpl) GetPhotoLike(userId int, photoId int) (int, []UserId) {
 	for row.Next() {
 		err = row.Scan(&like.PHID, &like.UID)
 		if err == nil {
-			userLike = append(userLike, UserId{int(like.UID)})
+			userLike = append(userLike, UserId{like.UID})
 		} else {
 			return -5, nil
 		}

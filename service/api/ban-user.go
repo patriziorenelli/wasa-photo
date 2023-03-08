@@ -18,7 +18,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	reqUser := strings.Split(r.RequestURI, "/")[2]
 	banId := strings.Split(r.RequestURI, "/")[4]
 
-	// Se l'autenticazione va a buon fine e si sta cercando di bannare un altro user, si invia la richiesta di follow
+	// Se l'autenticazione va a buon fine e si sta cercando di bannare un altro user, si invia la richiesta di ban
 	if auth == reqUser && auth != banId {
 
 		reqUser, _ := strconv.Atoi(reqUser)

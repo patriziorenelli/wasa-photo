@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"git.sapienzaapps.it/gamificationlab/wasa-fontanelle/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -70,9 +70,8 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	//  CONVERSIONE E SCRITTURA RITORNO
-
 	reader := bufio.NewReader(file)
-	content, _ := ioutil.ReadAll(reader)
+	content, _ := io.ReadAll(reader)
 
 	// Encode as base64.
 	encoded := base64.StdEncoding.EncodeToString(content)
