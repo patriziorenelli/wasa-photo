@@ -47,6 +47,10 @@ func (db *appdbimpl) GetUserFollowers(userId int, userId2 int) (int, []UserId) {
 		}
 	}
 
+	if row.Err() != nil {
+		return -5, nil
+	}
+
 	return 0, followers
 
 }
@@ -96,6 +100,10 @@ func (db *appdbimpl) GetUserFollowing(userId int, userId2 int) (int, []UserId) {
 		} else {
 			return -5, nil
 		}
+	}
+
+	if row.Err() != nil {
+		return -5, nil
 	}
 
 	return 0, followers
@@ -171,6 +179,10 @@ func (db *appdbimpl) GetUserPhotos(userId int, userId2 int) (int, []CompletePost
 		// Aggiungo il post all'array
 		posts = append(posts, post)
 
+	}
+
+	if row.Err() != nil {
+		return -5, nil
 	}
 
 	return 0, posts

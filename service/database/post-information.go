@@ -49,6 +49,10 @@ func (db *appdbimpl) GetPhotoLike(userId int, photoId int) (int, []UserId) {
 		}
 	}
 
+	if row.Err() != nil {
+		return -5, nil
+	}
+
 	return 0, userLike
 }
 
@@ -100,6 +104,10 @@ func (db *appdbimpl) GetPhotoComment(userId int, photoId int) (int, []Comment) {
 		} else {
 			return -5, nil
 		}
+	}
+
+	if row.Err() != nil {
+		return -5, nil
 	}
 
 	return 0, commentList

@@ -63,6 +63,11 @@ func (db *appdbimpl) GetMyStream(userId int, limit int, startIndex int) (int, []
 
 	}
 
+	// Aggiunta del check errore
+	if row.Err() != nil {
+		return -2, nil
+	}
+
 	return 0, posts
 
 }
