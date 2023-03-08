@@ -165,19 +165,23 @@ export default {
 			}
 		},
 		async showComment(val){
-			let response = await this.$axios.get("photo/" + val + "/comment", {
-						headers: {
-							Authorization: this.token
-						}
-					})
-			this.photoComment = response.data;
-			if(response.data == null){
-				this.c = 0;
-			}else{
-				this.c = 1;
+			try{
+				let response = await this.$axios.get("photo/" + val + "/comment", {
+							headers: {
+								Authorization: this.token
+							}
+						})
+				this.photoComment = response.data;
+				if(response.data == null){
+					this.c = 0;
+				}else{
+					this.c = 1;
+				}
+				this.photoId = val;
+				document.getElementById("commentForm").style.display = "block";
+			} catch(e){
+				alert(e.response.data)
 			}
-			this.photoId = val;
-			document.getElementById("commentForm").style.display = "block";
 		},
 		async closeComment(){
 			document.getElementById("commentForm").style.display = "none";

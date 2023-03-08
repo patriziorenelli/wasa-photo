@@ -29,7 +29,7 @@ func (db *appdbimpl) BanUser(userId int, banId int) (int, Username) {
 	}
 
 	// BAN DELL'UTENTE  E SMETTERE DI SEGUIRE L'UTENTE banId E VERIFICARNE IL BUON ESITO
-	_, err := db.c.Exec(`INSERT INTO ban VALUES (? , ?); DELETE FROM follow WHERE uid = ? AND uid2 = ?`, userId, banId, userId, banId)
+	_, err := db.c.Exec(`INSERT INTO ban VALUES (? , ?); DELETE FROM follow WHERE uid = ? AND uid2 = ?; DELETE FROM follow WHERE uid = ? AND uid2 = ?;`, userId, banId, userId, banId, banId, userId)
 
 	// Caso in cui già si ha bannato l'user
 	if err != nil && (err.Error()) == "UNIQUE constraint failed: ban.uid, ban.uid2" {
