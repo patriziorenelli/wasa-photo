@@ -188,12 +188,16 @@ export default {
 			this.photoComment = [];
 		},
 		async deleteComment(commentId, photoId){
-			let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
-						headers: {
-							Authorization: this.token
-						}
-					})
-			location.reload();
+			try{
+				let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
+							headers: {
+								Authorization: this.token
+							}
+						})
+				location.reload();
+			}catch (e){
+				alert(e.response.data)
+			}
 		},
 		async postComment(pId){
 			let response = await this.$axios.post("photo/" + pId + "/comment", {text: this.inputCommentText}, {
