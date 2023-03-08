@@ -1095,20 +1095,6 @@ components:
         description: "Single id comment"
         example: 456 
 
-    username:
-      in: path
-      name: username
-      required: true
-      description: User's username 
-      schema:
-        type: string 
-        description: User's UserName 
-        example: "Franchino_12"
-        pattern: '^[a-zA-Z0-9_.-]*$' 
-        minLength: 6 
-        maxLength: 16 
-
-
   securitySchemes: 
     BearerAuth: 
       description: login only as your user id 
