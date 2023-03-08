@@ -189,7 +189,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
 		}
 
-		const q = `PRAGMA foreign_keys = ON`
+		const q = `PRAGMA foreign_keys = ON;`
 		_, err = db.Exec(q)
 
 		if err != nil {
@@ -237,6 +237,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 				   INSERT INTO follow(uid, uid2) VALUES (000004, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000002, 000001);
 				   INSERT INTO follow(uid, uid2) VALUES (000004, 000003);
+				   INSERT INTO follow(uid, uid2) VALUES (000001, 000004);
 
 
 				   INSERT INTO ban(uid, uid2) VALUES (0000003,0000002 );

@@ -29,7 +29,7 @@ func (db *appdbimpl) LikePhoto(userId int, photoId int) int {
 	}
 
 	// Aggiungo il like al post
-	_, err := db.c.Exec(`INSERT INTO like VALUES (? , ?)`, photoId, userId)
+	_, err := db.c.Exec(`PRAGMA foreign_keys = ON; INSERT INTO like VALUES (? , ?)`, photoId, userId)
 
 	// Caso in cui ci sia già quel like
 	if err != nil && (err.Error()) == "UNIQUE constraint failed: like.phid, like.uid" {

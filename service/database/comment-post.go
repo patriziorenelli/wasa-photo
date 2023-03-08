@@ -36,7 +36,7 @@ func (db *appdbimpl) CommentPhoto(userId int, photoId int, text string) int {
 	date := time.Now().Format(time.RFC3339)
 
 	// Aggiungo il commento al post
-	_, err := db.c.Exec(`INSERT INTO comment (uid, phid, text, date) VALUES (? , ?, ?, ?)`, userId, photoId, text, date)
+	_, err := db.c.Exec(`PRAGMA foreign_keys = ON; INSERT INTO comment (uid, phid, text, date) VALUES (? , ?, ?, ?)`, userId, photoId, text, date)
 
 	// Errore durante il salvataggio del commento
 	if err != nil {
