@@ -200,12 +200,16 @@ export default {
 			}
 		},
 		async postComment(pId){
-			let response = await this.$axios.post("photo/" + pId + "/comment", {text: this.inputCommentText}, {
-						headers: {
-							Authorization: this.token
-						}
-			})
-			location.reload();
+			try{
+				let response = await this.$axios.post("photo/" + pId + "/comment", {text: this.inputCommentText}, {
+							headers: {
+								Authorization: this.token
+							}
+				})
+				location.reload();
+			}catch (e){
+				alert(e.response.data)
+			}
 		},
 		async loadMore(){
 			let response = await this.$axios.get("users/" + localStorage.getItem("token") + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
