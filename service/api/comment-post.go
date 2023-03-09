@@ -45,27 +45,24 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 		var risultato Result
 		risultato.TEXT = Done
 		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
 		_ = json.NewEncoder(w).Encode(risultato)
 
 	case -1:
-		ctx.Logger.Error("User not exist")
-		w.WriteHeader(http.StatusUnauthorized)
-
+		ctx.Logger.Error(UserIdNotFound)
+		http.Error(w, UserIdNotFound, http.StatusBadRequest)
 	case -2:
-		ctx.Logger.Error("The post doesn't exist")
-		w.WriteHeader(http.StatusUnauthorized)
-
+		ctx.Logger.Error(photoNotFound)
+		http.Error(w, photoNotFound, http.StatusProxyAuthRequired)
 	case -3:
-		ctx.Logger.Error("You banned other user")
-		w.WriteHeader(http.StatusUnauthorized)
-
+		ctx.Logger.Error(userId2Banned)
+		http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 	case -4:
-		ctx.Logger.Error("The other user blocked you")
-		w.WriteHeader(http.StatusUnauthorized)
-
+		ctx.Logger.Error(UserIdBanned)
+		http.Error(w, UserIdBanned, http.StatusForbidden)
 	case -5:
-		ctx.Logger.Error("Error during execution")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 
 	}
 }
