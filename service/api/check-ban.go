@@ -46,12 +46,12 @@ func (rt *_router) checkUserBan(w http.ResponseWriter, r *http.Request, ps httpr
 			http.Error(w, UserIdBanned, http.StatusForbidden)
 
 		case -4:
-			ctx.Logger.Error(ErrorServerExecution)
-			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
+			ctx.Logger.Error("You didn't ban the user")
+			http.Error(w, "You didn't ban the user", http.StatusInternalServerError)
 		}
 	} else {
 		ctx.Logger.Error(Fail_Auth)
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, Fail_Auth, http.StatusBadGateway)
 	}
 
 }
