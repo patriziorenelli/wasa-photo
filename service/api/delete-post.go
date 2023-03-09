@@ -38,19 +38,18 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	case 0:
 		// tutto ok faccio eliminazione del file
 		risultato.TEXT = Done
-
 	case -1:
 		// foto non esistente
-		ctx.Logger.Error("The photo does not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(photoNotFound)
+		http.Error(w, photoNotFound, http.StatusProxyAuthRequired)
 	case -2:
 		// utente autenticato non è il proprietario del file
-		ctx.Logger.Error("The user cannot delete the photo")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserNotAuthorized)
+		http.Error(w, UserNotAuthorized, http.StatusUnauthorized)
 	case -3:
 		// errore durante l'eliminazione
-		ctx.Logger.Error("Error while deleting")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 	}
 
 	if ris != 0 {
@@ -60,7 +59,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	mydir, err := os.Getwd()
 	if err != nil {
 		ctx.Logger.Error("Error during directory creation")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		return
 	}
 
@@ -69,10 +68,10 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	err = os.Remove(path)
 	if err != nil {
 		ctx.Logger.Error("Error while deleting the photo")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(risultato)
 }
