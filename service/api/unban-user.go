@@ -33,29 +33,28 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 			_ = json.NewEncoder(w).Encode(username)
 
 		case -1:
-			ctx.Logger.Error("User not exist")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(UserIdNotFound)
+			http.Error(w, UserIdNotFound, http.StatusBadRequest)
 
 		case -2:
-			ctx.Logger.Error("User you want to unban does not exist")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(userId2Banned)
+			http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 
 		case -3:
-			ctx.Logger.Error("User you want to unban banned you")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(UserIdBanned)
+			http.Error(w, UserIdBanned, http.StatusForbidden)
 
 		case -4:
 			ctx.Logger.Error("User wasn't banned")
 			w.WriteHeader(http.StatusUnauthorized)
 
 		case -5:
-			ctx.Logger.Error("Error during execution")
-			w.WriteHeader(http.StatusUnauthorized)
-
+			ctx.Logger.Error(ErrorServerExecution)
+			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		}
 
 	} else {
 		ctx.Logger.Error(Fail_Auth)
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, Fail_Auth, http.StatusBadGateway)
 	}
 }

@@ -212,43 +212,47 @@ export default {
 			}
 		},
 		async loadMore(){
-			let response = await this.$axios.get("users/" + localStorage.getItem("token") + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
+			try{
+				let response = await this.$axios.get("users/" + localStorage.getItem("token") + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
+									headers: {
+										Authorization:  this.token
+									}
+								})
+								this.startIndex = this.startIndex + this.limit;
+				for(var i = 0; i < (response.data).length; i++){
+					this.photoStream.push( (response.data)[i]);
+				}
+				for(var i = 0; i < (response.data).length; i++){
+									
+					try{
+							let fotoFile = await this.$axios.get("user/" + (response.data)[i].userId + "/photo/" + (response.data)[i].photoId,{
 								headers: {
-									Authorization:  this.token
+											Authorization:  this.token
 								}
 							})
-							this.startIndex = this.startIndex + this.limit;
-			for(var i = 0; i < (response.data).length; i++){
-				this.photoStream.push( (response.data)[i]);
-			}
-			for(var i = 0; i < (response.data).length; i++){
-								
-				try{
-						let fotoFile = await this.$axios.get("user/" + (response.data)[i].userId + "/photo/" + (response.data)[i].photoId,{
-							headers: {
-										Authorization:  this.token
-							}
-						})
-						this.userPhoto.set((response.data)[i].photoId,fotoFile.data.image );
-						//-- Costruisco array con gli id degli utenti che hanno messo mi piace alla foto 
-									
-						let users = await this.$axios.get("photo/" + (response.data)[i].photoId  +"/likes", {
-							headers: {
-										Authorization:  this.token
-										}
-						})
-						if ( users.data ){
-							for(var x = 0; x < (users.data).length; x++){
-								if ( users.data[x].userId == this.token){
-									this.photoLike.push((response.data)[i].photoId)
+							this.userPhoto.set((response.data)[i].photoId,fotoFile.data.image );
+							//-- Costruisco array con gli id degli utenti che hanno messo mi piace alla foto 
+										
+							let users = await this.$axios.get("photo/" + (response.data)[i].photoId  +"/likes", {
+								headers: {
+											Authorization:  this.token
+											}
+							})
+							if ( users.data ){
+								for(var x = 0; x < (users.data).length; x++){
+									if ( users.data[x].userId == this.token){
+										this.photoLike.push((response.data)[i].photoId)
+									}
 								}
 							}
+						}catch (error) {
+							continue;
 						}
-					}catch (error) {
-						continue;
-					}
-								
-							}
+									
+								}
+			}catch(e){
+				alert(e.response.data)
+			}
 		},
 	},
 	mounted() {

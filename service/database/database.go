@@ -198,8 +198,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 		popola := `INSERT INTO user(id, username) VALUES (0000004, "marione_12");
 				   INSERT INTO user(id, username) VALUES (0000001, "luca_33");
-				   INSERT INTO user(id, username) VALUES (0000002, "Giorgia_Na");
-				   INSERT INTO user(id, username) VALUES (0000003, "Marisina");
+				   INSERT INTO user(id, username) VALUES (0000002, "giorgia");
+				   INSERT INTO user(id, username) VALUES (0000003, "marisina");
 
 
 				   INSERT INTO post(id, uid, date) VALUES (0000000003, 0000001,  "2023-05-29T21:50:02+01:00" );
