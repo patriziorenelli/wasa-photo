@@ -38,24 +38,24 @@ func (rt *_router) getUserFollowing(w http.ResponseWriter, r *http.Request, ps h
 		_ = json.NewEncoder(w).Encode(arF)
 
 	case -1:
-		ctx.Logger.Error("User not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserIdNotFound)
+		http.Error(w, UserIdNotFound, http.StatusBadRequest)
 
 	case -2:
-		ctx.Logger.Error("User you want to know the following  does not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserId2NotFound)
+		http.Error(w, UserId2NotFound, http.StatusNotFound)
 
 	case -3:
-		ctx.Logger.Error("User you want to know the following has banned you")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserIdBanned)
+		http.Error(w, UserIdBanned, http.StatusForbidden)
 
 	case -4:
-		ctx.Logger.Error("You ban the user you want to know the following")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(userId2Banned)
+		http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 
 	case -5:
-		ctx.Logger.Error("Error during execution")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 
 	}
 
