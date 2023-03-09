@@ -18,10 +18,14 @@ func (db *appdbimpl) GetMyStream(userId int, limit int, startIndex int) (int, []
 								AND post.uid NOT IN (
 									SELECT uid2 FROM ban 
 									WHERE ban.uid = ?
+
+								)AND post.uid NOT IN (
+									SELECT uid FROM ban 
+									WHERE ban.uid2 = ?
 								)
 								ORDER BY date DESC
 								LIMIT ?
-								OFFSET ?`, userId, userId, limit, startIndex)
+								OFFSET ?`, userId, userId, userId, limit, startIndex)
 
 	if err != nil {
 		return -2, nil
