@@ -9,8 +9,7 @@ import (
 	"strings"
 )
 
-// rt.router.GET("/users/:userId/profile", rt.wrap(rt.getUserProfile))
-
+// Va bene
 func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")
@@ -27,27 +26,28 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	case 0:
 		// user, _ := json.Marshal(userProfile)
 		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(userProfile)
 
 	case -1:
-		ctx.Logger.Error("User id not found")
-		http.Error(w, "User id not found", http.StatusBadRequest)
+		ctx.Logger.Error(UserIdNotFound)
+		http.Error(w, UserIdNotFound, http.StatusBadRequest)
 
 	case -2:
-		ctx.Logger.Error("User you want to know the information  does not exist")
-		http.Error(w, "User you want to know the information  does not exist", http.StatusBadRequest)
+		ctx.Logger.Error(UserId2NotFound)
+		http.Error(w, UserId2NotFound, http.StatusNotFound)
 
 	case -3:
-		ctx.Logger.Error("User you want to know the infromation has banned you")
-		http.Error(w, "User you want to know the infromation has banned you", http.StatusForbidden)
+		ctx.Logger.Error(UserIdBanned)
+		http.Error(w, UserIdBanned, http.StatusForbidden)
 
 	case -4:
-		ctx.Logger.Error("You ban the user you want to know the information")
-		http.Error(w, "You ban the user you want to know the information", http.StatusMethodNotAllowed)
+		ctx.Logger.Error(userId2Banned)
+		http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 
 	case -5:
-		ctx.Logger.Error("Error during execution")
-		http.Error(w, "Error during execution", http.StatusInternalServerError)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 
 	}
 }
