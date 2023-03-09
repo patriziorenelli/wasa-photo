@@ -30,7 +30,7 @@ func (db *appdbimpl) GetPhotoLike(userId int, photoId int) (int, []UserId) {
 	var like Like
 
 	// Prendo i like alla foto
-	row, err := db.c.Query(`SELECT * FROM like  WHERE phid = ?`, photoId)
+	row, err := db.c.Query(`SELECT * FROM like  WHERE phid = ? AND like.uid NOT IN ( SELECT uid2 FROM ban WHERE uid = ? ) AND ? NOT IN ( SELECT uid2 FROM ban WHERE uid = like.uid ); `, photoId, userId, userId)
 
 	// Errore nella query
 	if err != nil {
@@ -82,8 +82,6 @@ func (db *appdbimpl) GetPhotoComment(userId int, photoId int) (int, []Comment) {
 	if db.CheckBan(userId, post.USERID) == 0 {
 		return -4, nil
 	}
-
-
 
 	// Prendo i commenti
 	row, err := db.c.Query(`SELECT cid, uid, phid, text, date, username FROM comment, user WHERE 
