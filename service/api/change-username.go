@@ -25,11 +25,12 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		err := json.NewDecoder(r.Body).Decode(&user)
 		// Controllo che l'username sia valido
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
+			ctx.Logger.Error(ErrorServerExecution)
+			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 			return
 		} else if !user.UsernameIsValid() {
-			ctx.Logger.Error("Username not valid")
-			w.WriteHeader(http.StatusBadRequest)
+			ctx.Logger.Error(UsernameNotValid)
+			http.Error(w, UsernameNotValid, http.StatusLengthRequired)
 			return
 		}
 		// Converto l'id utente in un int
@@ -43,23 +44,24 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 			var username Username
 			username.USERNAME = user.USERNAME
 			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
 			_ = json.NewEncoder(w).Encode(username)
 
 		case -1:
-			ctx.Logger.Error("User not exist")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(UserIdNotFound)
+			http.Error(w, UserIdNotFound, http.StatusBadRequest)
 
 		case -2:
 			ctx.Logger.Error("Username already used")
 			w.WriteHeader(http.StatusUnauthorized)
 
 		case -3:
-			ctx.Logger.Error("Error during execution")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(ErrorServerExecution)
+			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		}
 
 	} else {
 		ctx.Logger.Error(Fail_Auth)
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, Fail_Auth, http.StatusBadGateway)
 	}
 }

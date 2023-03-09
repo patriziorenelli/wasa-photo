@@ -40,7 +40,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		case -2:
 			ctx.Logger.Error(UserId2NotFound)
 			http.Error(w, UserId2NotFound, http.StatusNotFound)
-	
+
 		case -3:
 			ctx.Logger.Error(UserIdBanned)
 			http.Error(w, UserIdBanned, http.StatusForbidden)
