@@ -83,8 +83,12 @@ func (db *appdbimpl) GetPhotoComment(userId int, photoId int) (int, []Comment) {
 		return -4, nil
 	}
 
+
+
 	// Prendo i commenti
-	row, err := db.c.Query(`SELECT cid, uid, phid, text, date, username FROM comment, user  WHERE phid = ? AND id = uid`, photoId)
+	row, err := db.c.Query(`SELECT cid, uid, phid, text, date, username FROM comment, user WHERE 
+							phid = ? AND user.id = comment.uid AND 
+							comment.uid NOT IN ( SELECT uid2 FROM ban WHERE uid = ? ) AND ? NOT IN ( SELECT uid2 FROM ban WHERE uid = comment.uid );`, photoId, userId, userId)
 
 	// Errore nella query
 	if err != nil {
