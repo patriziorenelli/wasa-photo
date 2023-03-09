@@ -31,24 +31,24 @@ func (rt *_router) getPhotoLike(w http.ResponseWriter, r *http.Request, ps httpr
 		_ = json.NewEncoder(w).Encode(arL)
 
 	case -1:
-		ctx.Logger.Error("User not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserIdNotFound)
+		http.Error(w, UserIdNotFound, http.StatusBadRequest)
 
 	case -2:
-		ctx.Logger.Error("Photo  does not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(photoNotFound)
+		http.Error(w, photoNotFound, http.StatusProxyAuthRequired)
 
 	case -3:
-		ctx.Logger.Error("User who posted the photo whose likes you want to know has blocked you")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserIdBanned)
+		http.Error(w, UserIdBanned, http.StatusForbidden)
 
 	case -4:
-		ctx.Logger.Error("You ban the user that posted the photo")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(userId2Banned)
+		http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 
 	case -5:
-		ctx.Logger.Error("Error during execution")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 	}
 
 }
