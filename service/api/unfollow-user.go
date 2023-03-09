@@ -30,34 +30,35 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 
 		case 0:
 			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
 			_ = json.NewEncoder(w).Encode(username)
 
 		case -1:
-			ctx.Logger.Error("User not exist")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(UserIdNotFound)
+			http.Error(w, UserIdNotFound, http.StatusBadRequest)
 
 		case -2:
-			ctx.Logger.Error("User you want to unfollow does not exist")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(UserId2NotFound)
+			http.Error(w, UserId2NotFound, http.StatusNotFound)
 
 		case -3:
-			ctx.Logger.Error("User you want to unfollow has banned you")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(UserIdBanned)
+			http.Error(w, UserIdBanned, http.StatusForbidden)
 
 		case -4:
-			ctx.Logger.Error("You ban the user you want to unfollow")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(userId2Banned)
+			http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 
 		case -5:
 			ctx.Logger.Error("You don't already follow the user")
 			w.WriteHeader(http.StatusUnauthorized)
 
 		case -6:
-			ctx.Logger.Error("Error during execution")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(ErrorServerExecution)
+			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		}
 	} else {
 		ctx.Logger.Error(Fail_Auth)
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, Fail_Auth, http.StatusBadGateway)
 	}
 }
