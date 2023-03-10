@@ -23,7 +23,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// Controllo che l'autenticazione vada a buon fine
 	if auth != userId {
 		ctx.Logger.Error(Fail_Auth)
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, Fail_Auth, http.StatusBadGateway)
 		return
 	}
 
@@ -31,15 +31,15 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	if err != nil {
 		ctx.Logger.Error("Error during image check")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, InvalidFormat, http.StatusGone)
 		return
 	}
 
 	mimeType := http.DetectContentType(bytes)
 	// Controllo il tipo del file caricato
 	if !strings.HasPrefix(mimeType, "image/") {
-		ctx.Logger.Error("File is not a valid image")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(InvalidFormat)
+		http.Error(w, InvalidFormat, http.StatusGone)
 		return
 	}
 
@@ -48,19 +48,19 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	ris, photoId := rt.db.UploadPhoto(usId)
 
 	if ris == -1 {
-		ctx.Logger.Error("User not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserIdNotFound)
+		http.Error(w, UserIdNotFound, http.StatusBadRequest)
 		return
 	} else if ris == -2 {
 		ctx.Logger.Error("Error during saving into database")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		return
 	}
 
 	mydir, err := os.Getwd()
 	if err != nil {
 		ctx.Logger.Error("Error during directory creation")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		_ = rt.db.DeletePhotoRecord(photoId)
 		return
 	}
@@ -69,8 +69,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// Creo la directory, in caso di errore elimino anche il record relativo alla nuova foto
 	err = os.MkdirAll(filepath.Dir(path), 0777)
 	if err != nil {
-		ctx.Logger.Error("Error during directory creation")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		_ = rt.db.DeletePhotoRecord(photoId)
 		return
 	}
@@ -78,8 +78,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// Salvo l'immagine, in caso di errore elimino il record relativo alla nuova foto
 	err = os.WriteFile(path, bytes, 0644)
 	if err != nil {
-		ctx.Logger.Error("Error save photo file")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		_ = rt.db.DeletePhotoRecord(photoId)
 		return
 	}
@@ -87,6 +87,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	var risultato Result
 	risultato.TEXT = Done
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(risultato)
 
 }
