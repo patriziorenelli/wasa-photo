@@ -45,8 +45,8 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 			http.Error(w, UserIdBanned, http.StatusForbidden)
 
 		case -4:
-			ctx.Logger.Error("User wasn't banned")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(userNotBanned)
+			http.Error(w, userNotBanned, http.StatusNotAcceptable)
 
 		case -5:
 			ctx.Logger.Error(ErrorServerExecution)
