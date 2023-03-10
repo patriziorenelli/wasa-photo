@@ -366,16 +366,17 @@ export default {
 						<div v-if="c == 0" class="noPost">
 							No Comment
 						</div>
-
-							<div v-if="c != 0" v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
-								<div class="userComment">
-									<label >{{comment.name}}</label>
+							<div v-if="c != 0">
+								<div  v-for="comment in photoComment" :key="comment.commentId" class="commentSec">
+									<div class="userComment">
+										<label >{{comment.name}}</label>
+									</div>
+									<label class="dateComment">{{comment.date}}</label>
+									<button class="cancelComment" v-if="comment.userId == token" @click="deleteComment(comment.commentId, comment.photoId)"><i class="fa fa-trash"></i></button>
+									<br>
+									<label class="commentText">{{comment.comment}}</label>
+									
 								</div>
-								<label class="dateComment">{{comment.date}}</label>
-								<button class="cancelComment" v-if="comment.userId == token" @click="deleteComment(comment.commentId, comment.photoId)"><i class="fa fa-trash"></i></button>
-								<br>
-								<label class="commentText">{{comment.comment}}</label>
-								
 							</div>
 					</div>
 				
