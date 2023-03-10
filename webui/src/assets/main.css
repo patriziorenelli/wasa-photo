@@ -265,7 +265,11 @@ a{
 	padding-left: 45%;
 }
 
-
+.followBack{
+	color: green;
+	font-size: x-large;
+	position: relative;
+}
 
 .lFirstPart{
 	position: relative;

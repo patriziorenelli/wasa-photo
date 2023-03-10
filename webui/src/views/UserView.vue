@@ -35,6 +35,7 @@ export default {
 			],
 			photoLike: [],
             follow: 0,
+			followBack: 0,
 			c: 0,
             ban: -1,
 			photoId: 0,
@@ -187,6 +188,19 @@ export default {
             }
         },
 
+		async checkFollowBack(){
+			let follower = await this.$axios.get("/users/" + this.viewId + "/following", {
+								headers: {
+									Authorization: this.token
+								}
+							})
+						for(var i = 0; i < (follower.data).length; i++){
+							if( (follower.data)[i].userId ==  this.token ){
+								this.followBack = 1;
+							}
+						}
+		},
+
         async followUser(){
             let follower = await this.$axios.put("/users/" + this.token + "/followUser/" + this.viewId, {}, {
                 headers: {
@@ -311,6 +325,7 @@ export default {
 		this.searcUserInfo()
         this.getUserPhoto()
         this.checkFollow()
+		this.checkFollowBack()
 
 
 	},
@@ -339,10 +354,12 @@ export default {
         <table class="tableU"> 
             <tr class="firstRU">
 				<th class="firstPartRU"><button class="followUser" v-if="follow == 0"  @click="followUser">Follow</button></th>
-				<th class="firstPartRU"><button class="unfollowUser" v-if="follow == 1" @click="unfollowUser">Unfollow</button></th>
+				<th class="firstPartRU"><button class="unfollowUser" v-if="follow == 1" @click="unfollowUser">Unfollow</button></th>  
+
 
                 <th class="rowFirstPartU" v-if="ban == -1 && follow == 0">{{viewName}}</th>
                 <th class="rowFirstPartUU" v-if="ban == -1 && follow == 1">{{viewName}}</th>
+				<div class="followBack"> <i class="fa fa-check-circle" v-if="followBack==1" aria-hidden="true"></i> </div>
 
                 <th class="rowFirstPartUT" v-if="ban == 0">{{viewName}}</th>
 
