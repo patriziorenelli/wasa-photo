@@ -534,7 +534,7 @@ paths:
                   example:
                     result: "Done" 
 
-            '400': { $ref: "#/components/responses/UserIdNotFound" }    
+            '401': { $ref: "#/components/responses/UserNotAuthorized" }
             '407': {$ref: "#/components/responses/photoNotFound"}              
             '500': {$ref: "#/components/responses/ErrorServerExecution"}         
 
@@ -556,7 +556,12 @@ paths:
                   example:
                     image: "34qfni23"
 
-            '407': {$ref: "#/components/responses/photoNotFound"}              
+            '400': { $ref: "#/components/responses/UserIdNotFound" }   
+            '403': {$ref: "#/components/responses/UserIdBanned"}
+            '404': {$ref: "#/components/responses/UserId2NotFound"} 
+            '405': {$ref: "#/components/responses/userId2Banned"} 
+            '407': {$ref: "#/components/responses/photoNotFound"}   
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
 
   /users/{userId}/stream:
 
