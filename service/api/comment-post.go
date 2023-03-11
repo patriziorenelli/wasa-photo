@@ -25,10 +25,11 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	// Controllo che il testo del commento sia valido
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, commentNotValid, http.StatusRequestEntityTooLarge)
 		return
 	} else if !comment.CommentTextIsValid() {
-		ctx.Logger.Error("Comment isn't valid")
-		w.WriteHeader(http.StatusBadRequest)
+		ctx.Logger.Error(commentNotValid)
+		http.Error(w, commentNotValid, http.StatusRequestEntityTooLarge)
 		return
 	}
 	// Converto l'id utente in un int
@@ -63,6 +64,5 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	case -5:
 		ctx.Logger.Error(ErrorServerExecution)
 		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
-
 	}
 }

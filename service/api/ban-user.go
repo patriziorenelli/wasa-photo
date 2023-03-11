@@ -46,8 +46,8 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 			http.Error(w, UserIdBanned, http.StatusForbidden)
 
 		case -4:
-			ctx.Logger.Error("You already ban the user")
-			w.WriteHeader(http.StatusUnauthorized)
+			ctx.Logger.Error(userId2Banned)
+			http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 
 		case -6:
 			ctx.Logger.Error(ErrorServerExecution)

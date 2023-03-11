@@ -50,9 +50,9 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 			http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 
 		case -5:
-			ctx.Logger.Error("You don't already follow the user")
-			w.WriteHeader(http.StatusUnauthorized)
-
+			ctx.Logger.Error(UnfollowedUser)
+			http.Error(w, UnfollowedUser, http.StatusPaymentRequired)
+			
 		case -6:
 			ctx.Logger.Error(ErrorServerExecution)
 			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)

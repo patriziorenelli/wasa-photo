@@ -53,8 +53,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 		case -2:
 			ctx.Logger.Error("Username already used")
-			w.WriteHeader(http.StatusUnauthorized)
-
+			http.Error(w, UsernameNotValid, http.StatusLengthRequired)
 		case -3:
 			ctx.Logger.Error(ErrorServerExecution)
 			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)

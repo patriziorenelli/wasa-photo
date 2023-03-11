@@ -60,8 +60,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 
 	case -7:
 		ctx.Logger.Error("Comment not associated with the photo")
-		http.Error(w, "Comment not associated with the photo", http.StatusConflict)
-
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 	case -8:
 		ctx.Logger.Error(ErrorServerExecution)
 		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)

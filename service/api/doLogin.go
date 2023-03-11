@@ -17,8 +17,8 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	// controllo che l'username passato sia nel formato corretto
 	if err != nil || !user.UsernameIsValid() {
-		ctx.Logger.WithError(err).Error("Username not valid")
-		http.Error(w, "Username not valid", http.StatusInternalServerError)
+		ctx.Logger.WithError(err).Error(UsernameNotValid)
+		http.Error(w, UsernameNotValid, http.StatusLengthRequired)
 		return
 	}
 
@@ -33,11 +33,11 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 		if err != nil && dbUser.ID == -1 {
 			ctx.Logger.WithError(err).Error("Error during creation user")
-			http.Error(w, "Error during creation user", http.StatusInternalServerError)
+			http.Error(w,ErrorServerExecution, http.StatusInternalServerError)
 			return
 		} else if err != nil && dbUser.ID == -2 {
 			ctx.Logger.WithError(err).Error("Error during extract new userId")
-			http.Error(w, "Error during extract new userId", http.StatusInternalServerError)
+			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 			return
 		}
 
@@ -46,7 +46,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	} else if err != nil && dbUser.ID == -1 {
 		ctx.Logger.WithError(err).Error("Error during find userId")
-		http.Error(w, "Error during find userId", http.StatusInternalServerError)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		return
 
 	} else {

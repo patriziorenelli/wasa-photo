@@ -79,6 +79,9 @@ paths:
                   $ref: "#/components/schemas/userId"
               example:
                 userId: 111112
+        '411': { $ref: "#/components/responses/UsernameNotValid" }
+        '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+
 
 
   /users/{userId}/username: 
@@ -110,6 +113,7 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }
             '401': { $ref: "#/components/responses/UserNotAuthorized" }
             '411': { $ref: "#/components/responses/UsernameNotValid" }
+            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
 
 
   /users/{userId}/followUser/{userId2}: 
@@ -142,6 +146,7 @@ paths:
             '404': {$ref: "#/components/responses/UserId2NotFound"} 
             '405': {$ref: "#/components/responses/userId2Banned"}
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
 
     delete:
           tags: ["unfollowUser"] 
@@ -166,8 +171,10 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }                  
             '403': {$ref: "#/components/responses/UserIdBanned"}   
             '402': {$ref: "#/components/responses/UnfollowedUser"}    
-            '404': {$ref: "#/components/responses/UserId2NotFound"}                             
+            '404': {$ref: "#/components/responses/UserId2NotFound"}
+            '405': {$ref: "#/components/responses/userId2Banned"}   
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
 
 
   /users/{userId}/banUser/{userId2}:
@@ -201,6 +208,7 @@ paths:
             '404': {$ref: "#/components/responses/UserId2NotFound"}                 
             '405': {$ref: "#/components/responses/userId2Banned"} 
             '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
 
      delete:
           tags: ["unbanUser"] 
@@ -226,9 +234,10 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }            
             '403': {$ref: "#/components/responses/UserIdBanned"}
             '404': {$ref: "#/components/responses/UserId2NotFound"}                 
-            '405': {$ref: "#/components/responses/userId2Banned"} 
             '406': {$ref: "#/components/responses/userNotBanned"}
             '500': {$ref: "#/components/responses/ErrorServerExecution"}   
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
+
             
      get:
       tags: ["checkBan"] 
@@ -254,9 +263,10 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }            
             '403': {$ref: "#/components/responses/UserIdBanned"}
             '404': {$ref: "#/components/responses/UserId2NotFound"}                 
-            '405': {$ref: "#/components/responses/userId2Banned"} 
             '406': {$ref: "#/components/responses/userNotBanned"}
-            '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '500': {$ref: "#/components/responses/ErrorServerExecution"} 
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
+ 
       
 
 
@@ -349,7 +359,9 @@ paths:
             '403': {$ref: "#/components/responses/UserIdBanned"}
             '405': {$ref: "#/components/responses/userId2Banned"} 
             '407': {$ref: "#/components/responses/photoNotFound"} 
+            '413': { $ref: "#/components/responses/commentNotValid" }
             '500': {$ref: "#/components/responses/ErrorServerExecution"} 
+
     get:
       tags: ["getPhotoComments"]
       summary: Gets photo comments
@@ -452,6 +464,8 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }                       
             '410': { $ref: "#/components/responses/InvalidFormat" }   
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
+            '502': {$ref: "#/components/responses/FailedAutentication"}  
+
           
     get:
       tags: ["getUserPhotos"]
@@ -489,9 +503,11 @@ paths:
                   upladTime: "2023-03-18T12:00:00Z"
 
         '400': { $ref: "#/components/responses/UserIdNotFound" }    
-        '500': {$ref: "#/components/responses/ErrorServerExecution"}    
         '403': {$ref: "#/components/responses/UserIdBanned"}
-        '405': {$ref: "#/components/responses/userId2Banned"}      
+        '404': {$ref: "#/components/responses/UserId2NotFound"}
+        '405': {$ref: "#/components/responses/userId2Banned"}     
+        '500': {$ref: "#/components/responses/ErrorServerExecution"}    
+
 
 
   /user/{userId}/photo/{photoId}:  
@@ -774,6 +790,8 @@ paths:
 components:  
 
   responses:
+    commentNotValid:
+      description: "Comment isn't valid"
 
     UsernameNotValid:
      description: Username not valid

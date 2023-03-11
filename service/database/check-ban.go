@@ -15,7 +15,7 @@ func (db *appdbimpl) CheckUserBan(userId int, banId int) (int, UserId) {
 		return -2, usId
 	}
 
-	// Controllo che l'utente di cui si vuole sapere il ban non sia bannato
+	// Controllo che l'utente di cui si vuole sapere il ban non ci abbia bannato
 	if db.CheckBan(banId, userId) == 0 {
 		return -3, usId
 	}

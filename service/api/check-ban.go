@@ -31,6 +31,7 @@ func (rt *_router) checkUserBan(w http.ResponseWriter, r *http.Request, ps httpr
 			var usId UserId
 			usId.USERID = userId.USERID
 			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
 			_ = json.NewEncoder(w).Encode(usId)
 
 		case -1:
@@ -46,8 +47,8 @@ func (rt *_router) checkUserBan(w http.ResponseWriter, r *http.Request, ps httpr
 			http.Error(w, UserIdBanned, http.StatusForbidden)
 
 		case -4:
-			ctx.Logger.Error("You didn't ban the user")
-			http.Error(w, "You didn't ban the user", http.StatusInternalServerError)
+			ctx.Logger.Error(userNotBanned)
+			http.Error(w, userNotBanned, http.StatusNotAcceptable)
 		}
 	} else {
 		ctx.Logger.Error(Fail_Auth)

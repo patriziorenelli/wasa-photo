@@ -37,8 +37,8 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 			http.Error(w, UserIdNotFound, http.StatusBadRequest)
 
 		case -2:
-			ctx.Logger.Error(userId2Banned)
-			http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
+			ctx.Logger.Error(UserId2NotFound)
+			http.Error(w, UserId2NotFound, http.StatusNotFound)
 
 		case -3:
 			ctx.Logger.Error(UserIdBanned)
