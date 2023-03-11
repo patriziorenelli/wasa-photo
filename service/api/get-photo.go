@@ -22,40 +22,40 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	authId, _ := strconv.Atoi(r.Header.Get("Authorization"))
 
 	if rt.db.UserExist(authId) == -1 {
-		ctx.Logger.Error("User not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserIdNotFound)
+		http.Error(w, UserIdNotFound, http.StatusBadRequest)
 		return
 	}
 
 	if rt.db.UserExist(userId) == -1 {
-		ctx.Logger.Error("The photo owner does not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserId2NotFound)
+		http.Error(w, UserId2NotFound, http.StatusNotFound)
 		return
 	}
 
 	if rt.db.CheckBan(authId, userId) == 0 {
-		ctx.Logger.Error("You ban the photo owner")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(userId2Banned)
+		http.Error(w, userId2Banned, http.StatusMethodNotAllowed)
 		return
 	}
 
 	if rt.db.CheckBan(userId, authId) == 0 {
-		ctx.Logger.Error("The photo owner ban you")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(UserIdBanned)
+		http.Error(w, UserIdBanned, http.StatusForbidden)
 		return
 	}
 
 	_, err := rt.db.GetPhoto(postId)
 	if err == -1 {
-		ctx.Logger.Error("The photo does not exist")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(photoNotFound)
+		http.Error(w, photoNotFound, http.StatusProxyAuthRequired)
 		return
 	}
 
 	mydir, erro := os.Getwd()
 	if erro != nil {
-		ctx.Logger.Error("Error during execution")
-		w.WriteHeader(http.StatusUnauthorized)
+		ctx.Logger.Error(ErrorServerExecution)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		return
 	}
 
@@ -65,7 +65,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 
 	if erOpen != nil {
 		ctx.Logger.Error("Photo file not found")
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 		return
 	}
 
@@ -81,6 +81,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 	photoFile.PHOTOFILE = encoded
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(photoFile)
 
 }
