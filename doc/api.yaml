@@ -684,6 +684,8 @@ paths:
                 example:
                   - userId: 111112
                   - userId: 1452
+
+          '404': {$ref: "#/components/responses/UserId2NotFound"} 
           '400': { $ref: "#/components/responses/UserIdNotFound" }    
           '405': {$ref: "#/components/responses/userId2Banned"} 
           '403': {$ref: "#/components/responses/UserIdBanned"}
@@ -718,9 +720,10 @@ paths:
                   - userId: 111112
                   - userId: 1452
 
-        '400': { $ref: "#/components/responses/UserIdNotFound" }    
-        '405': {$ref: "#/components/responses/userId2Banned"} 
+        '400': { $ref: "#/components/responses/UserIdNotFound" }  
         '403': {$ref: "#/components/responses/UserIdBanned"}
+        '404': {$ref: "#/components/responses/UserId2NotFound"} 
+        '405': {$ref: "#/components/responses/userId2Banned"} 
         '500': {$ref: "#/components/responses/ErrorServerExecution"} 
 
 
