@@ -758,11 +758,6 @@ paths:
           '500': {$ref: "#/components/responses/ErrorServerExecution"} 
           '411': { $ref: "#/components/responses/UsernameNotValid" }
 
-
-        
-
-    
-
   /photo/{photoId}/likes:
     get:
         tags: ["getPhotoLike"]
@@ -791,8 +786,9 @@ paths:
                   - userId: 111112
                   - userId: 1452
           '400': { $ref: "#/components/responses/UserIdNotFound" }    
-          '405': {$ref: "#/components/responses/userId2Banned"} 
           '403': {$ref: "#/components/responses/UserIdBanned"}
+          '405': {$ref: "#/components/responses/userId2Banned"} 
+          '407': {$ref: "#/components/responses/photoNotFound"} 
           '500': {$ref: "#/components/responses/ErrorServerExecution"}    
 
 components:  
