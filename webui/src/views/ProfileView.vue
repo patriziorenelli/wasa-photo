@@ -177,6 +177,7 @@ export default {
 				this.$router
 						.push({ path: '/users/' + response.data.username + '/profile' })
 						.then(() => { this.$router.go() })
+				localStorage.setItem('username', this.newUsername);
 			}catch(e){
 				if (e.response.data != undefined){
                         alert(e.response.data)
