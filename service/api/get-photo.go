@@ -12,7 +12,8 @@ import (
 	"strconv"
 	"strings"
 )
-// Va bene 
+
+// Va bene
 func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	userId, _ := strconv.Atoi(strings.Split(r.RequestURI, "/")[2])

@@ -11,7 +11,8 @@ import (
 	"strconv"
 	"strings"
 )
-// Va bene 
+
+// Va bene
 func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Prendo l'autenticazione
