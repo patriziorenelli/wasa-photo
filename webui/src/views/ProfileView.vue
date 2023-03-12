@@ -90,7 +90,6 @@ export default {
 			
 		},
 
-    
         async searcUserInfo(){
 			try{
 				let response = await this.$axios.get("users/" + this.token + "/profile", {
