@@ -37,6 +37,7 @@ func (db *appdbimpl) CheckBan(userId int, banId int) int {
 	var ban Ban
 	row := db.c.QueryRow(`SELECT * from ban where uid = ? and uid2 = ?`, userId, banId)
 	err := row.Scan(&ban.UID1, &ban.UID2)
+
 	if err == nil || !errors.Is(err, sql.ErrNoRows) {
 		return 0
 	} else {

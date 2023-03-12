@@ -33,7 +33,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 		if err != nil && dbUser.ID == -1 {
 			ctx.Logger.WithError(err).Error("Error during creation user")
-			http.Error(w,ErrorServerExecution, http.StatusInternalServerError)
+			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
 			return
 		} else if err != nil && dbUser.ID == -2 {
 			ctx.Logger.WithError(err).Error("Error during extract new userId")

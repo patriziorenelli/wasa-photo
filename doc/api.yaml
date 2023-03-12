@@ -147,6 +147,7 @@ paths:
             '405': {$ref: "#/components/responses/userId2Banned"}
             '500': {$ref: "#/components/responses/ErrorServerExecution"}  
             '502': {$ref: "#/components/responses/FailedAutentication"}  
+            '503': {$ref: "#/components/responses/NotAllowed"}  
 
     delete:
           tags: ["unfollowUser"] 
@@ -841,6 +842,10 @@ components:
 
     InvalidFormat:
       description: Invalid file format
+
+    NotAllowed:
+      description: "Operation not allowed"
+
 
   schemas: 
     username: 

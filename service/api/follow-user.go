@@ -58,7 +58,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 
 		case -5:
 			ctx.Logger.Error("You already follow the user")
-			w.WriteHeader(http.StatusUnauthorized)
+			http.Error(w, NotAllowed, http.StatusServiceUnavailable)
 
 		case -6:
 			ctx.Logger.Error(ErrorServerExecution)

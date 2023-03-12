@@ -52,7 +52,7 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		case -5:
 			ctx.Logger.Error(UnfollowedUser)
 			http.Error(w, UnfollowedUser, http.StatusPaymentRequired)
-			
+
 		case -6:
 			ctx.Logger.Error(ErrorServerExecution)
 			http.Error(w, ErrorServerExecution, http.StatusInternalServerError)

@@ -1,0 +1,1 @@
+export const NO_CONNECTION = "Error server connection";

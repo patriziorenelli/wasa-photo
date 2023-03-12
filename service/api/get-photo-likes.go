@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 )
-
+// Va bene
 func (rt *_router) getPhotoLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := r.Header.Get("Authorization")

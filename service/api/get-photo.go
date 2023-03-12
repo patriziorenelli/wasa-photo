@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 )
-
+// Va bene 
 func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	userId, _ := strconv.Atoi(strings.Split(r.RequestURI, "/")[2])
@@ -69,7 +69,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	//  CONVERSIONE E SCRITTURA RITORNO
+	// Lettura del file
 	reader := bufio.NewReader(file)
 	content, _ := io.ReadAll(reader)
 

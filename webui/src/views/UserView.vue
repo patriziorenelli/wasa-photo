@@ -1,4 +1,5 @@
 <script>
+import * as Costanti from '../services/costanti.js'
 export default {
 	data: function () {
 		return {
@@ -74,44 +75,92 @@ export default {
 		},
 
 		async searchUser() {
-			if (this.searchUsername != this.username){
-				localStorage.setItem('viewName', this.searchUsername);
-				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
-						headers: {
-							Authorization: this.token
-						}
-				})
 
-				localStorage.setItem('viewId', viewId.data.userId);
+			try{
+				if (this.searchUsername != this.username){
+					localStorage.setItem('viewName', this.searchUsername);
+					let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
+							headers: {
+								Authorization: this.token
+							}
+					})
 
-				this.$router
-					.push({ path: '/users/' + this.searchUsername + '/view' })
-					.then(() => { this.$router.go() })
-			}else{
-				this.viewProfile()
+					localStorage.setItem('viewId', viewId.data.userId);
+
+					this.$router
+						.push({ path: '/users/' + this.searchUsername + '/view' })
+						.then(() => { this.$router.go() })
+				}else{
+					this.viewProfile()
+				}
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
 			}
-
 			
 		},
 
         async searcUserInfo(){
-            let response = await this.$axios.get("users/" + this.viewId + "/profile", {
-						headers: {
-							Authorization:  localStorage.getItem("token")
-						}
-		    })
-            this.profile = response.data
-
+			try{
+				let response = await this.$axios.get("users/" + this.viewId + "/profile", {
+							headers: {
+								Authorization:  localStorage.getItem("token")
+							}
+				})
+				this.profile = response.data
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
             
         },
 
-		
+	   async loadProfile(){
+			try{
+				let response = await this.$axios.get("/users/" + this.token + "/banUser/" + this.viewId, {
+							headers: {
+								Authorization: this.token
+							}
+				})
+
+				if (response.data.userId == this.viewId){
+							this.ban = 0;
+							return;
+				}
+			}catch(e){
+				if (e.response.data == undefined){
+					alert(Costanti.NO_CONNECTION);
+					return;
+				}
+				if(e.response.status != 406){
+					return;
+				}
+			}
+
+			this.checkFollow();
+			this.searcUserInfo();
+			this.getUserPhoto();
+			this.checkFollow();
+			this.checkFollowBack();
+
+
+	   },
+
        async getUserPhoto() {
+			try{
 				let response = await this.$axios.get("users/" + this.viewId + "/photo", {
 					headers: {
 						Authorization:  this.token
 					}
 				})
+
+			
 				this.photoStream =  response.data;
 
 				this.userPhoto = new Map();
@@ -143,29 +192,51 @@ export default {
 					}catch (error) {
 							continue;
 					}
-
-
 				}
+			}catch(e){
+
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
+
 
 		},
 
 		async likePost(val){
-			let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
-					headers: {
-							Authorization: this.token
-					}
-		    })
-			location.reload();
+			try{
+				let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
+						headers: {
+								Authorization: this.token
+						}
+				})
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 		},
 
 		async unlikePost(val){
-			let response = await this.$axios.delete("photo/" + val + "/like/" + this.token, {
-					headers: {
-						Authorization: this.token
-					}
-				})
-			location.reload();
-
+			try{
+				let response = await this.$axios.delete("photo/" + val + "/like/" + this.token, {
+						headers: {
+							Authorization: this.token
+						}
+					})
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 		},
 
         async viewProfile() {
@@ -176,117 +247,151 @@ export default {
 		
 
         async checkFollow(){
-            let follower = await this.$axios.get("/users/" + this.viewId + "/followers", {
-                    headers: {
-                        Authorization: this.token
-                    }
-                })
-			for(var i = 0; i < (follower.data).length; i++){
-                if( (follower.data)[i].userId ==  this.token ){
-                    this.follow = 1;
+			try{
+				let follower = await this.$axios.get("/users/" + this.viewId + "/followers", {
+						headers: {
+							Authorization: this.token
+						}
+					})
+				for(var i = 0; i < (follower.data).length; i++){
+					if( (follower.data)[i].userId ==  this.token ){
+						this.follow = 1;
+					}
+				}
+			}catch(e){
+				if (e.response.data != undefined){
+                	alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
                 }
-            }
+			}
         },
 
 		async checkFollowBack(){
-			let follower = await this.$axios.get("/users/" + this.viewId + "/following", {
-								headers: {
-									Authorization: this.token
+			try{
+				let follower = await this.$axios.get("/users/" + this.viewId + "/following", {
+									headers: {
+										Authorization: this.token
+									}
+								})
+							for(var i = 0; i < (follower.data).length; i++){
+								if( (follower.data)[i].userId ==  this.token ){
+									this.followBack = 1;
 								}
-							})
-						for(var i = 0; i < (follower.data).length; i++){
-							if( (follower.data)[i].userId ==  this.token ){
-								this.followBack = 1;
 							}
-						}
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 		},
 
         async followUser(){
-            let follower = await this.$axios.put("/users/" + this.token + "/followUser/" + this.viewId, {}, {
-                headers: {
-                    Authorization: this.token
+			try{
+				let follower = await this.$axios.put("/users/" + this.token + "/followUser/" + this.viewId, {}, {
+					headers: {
+						Authorization: this.token
+					}
+				})
+
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
                 }
-            })
-
-			location.reload();
-
-
-
+			}
         },
 
         async unfollowUser(){
-            let follower = await this.$axios.delete("/users/" + this.token + "/followUser/" + this.viewId, {
-                headers: {
-                    Authorization: this.token
-                }
-            })
+			try{
+				let follower = await this.$axios.delete("/users/" + this.token + "/followUser/" + this.viewId, {
+					headers: {
+						Authorization: this.token
+					}
+				})
 
-			location.reload();
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 
         },
 
         async banUser(){
-            let response = await this.$axios.put("/users/" + this.token + "/banUser/" + this.viewId, {}, {
-                headers: {
-                    Authorization: this.token
-                }
-            })
+			try{
+				let response = await this.$axios.put("/users/" + this.token + "/banUser/" + this.viewId, {}, {
+					headers: {
+						Authorization: this.token
+					}
+				})
 
-            this.ban = 0;
+				this.ban = 0;
 
-			location.reload();
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }				
+			}
 
         },
 
 
         async unbanUser(){
-            let response = await this.$axios.delete("/users/" + this.token + "/banUser/" + this.viewId, {
-                headers: {
-                    Authorization: this.token
+			try{
+				let response = await this.$axios.delete("/users/" + this.token + "/banUser/" + this.viewId, {
+					headers: {
+						Authorization: this.token
+					}
+				})
+				this.ban = -1;
+
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
                 }
-            })
-            this.ban = -1;
-
-			location.reload();
-
-
-
-        },
-
-
-
-        async checkBan(){
-            let response = await this.$axios.get("/users/" + this.token + "/banUser/" + this.viewId, {
-                headers: {
-                    Authorization: this.token
-                }
-            })
-
-            if (response.data.userId == this.viewId){
-                this.ban = 0;
-            }
-
-
-
+			}
         },
 
 
 		async showComment(val){
-			let response = await this.$axios.get("photo/" + val + "/comment", {
-						headers: {
-							Authorization: this.token
-						}
-					})
+			try{
+				let response = await this.$axios.get("photo/" + val + "/comment", {
+							headers: {
+								Authorization: this.token
+							}
+						})
 
-			if(response.data == null){
-				this.c = 0;
-			}else{
-				this.c = 1;
-			}
-            
+				if(response.data == null){
+					this.c = 0;
+				}else{
+					this.c = 1;
+				}
+				
 
 			this.photoComment = response.data;
 			this.photoId = val;
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			
+			}
 			document.getElementById("commentForm").style.display = "block";
 
 		},
@@ -297,37 +402,45 @@ export default {
 		},
 
 		async deleteComment(commentId, photoId){
-
-			let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
-						headers: {
-							Authorization: this.token
-						}
-					})
-			location.reload();
+			try{
+				let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
+							headers: {
+								Authorization: this.token
+							}
+						})
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 
 		},
 
 		async postComment(photoId){			
-			let response = await this.$axios.post("photo/" + photoId + "/comment",{text: this.inputCommentText}, {
-						headers: {
-							Authorization: this.token
-						}
-			})
-			location.reload();
-
+			try{
+				let response = await this.$axios.post("photo/" + photoId + "/comment",{text: this.inputCommentText}, {
+							headers: {
+								Authorization: this.token
+							}
+				})
+				location.reload();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			
+			}
 
 		},
 		
 	},
 	mounted() {
-        this.checkBan()
-		this.checkFollow()
-		this.searcUserInfo()
-        this.getUserPhoto()
-        this.checkFollow()
-		this.checkFollowBack()
-
-
+		this.loadProfile()       
 	},
 }
 

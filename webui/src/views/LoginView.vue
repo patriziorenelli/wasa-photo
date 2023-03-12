@@ -1,4 +1,5 @@
 <script>
+import * as Costanti from '../services/costanti.js'
 export default {
     data: function () {
         return {
@@ -19,8 +20,11 @@ export default {
 
                     this.$router.push({ path: '/session' })
                 } catch (e) {
-                    alert(e.response.data)
-                    
+                    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
                 }
                 
             }

@@ -1,4 +1,5 @@
 <script>
+import * as Costanti from '../services/costanti.js'
 export default {
 	data: function () {
 		return {
@@ -58,18 +59,26 @@ export default {
 
 		async searchUser() {
 			if (this.searchUsername != this.username){
-				localStorage.setItem('viewName', this.searchUsername);
-				let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
-						headers: {
-							Authorization: this.token
-						}
-				})
+				try{
+					localStorage.setItem('viewName', this.searchUsername);
+					let viewId = await this.$axios.get("/users?username="+this.searchUsername , {
+							headers: {
+								Authorization: this.token
+							}
+					})
 
-				localStorage.setItem('viewId', viewId.data.userId)
+					localStorage.setItem('viewId', viewId.data.userId)
 
-				this.$router
-					.push({ path: '/users/' + this.searchUsername + '/view' })
-					.then(() => { this.$router.go() })
+					this.$router
+						.push({ path: '/users/' + this.searchUsername + '/view' })
+						.then(() => { this.$router.go() })
+				}catch(e){
+					if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
+				}
 			}else{
 				
 				this.viewProfile()
@@ -90,17 +99,22 @@ export default {
 								}
 				})
 				this.profile = response.data
+				this.getUserPhoto()
+
 			}catch(e){
-
-				alert(e.response.status)
-
-
+				if (e.response.data != undefined){
+                        alert(e.response.data)
+                }else{
+                        alert(Costanti.NO_CONNECTION)
+                }
 			}
           
         },
 
 		
        async getUserPhoto() {
+			try{
+
 				let response = await this.$axios.get("users/" + this.token + "/photo", {
 					headers: {
 						Authorization:  this.token
@@ -141,21 +155,36 @@ export default {
 					}
 					
 				}
+			}catch(e){
+
+				if (e.response.data != undefined){
+                	alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 
 		},
 
 
 		async changeUsername(){
-
-			let response = await this.$axios.put("users/" + this.token + "/username", { username: this.newUsername }, {
-						headers: {
-							Authorization:  this.token
-						}
-		    })
-			alert("Username cambiato in " + response.data.username)
-			this.$router
-					.push({ path: '/users/' + response.data.username + '/profile' })
-					.then(() => { this.$router.go() })
+			try{
+				let response = await this.$axios.put("users/" + this.token + "/username", { username: this.newUsername }, {
+							headers: {
+								Authorization:  this.token
+							}
+				})
+				alert("Username cambiato in " + response.data.username)
+				this.$router
+						.push({ path: '/users/' + response.data.username + '/profile' })
+						.then(() => { this.$router.go() })
+			}catch(e){
+				if (e.response.data != undefined){
+                        alert(e.response.data)
+                }else{
+                        alert(Costanti.NO_CONNECTION)
+                }
+			}
 		},
 
 		async uploadFile() {
@@ -166,44 +195,75 @@ export default {
 			if (this.images === null) {
 				this.errormsg = "Please select a file to upload."
 			} else {
-				
-					let response = await this.$axios.post("users/" + this.token + "/photo" , this.images, {
-						headers: {
-							Authorization: this.token
+					try{
+						let response = await this.$axios.post("users/" + this.token + "/photo" , this.images, {
+							headers: {
+								Authorization: this.token
+							}
+						})
+					}catch(e){
+						if (e.response.data != undefined){
+                        	alert(e.response.data)
+						}else{
+							alert(Costanti.NO_CONNECTION)
 						}
-					})
+					}
 
 			}
 
 			this.viewProfile()
 		},
 		async deletePhoto(val){
-			let response = await this.$axios.delete("user/" + this.token + "/photo/" + val, {
-						headers: {
-							Authorization: this.token
-						}
-			})
-			this.viewProfile();
+			try{
+				let response = await this.$axios.delete("user/" + this.token + "/photo/" + val, {
+							headers: {
+								Authorization: this.token
+							}
+				})
+				this.viewProfile();
+			}catch(e){
+				if (e.response.data != undefined){
+                        alert(e.response.data)
+                }else{
+                        alert(Costanti.NO_CONNECTION)
+                }
+			}
 
 		},
 
 		async likePost(val){
-			let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
-					headers: {
-							Authorization: this.token
-					}
-		    })
-			this.viewProfile();
+			try{
+				let response = await this.$axios.put("photo/" + val + "/like/" + this.token , {},  {
+						headers: {
+								Authorization: this.token
+						}
+				})
+				this.viewProfile();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 
 		},
 
 		async unlikePost(val){
-			let response = await this.$axios.delete("photo/" + val + "/like/" + this.token, {
-									headers: {
-										Authorization: this.token
-									}
-						})
-			this.viewProfile();
+			try{
+				let response = await this.$axios.delete("photo/" + val + "/like/" + this.token, {
+										headers: {
+											Authorization: this.token
+										}
+							})
+				this.viewProfile();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 
 		},
 		
@@ -215,19 +275,27 @@ export default {
 		},
 
 		async showComment(val){
-			let response = await this.$axios.get("photo/" + val + "/comment", {
-						headers: {
-							Authorization: this.token
-						}
-					})
-			if(response.data == null){
-				this.c = 0;
-			}else{
-				this.c = 1;
+			try{
+				let response = await this.$axios.get("photo/" + val + "/comment", {
+							headers: {
+								Authorization: this.token
+							}
+						})
+				if(response.data == null){
+					this.c = 0;
+				}else{
+					this.c = 1;
+				}
+				this.photoComment = response.data;
+				this.photoId = val;
+				document.getElementById("commentForm").style.display = "block";
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
 			}
-			this.photoComment = response.data;
-			this.photoId = val;
-			document.getElementById("commentForm").style.display = "block";
 
 		},
 
@@ -237,40 +305,47 @@ export default {
 		},
 
 		async deleteComment(commentId, photoId){
-
-			let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
-						headers: {
-							Authorization: this.token
-						}
-					})
-			this.viewProfile();
+			try{
+				let response = await this.$axios.delete("photo/" + photoId + "/comment/"+commentId, {
+							headers: {
+								Authorization: this.token
+							}
+						})
+				this.viewProfile();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 
 
 		},
 
 		async postComment(photoId){
-			
-			let response = await this.$axios.post("photo/" + photoId + "/comment", {text: this.inputCommentText}, {
-						headers: {
-							Authorization: this.token
-						}
-			})
-			this.viewProfile();
+			try{
+				let response = await this.$axios.post("photo/" + photoId + "/comment", {text: this.inputCommentText}, {
+							headers: {
+								Authorization: this.token
+							}
+				})
+				this.viewProfile();
+			}catch(e){
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
+			}
 		},
-
 
 		
 	},
 
-
 	mounted() {
 		this.searcUserInfo()
-        this.getUserPhoto()
-
 	},
-
-
-
 
 }
 </script>
@@ -298,7 +373,7 @@ export default {
                 <th ><input type="text" class="newUsername"  placeholder="newUsername" v-model="newUsername"></th>
 				<th class="firstPartR"><button class="changeButton" @click="changeUsername"><i class="fa fa-paper-plane-o"></i></button></th>
 
-                <th class="rowFirstPart">{{profile.userName}}</th>
+                <th class="rowFirstPart">{{this.username}}</th>
                 <th class="lFirstPart"><input type="file" accept="image/*" @change="uploadFile" ref="file"></th>
                 <th class="l2FistPart"><button class="changeButton" @click="uploadPhoto"><i class="fa fa-paper-plane-o"></i></button></th>
             </tr>

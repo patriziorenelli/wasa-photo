@@ -1,4 +1,5 @@
 <script>
+import * as Costanti from '../services/costanti.js'
 export default {
 	data: function () {
 		return {
@@ -37,7 +38,9 @@ export default {
 	},
 	methods: {
 		async refresh() {
-			this.getStream()
+			this.$router
+            	.push({ path: '/session' })
+				.then(() => { this.$router.go() })
 		},
 		
 		async doLogout() {
@@ -63,7 +66,11 @@ export default {
 						.push({ path: '/users/' + this.searchUsername + '/view' })
 						.then(() => { this.$router.go() })
 				}catch(e){
-					alert(e.response.data)
+					if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 
 				}
 
@@ -115,7 +122,11 @@ export default {
 				 }
 
 			}catch(e){
-				alert(e.response.data)
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
 			}
 		},
 		
@@ -137,7 +148,11 @@ export default {
 						.push({ path: '/users/' + val + '/view' })
 						.then(() => { this.$router.go() })
 			}catch (e){
-				alert(e.response.data)
+				    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 			}
 		},
 		async likePost(val){
@@ -149,7 +164,11 @@ export default {
 				})
 				location.reload();
 			}catch(e){
-				alert(e.response.data)
+				    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 			}
 		},
 		async unlikePost(val){
@@ -161,7 +180,11 @@ export default {
 							})
 				location.reload();
 			}catch(e){
-				alert(e.response.data)
+				    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 			}
 		},
 		async showComment(val){
@@ -180,7 +203,11 @@ export default {
 				this.photoId = val;
 				document.getElementById("commentForm").style.display = "block";
 			} catch(e){
-				alert(e.response.data)
+				    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 			}
 		},
 		async closeComment(){
@@ -196,7 +223,11 @@ export default {
 						})
 				location.reload();
 			}catch (e){
-				alert(e.response.data)
+				    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 			}
 		},
 		async postComment(pId){
@@ -208,7 +239,11 @@ export default {
 				})
 				location.reload();
 			}catch (e){
-				alert(e.response.data)
+				    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 			}
 		},
 		async loadMore(){
@@ -249,9 +284,13 @@ export default {
 							continue;
 						}
 									
-								}
+				}
 			}catch(e){
-				alert(e.response.data)
+				    if (e.response.data != undefined){
+                        alert(e.response.data)
+                    }else{
+                        alert(Costanti.NO_CONNECTION)
+                    }
 			}
 		},
 	},
@@ -269,7 +308,7 @@ export default {
 		<!-- Icona bottone di ricerca-->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<div class="topnav">
-		<a class="active" href="#session" >WasaPhoto</a>
+		<a class="active" @click="refresh" >WasaPhoto</a>
 		<a class="leftItem" @click="viewProfile">Profile</a>
 		<a class="leftItem" @click="doLogout">LogOut</a>
   		<input type="text" class="searchBar"  placeholder="Username" v-model="searchUsername">
