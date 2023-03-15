@@ -20,6 +20,9 @@ export default {
 
                     this.$router.push({ path: '/session' })
                 } catch (e) {
+                    if(!e.response){
+					    return;
+				    }
                     if (e.response.data != undefined){
                         alert(e.response.data)
                     }else{

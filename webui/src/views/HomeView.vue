@@ -3,8 +3,6 @@ import * as Costanti from '../services/costanti.js'
 export default {
 	data: function () {
 		return {
-			errormsg: null,
-			detailedmsg: null,
 			limit: 10,
 			startIndex: 0,
 			photoComment:[
@@ -32,8 +30,7 @@ export default {
 			userPhoto: null,
 			username: localStorage.getItem('username'),
 			token: localStorage.getItem('token'),
-			photoLike: [],
-			
+			photoLike: [],			
 		}
 	},
 	methods: {
@@ -81,17 +78,20 @@ export default {
 		},
 		
 		async getStream() {
-
 			try{
 				let response = await this.$axios.get("users/" + localStorage.getItem("token") + "/stream?limit=" + this.limit + "&startIndex=" + this.startIndex , {
 					headers: {
 						Authorization:  this.token
 					}
 				})
+
+				if(response.data == null){
+					return;
+				}
 				this.startIndex = this.startIndex + this.limit;
-				this.photoStream =  response.data;
 				this.userPhoto = new Map();
-				
+				this.photoStream =  response.data;
+
 				for(var i = 0; i < (response.data).length; i++){
 					try{
 						let fotoFile = await this.$axios.get("user/" + (response.data)[i].userId + "/photo/" + (response.data)[i].photoId,{
@@ -118,10 +118,11 @@ export default {
 					}catch (error) {
 							continue;
 					}
-					
 				 }
-
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{

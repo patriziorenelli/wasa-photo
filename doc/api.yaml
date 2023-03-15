@@ -264,7 +264,7 @@ paths:
             '400': { $ref: "#/components/responses/UserIdNotFound" }            
             '403': {$ref: "#/components/responses/UserIdBanned"}
             '404': {$ref: "#/components/responses/UserId2NotFound"}                 
-            '406': {$ref: "#/components/responses/userNotBanned"}
+            '204': {$ref: "#/components/responses/userNotBanned"}
             '500': {$ref: "#/components/responses/ErrorServerExecution"} 
             '502': {$ref: "#/components/responses/FailedAutentication"}  
  

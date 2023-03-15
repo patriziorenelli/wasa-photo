@@ -134,11 +134,17 @@ export default {
 							return;
 				}
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data == undefined){
 					alert(Costanti.NO_CONNECTION);
 					return;
 				}
-				if(e.response.status != 406){
+				if(e.response.status == 204){
+					return;
+				}else{
+                    alert(e.response.data)
 					return;
 				}
 			}
@@ -159,7 +165,9 @@ export default {
 						Authorization:  this.token
 					}
 				})
-
+				if(response.data == null){
+					return;
+				}
 			
 				this.photoStream =  response.data;
 
@@ -194,7 +202,9 @@ export default {
 					}
 				}
 			}catch(e){
-
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -259,6 +269,9 @@ export default {
 					}
 				}
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                 	alert(e.response.data)
                 }else{
@@ -280,6 +293,9 @@ export default {
 								}
 							}
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{

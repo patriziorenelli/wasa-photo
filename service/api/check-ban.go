@@ -48,7 +48,7 @@ func (rt *_router) checkUserBan(w http.ResponseWriter, r *http.Request, ps httpr
 
 		case -4:
 			ctx.Logger.Error(userNotBanned)
-			http.Error(w, userNotBanned, http.StatusNotAcceptable)
+			http.Error(w, userNotBanned, http.StatusNoContent)
 		}
 	} else {
 		ctx.Logger.Error(Fail_Auth)

@@ -119,6 +119,10 @@ export default {
 						Authorization:  this.token
 					}
 				})
+
+				if(response.data == null){
+					return;
+				}
 				this.photoStream =  response.data;
 
 				this.userPhoto = new Map();
@@ -156,6 +160,9 @@ export default {
 				}
 			}catch(e){
 
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                 	alert(e.response.data)
                 }else{
