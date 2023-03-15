@@ -94,6 +94,7 @@ export default {
 					this.viewProfile()
 				}
 			}catch(e){
+
 				if(!e.response){
 					return;
 				}
@@ -147,7 +148,7 @@ export default {
 					alert(Costanti.NO_CONNECTION);
 					return;
 				}
-				if(e.response.status == 204){
+				if(e.response.status == 403){
 					return;
 				}else{
                     alert(e.response.data)

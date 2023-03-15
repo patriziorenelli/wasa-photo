@@ -73,6 +73,10 @@ export default {
 						.push({ path: '/users/' + this.searchUsername + '/view' })
 						.then(() => { this.$router.go() })
 				}catch(e){
+
+					if(!e.response){
+						return;
+					}
 					if (e.response.data != undefined){
                         alert(e.response.data)
                     }else{
@@ -101,6 +105,9 @@ export default {
 				this.getUserPhoto()
 
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                         alert(e.response.data)
                 }else{
@@ -186,6 +193,9 @@ export default {
 						.then(() => { this.$router.go() })
 				localStorage.setItem('username', this.newUsername);
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                         alert(e.response.data)
                 }else{
@@ -209,6 +219,9 @@ export default {
 							}
 						})
 					}catch(e){
+						if(!e.response){
+							return;
+						}
 						if (e.response.data != undefined){
                         	alert(e.response.data)
 						}else{
@@ -229,10 +242,14 @@ export default {
 				})
 				this.viewProfile();
 			}catch(e){
+
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
-                        alert(e.response.data)
+                    alert(e.response.data)
                 }else{
-                        alert(Costanti.NO_CONNECTION)
+                    alert(Costanti.NO_CONNECTION)
                 }
 			}
 
@@ -247,6 +264,10 @@ export default {
 				})
 				this.viewProfile();
 			}catch(e){
+
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -265,6 +286,9 @@ export default {
 							})
 				this.viewProfile();
 			}catch(e){
+				if(!e.response){
+					return;
+				}				
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -297,6 +321,9 @@ export default {
 				this.photoId = val;
 				document.getElementById("commentForm").style.display = "block";
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -320,14 +347,15 @@ export default {
 						})
 				this.viewProfile();
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
                     alert(Costanti.NO_CONNECTION)
                 }
 			}
-
-
 		},
 
 		async postComment(photoId){
@@ -339,6 +367,9 @@ export default {
 				})
 				this.viewProfile();
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{

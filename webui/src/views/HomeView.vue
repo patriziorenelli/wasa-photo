@@ -63,12 +63,13 @@ export default {
 						.push({ path: '/users/' + this.searchUsername + '/view' })
 						.then(() => { this.$router.go() })
 				}catch(e){
-					if (e.response.data != undefined){
-                        alert(e.response.data)
-                    }else{
-                        alert(Costanti.NO_CONNECTION)
-                    }
-
+					
+					if(!e.response){
+						return;
+					}
+					if (e.response.data == undefined){
+						alert(Costanti.NO_CONNECTION)
+					}
 				}
 
 			}else{
