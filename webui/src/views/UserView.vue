@@ -555,7 +555,7 @@ export default {
 		</div>
 
 
-		<!-- Controllo prima che ci siano post da visualizzare          <img ng-src="data:image/png;base64,{{image}}">         -->
+		<!-- Controllo prima che ci siano post da visualizzare -->
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
 

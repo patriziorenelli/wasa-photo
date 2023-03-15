@@ -149,11 +149,14 @@ export default {
 						.push({ path: '/users/' + val + '/view' })
 						.then(() => { this.$router.go() })
 			}catch (e){
-				    if (e.response.data != undefined){
+				if(!e.response){
+					return;
+				}
+				if (e.response.data != undefined){
                         alert(e.response.data)
-                    }else{
+                }else{
                         alert(Costanti.NO_CONNECTION)
-                    }
+                }
 			}
 		},
 		async likePost(val){
@@ -165,11 +168,14 @@ export default {
 				})
 				location.reload();
 			}catch(e){
-				    if (e.response.data != undefined){
-                        alert(e.response.data)
-                    }else{
-                        alert(Costanti.NO_CONNECTION)
-                    }
+				if(!e.response){
+					return;
+				}
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
 			}
 		},
 		async unlikePost(val){
@@ -181,11 +187,14 @@ export default {
 							})
 				location.reload();
 			}catch(e){
-				    if (e.response.data != undefined){
-                        alert(e.response.data)
-                    }else{
-                        alert(Costanti.NO_CONNECTION)
-                    }
+				if(!e.response){
+					return;
+				}
+				if (e.response.data != undefined){
+                    alert(e.response.data)
+                }else{
+                    alert(Costanti.NO_CONNECTION)
+                }
 			}
 		},
 		async showComment(val){
@@ -204,6 +213,9 @@ export default {
 				this.photoId = val;
 				document.getElementById("commentForm").style.display = "block";
 			} catch(e){
+					if(!e.response){
+						return;
+					}				
 				    if (e.response.data != undefined){
                         alert(e.response.data)
                     }else{
@@ -224,6 +236,9 @@ export default {
 						})
 				location.reload();
 			}catch (e){
+					if(!e.response){
+						return;
+					}			
 				    if (e.response.data != undefined){
                         alert(e.response.data)
                     }else{
@@ -240,6 +255,9 @@ export default {
 				})
 				location.reload();
 			}catch (e){
+					if(!e.response){
+						return;
+					}
 				    if (e.response.data != undefined){
                         alert(e.response.data)
                     }else{
@@ -287,6 +305,9 @@ export default {
 									
 				}
 			}catch(e){
+					if(!e.response){
+						return;
+					}
 				    if (e.response.data != undefined){
                         alert(e.response.data)
                     }else{
