@@ -94,6 +94,9 @@ export default {
 					this.viewProfile()
 				}
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -112,6 +115,9 @@ export default {
 				})
 				this.profile = response.data
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -224,6 +230,9 @@ export default {
 				})
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -241,6 +250,9 @@ export default {
 					})
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -314,6 +326,9 @@ export default {
 
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -332,6 +347,9 @@ export default {
 
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -353,6 +371,9 @@ export default {
 
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}		
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -374,6 +395,9 @@ export default {
 
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}						
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -401,6 +425,9 @@ export default {
 			this.photoComment = response.data;
 			this.photoId = val;
 			}catch(e){
+				if(!e.response){
+					return;
+				}						
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -426,6 +453,9 @@ export default {
 						})
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}						
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -444,6 +474,9 @@ export default {
 				})
 				location.reload();
 			}catch(e){
+				if(!e.response){
+					return;
+				}						
 				if (e.response.data != undefined){
                     alert(e.response.data)
                 }else{
@@ -522,7 +555,7 @@ export default {
 		</div>
 
 
-		<!-- Controllo prima che ci siano post da visualizzare -->
+		<!-- Controllo prima che ci siano post da visualizzare          <img ng-src="data:image/png;base64,{{image}}">         -->
 		<div v-if="(photoStream[0].photoId != 0)" class="wrapper">
 			<div v-for="post in photoStream" :key="post.photoId" class="card">
 
@@ -530,7 +563,7 @@ export default {
 
 			<br>
 			<hr class="divUsername">
-				<img alt="Image" :src="'data:image/jpeg;base64,'+userPhoto.get(post.photoId)" class="imageStandard">   
+				<img alt="Image" :src="'data:image/jpeg;base64,' + userPhoto.get(post.photoId)" class="imageStandard">   
 				<div>
 					<table class="infoSection"> 
 								<tr >
