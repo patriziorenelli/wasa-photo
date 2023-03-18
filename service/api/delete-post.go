@@ -57,16 +57,10 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	mydir, err := os.Getwd()
-	if err != nil {
-		ctx.Logger.Error("Error during directory creation")
-		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
-		return
-	}
+	path := "/tmp/photos/" + userId + "/" + photoId + ".jpg"
 
-	path := mydir + "/photos/" + userId + "/" + photoId + ".jpg"
 	// Elimino il file della foto
-	err = os.Remove(path)
+	err := os.Remove(path)
 	if err != nil {
 		ctx.Logger.Error("Error while deleting the photo")
 		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)

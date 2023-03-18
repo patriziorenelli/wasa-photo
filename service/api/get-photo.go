@@ -53,14 +53,7 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	mydir, erro := os.Getwd()
-	if erro != nil {
-		ctx.Logger.Error(ErrorServerExecution)
-		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
-		return
-	}
-
-	path := mydir + "/photos/" + strconv.Itoa(userId) + "/" + strconv.Itoa(postId) + ".jpg"
+	path := "/tmp/photos/" + strconv.Itoa(userId) + "/" + strconv.Itoa(postId) + ".jpg"
 
 	file, erOpen := os.Open(path)
 

@@ -58,15 +58,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	mydir, err := os.Getwd()
-	if err != nil {
-		ctx.Logger.Error("Error during directory creation")
-		http.Error(w, ErrorServerExecution, http.StatusInternalServerError)
-		_ = rt.db.DeletePhotoRecord(photoId)
-		return
-	}
-
-	path := mydir + "/photos/" + userId + "/" + strconv.Itoa(photoId) + ".jpg"
+	path := "/tmp/photos/" + userId + "/" + strconv.Itoa(photoId) + ".jpg"
 	// Creo la directory, in caso di errore elimino anche il record relativo alla nuova foto
 	err = os.MkdirAll(filepath.Dir(path), 0777)
 	if err != nil {

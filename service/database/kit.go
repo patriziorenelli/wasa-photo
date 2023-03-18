@@ -83,7 +83,7 @@ func (db *appdbimpl) GetPhoto(photoId int) (Post, int) {
 
 // Elimina un post dal database
 func (db *appdbimpl) DeletePhotoRecord(photoId int) int {
-	_, err := db.c.Exec(`DELETE FROM post WHERE id = ? `, photoId)
+	_, err := db.c.Exec(`PRAGMA foreign_keys = ON; DELETE FROM post WHERE id = ? `, photoId)
 	if err != nil {
 		return -1
 	} else {
