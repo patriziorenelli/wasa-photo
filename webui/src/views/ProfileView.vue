@@ -218,6 +218,8 @@ export default {
 								Authorization: this.token
 							}
 						})
+						this.viewProfile();
+
 					}catch(e){
 						if(!e.response){
 							return;
