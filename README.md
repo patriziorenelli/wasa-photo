@@ -5,7 +5,7 @@ This is an example of web application for [Web and Software Application](http://
 course.
 
 ## Project structure
-•	cmd/ contains all executables
+•	cmd/ contains all executables <br />
     o	cmd/healthcheck a daemon for checking the health of servers daemons; useful when the hypervisor is not providing HTTP readiness/liveness
     probes (e.g., Docker engine)
     o	cmd/webapi contains web API server daemon
